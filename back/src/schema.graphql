@@ -1,0 +1,47 @@
+type Query {
+  info: String!
+  articles(tags: [String!], skip: Int, first: Int): [Article!]!
+}
+
+type Mutation {
+  signup(email: String!, password: String!, name: String!): AuthPayload
+  login(email: String!, password: String!): AuthPayload
+  postArticle(title: String!, summary: String!, content: String!, tags: [String!]!): Article!
+  postComment(articleId: ID!, content: String!): Comment!
+}
+
+type Subscription {
+  newArticle: Article
+  newComment: Comment
+}
+
+type Article {
+  id: ID!
+  createdAt: String!
+  title: String!
+  summary: String!
+  content: String!
+  tags: [String!]!
+  comments: [Comment!]!
+}
+
+type AuthPayload {
+  token: String
+  user: User
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  comments: [Comment!]!
+  admin: Boolean!
+}
+
+type Comment {
+  id: ID!
+  createdAt: String!
+  content: String!
+  user: User!
+  article: Article!
+}

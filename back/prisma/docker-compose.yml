@@ -1,0 +1,30 @@
+version: '3'
+services:
+  prisma:
+    image: prismagraphql/prisma:1.24
+    restart: always
+    ports:
+    - "4466:4466"
+    environment:
+      PRISMA_CONFIG: |
+        managementApiSecret: mysecret42
+        port: 4466
+        databases:
+          default:
+            connector: postgres
+            migrations: true
+            host: postgres-db
+            port: 5432
+            user: prisma
+            password: prisma
+            connectionLimit: 2
+  postgres-db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: prisma
+      POSTGRES_PASSWORD: prisma
+    volumes:
+      - postgres:/var/lib/postgresql/robjinman.com
+volumes:
+  postgres:

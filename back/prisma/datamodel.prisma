@@ -1,0 +1,30 @@
+type Article {
+  id: ID! @unique
+  createdAt: DateTime!
+  title: String!
+  summary: String!
+  content: String!
+  tags: [String!]!
+  comments: [Comment!]!
+}
+
+type AuthPayload {
+  token: String
+  user: User
+}
+
+type User {
+  id: ID! @unique
+  name: String!
+  email: String!
+  pwHash: String!
+  comments: [Comment!]!
+}
+
+type Comment {
+  id: ID! @unique
+  createdAt: DateTime!
+  content: String!
+  user: User!
+  article: Article!
+}
