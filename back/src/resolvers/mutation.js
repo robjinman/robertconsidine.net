@@ -63,12 +63,6 @@ async function postArticle(parent, args, context, info) {
 async function postComment(parent, args, context, info) {
   const userId = getUserId(context)
 
-  const user = await context.prisma.user({ id: userId })
-
-  if (user.name != ADMIN_USER) {
-    throw new Error('Not authorized')
-  }
-
   return context.prisma.createComment({
     content: args.content,
     user: { connect: { id: userId } },
@@ -76,9 +70,25 @@ async function postComment(parent, args, context, info) {
   })
 }
 
+async function deleteComment(parent, args, context) {
+  const userId = getUserId(context)
+
+  const user = await context.prisma.user({ id: userId })
+  const comment = await context.prisma.comment({ id: args.commentId })
+
+  if (comment) {
+    if (user.name != ADMIN_USER && user.id != comment.user().id) {
+      throw new Error("Not authorized!")
+    }
+
+    return await context.prisma.deleteComment({ id: args.commentId })
+  }
+}
+
 module.exports = {
   signup,
   login,
   postArticle,
   postComment,
+  deleteComment,
 }

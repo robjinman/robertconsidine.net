@@ -8,6 +8,7 @@ type Mutation {
   login(email: String!, password: String!): AuthPayload
   postArticle(title: String!, summary: String!, content: String!, tags: [String!]!): Article!
   postComment(articleId: ID!, content: String!): Comment!
+  deleteComment(commentId: ID!): Comment
 }
 
 type Subscription {
