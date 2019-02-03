@@ -8,6 +8,7 @@ import { ArticlesComponent } from './articles/articles.component';
 import { CommentsComponent } from './comments/comments.component';
 import { ComposeComponent } from './compose/compose.component';
 import { SubscribersComponent } from './subscribers/subscribers.component';
+import { LoggingComponent } from './logging/logging.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { SubscribersComponent } from './subscribers/subscribers.component';
     ArticlesComponent,
     CommentsComponent,
     ComposeComponent,
-    SubscribersComponent
+    SubscribersComponent,
+    LoggingComponent
   ],
   imports: [
     BrowserModule,
