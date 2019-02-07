@@ -2,9 +2,12 @@
   <div class="header">
     <h1>RobJinman.com Admin Console</h1>
   </div>
-  <div class="middle">
-    <router-outlet></router-outlet>
-  </div>
-  <div class="app-logging"></div>
+  <as-split direction="vertical">
+    <as-split-area [size]="80" class="middle">
+      <router-outlet></router-outlet>
+    </as-split-area>
+    <as-split-area [size]="20" class="app-logging">
+    </as-split-area>
+  </as-split>
   <div class="footer">Copyright Rob Jinman 2019. All rights reserved.</div>
 </div>
