@@ -16,6 +16,8 @@ Run `ng generate component component-name` to generate a new component.
 You can also use
 `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
+To generate types.ts, run gql-gen. Its configuration lives in codegen.yml.
+
 ## Build
 
 Run `ng build` to build the project. The build artifacts will be stored in the
@@ -38,4 +40,5 @@ To get more help on the Angular CLI use `ng help` or go check out the
 
 ## Useful links
 
-* https://angular.io/tutorial
+* Heroes tutorial: https://angular.io/tutorial
+* Article on Angular/Apollo code generator https://medium.com/the-guild/apollo-angular-code-generation-7903da1f8559
