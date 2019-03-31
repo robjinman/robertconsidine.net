@@ -9,7 +9,7 @@ const subscription = require('./resolvers/subscription')
 
 const resolvers = {
   Query: {
-    info: () => `This is the API of robjinman.com`,
+    info: () => `This is the API of robjinman.com. Hello.`,
     ...query
   },
 
