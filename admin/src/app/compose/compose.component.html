@@ -1,6 +1,15 @@
 <div class="compose-article" *ngIf="article">
-  <label>
-    Title
-    <input [(ngModel)]="article.title" />
-  </label>
+  <div class="form">
+    <div class="field">
+      <div class="field-label">Title</div>
+      <input class="field-input" [(ngModel)]="article.title" />
+    </div>
+    <div class="field">
+      <div class="field-label">Summary</div>
+      <textarea class="field-input" [(ngModel)]="article.summary"></textarea>
+    </div>
+  </div>
+  <div class="content-input">
+    <quill-editor [(ngModel)]="article.content"></quill-editor>
+  </div>
 </div>

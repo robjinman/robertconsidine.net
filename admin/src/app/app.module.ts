@@ -6,6 +6,7 @@ import { AngularSplitModule } from 'angular-split';
 import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import { QuillModule } from 'ngx-quill';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -34,7 +35,8 @@ import { LoggingComponent } from './logging/logging.component';
     AngularSplitModule.forRoot(),
     HttpClientModule,
     ApolloModule,
-    HttpLinkModule
+    HttpLinkModule,
+    QuillModule
   ],
   providers: [{
     provide: APOLLO_OPTIONS,
