@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+import { Article } from '../types';
+import { ArticleService } from '../article.service';
 
 @Component({
   selector: 'app-compose',
@@ -6,10 +10,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./compose.component.styl']
 })
 export class ComposeComponent implements OnInit {
+  article: Article;
 
-  constructor() { }
+  constructor(private articleService: ArticleService,
+              private route: ActivatedRoute) { }
 
   ngOnInit() {
+    let id = this.route.snapshot.queryParams["id"];
+    this.articleService.getArticle(id).subscribe(article => {
+      return this.article = article;
+    });
   }
 
 }

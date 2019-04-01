@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Apollo } from 'apollo-angular';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import gql from 'graphql-tag';
 
-import { Article, Query } from '../types'
+import { Article } from '../types'
+import { ArticleService } from '../article.service';
 
 @Component({
   selector: 'app-articles',
@@ -14,29 +12,10 @@ import { Article, Query } from '../types'
 export class ArticlesComponent implements OnInit {
   articles: Observable<Article[]>;
 
-  constructor(private apollo: Apollo) { }
+  constructor(private articlesService: ArticleService) { }
 
   ngOnInit() {
-    this.articles = this.apollo.watchQuery<Query>({
-      query: gql`
-        query {
-          articles {
-            id
-            createdAt
-            title
-            summary
-            tags
-            comments {
-              id
-            }
-          }
-        }
-      `
-    })
-    .valueChanges
-    .pipe(
-      map(result => result.data.articles)
-    )
+    this.articles = this.articlesService.getArticles();
   }
 
 }

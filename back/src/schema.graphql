@@ -1,6 +1,7 @@
 type Query {
   info: String!
-  articles(tags: [String!], skip: Int, first: Int): [Article!]!
+  articles(tags: [String!], skip: Int, first: Int, filter: String): [Article!]!
+  article(id: ID!): Article
 }
 
 type Mutation {

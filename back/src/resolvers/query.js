@@ -13,6 +13,13 @@ async function articles(root, args, context, info) {
   })
 }
 
+async function article(root, args, context, info) {
+  return await context.prisma.article({
+    id: args.id
+  })
+}
+
 module.exports = {
   articles,
+  article,
 }

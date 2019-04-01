@@ -1,4 +1,6 @@
 <div>
-  <div class="article-summary"
+  <div class="article-link"
+       routerLink="/compose"
+       [queryParams]="{ 'id': article.id }"
        *ngFor="let article of articles | async">{{article.title}}</div>
 </div>

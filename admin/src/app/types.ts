@@ -8,6 +8,8 @@ export interface Query {
   info: string;
 
   articles: Article[];
+
+  article?: Maybe<Article>;
 }
 
 export interface Article {
@@ -84,6 +86,11 @@ export interface ArticlesQueryArgs {
   skip?: Maybe<number>;
 
   first?: Maybe<number>;
+
+  filter?: Maybe<string>;
+}
+export interface ArticleQueryArgs {
+  id: string;
 }
 export interface SignupMutationArgs {
   email: string;
