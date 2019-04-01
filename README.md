@@ -12,7 +12,7 @@ runs when executed locally.
 
 * 5432: Database server - PostgreSQL
 * 4466: Prisma server - Data access layer to simplify DB access
-* 4000. Back-end app - The GraphQL API
+* 4000: Back-end app - The GraphQL API
 * 4201: Admin front-end app
 * 4200: Front-end app
 
