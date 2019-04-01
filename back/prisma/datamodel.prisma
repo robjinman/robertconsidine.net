@@ -15,8 +15,8 @@ type AuthPayload {
 
 type User {
   id: ID! @unique
-  name: String!
-  email: String!
+  name: String! @unique
+  email: String! @unique
   pwHash: String!
   comments: [Comment!]!
 }
