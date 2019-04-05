@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -16,6 +17,7 @@ import { CommentsComponent } from './comments/comments.component';
 import { ComposeComponent } from './compose/compose.component';
 import { SubscribersComponent } from './subscribers/subscribers.component';
 import { LoggingComponent } from './logging/logging.component';
+import { MaterialUiModule } from './material-ui/material-ui.module';
 
 // The root module for this app
 @NgModule({
@@ -30,13 +32,15 @@ import { LoggingComponent } from './logging/logging.component';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     FormsModule,
     AngularSplitModule.forRoot(),
     HttpClientModule,
     ApolloModule,
     HttpLinkModule,
-    QuillModule
+    QuillModule,
+    MaterialUiModule
   ],
   providers: [{
     provide: APOLLO_OPTIONS,

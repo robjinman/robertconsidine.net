@@ -1,6 +1,6 @@
 <div class="activity-log">
   <h2>Activity Log</h2>
-    <button class="btn-clear"
+    <button mat-button class="btn-clear"
             (click)="logger.clear()">clear</button>
     <div class="log-msg"
           *ngFor="let message of logger.messages">{{message}}</div>

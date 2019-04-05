@@ -1,13 +1,11 @@
 <div class="compose-article" *ngIf="article">
   <div class="form">
-    <div class="field">
-      <div class="field-label">Title</div>
-      <input class="field-input" [(ngModel)]="article.title" />
-    </div>
-    <div class="field">
-      <div class="field-label">Summary</div>
-      <textarea class="field-input" [(ngModel)]="article.summary"></textarea>
-    </div>
+    <mat-form-field class="field-input">
+      <input matInput placeholder="Title" [(ngModel)]="article.title" />
+    </mat-form-field>
+    <mat-form-field class="field-input">
+      <textarea matInput placeholder="Summary" [(ngModel)]="article.summary"></textarea>
+    </mat-form-field>
   </div>
   <div class="content-input">
     <quill-editor [(ngModel)]="article.content"></quill-editor>
