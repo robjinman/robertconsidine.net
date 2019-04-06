@@ -21,10 +21,13 @@ class LoginGql extends Mutation {
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private loginGql: LoginGql) {}
-
   userName: string = null;
   token: string = null;
+
+  constructor(private loginGql: LoginGql) {
+    this.userName = localStorage.getItem("userName");
+    this.token = localStorage.getItem("token");
+  }
 
   login(email: string, password: string): Observable<string> {
     let ob = this.loginGql.mutate({ email, password })
@@ -35,6 +38,9 @@ export class AuthService {
     ob.subscribe(auth => {
       this.userName = auth.userName;
       this.token = auth.token;
+
+      localStorage.setItem("userName", this.userName);
+      localStorage.setItem("token", this.token);
     });
 
     return ob;
