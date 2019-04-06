@@ -4,10 +4,15 @@
       <input matInput placeholder="Title" [(ngModel)]="article.title" />
     </mat-form-field>
     <mat-form-field class="form-input">
-      <textarea matInput placeholder="Summary" [(ngModel)]="article.summary"></textarea>
+      <textarea matInput placeholder="Summary" [(ngModel)]="article.summary">
+      </textarea>
     </mat-form-field>
   </div>
   <div class="content-input">
     <quill-editor [(ngModel)]="article.content"></quill-editor>
+  </div>
+  <div class="buttons">
+    <button (click)="cancel()" mat-button>Cancel</button>
+    <button (click)="save()" mat-button>Save</button>
   </div>
 </div>

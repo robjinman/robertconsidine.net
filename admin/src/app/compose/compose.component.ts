@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Article } from '../types';
 import { ArticleService } from '../article.service';
@@ -13,13 +13,23 @@ export class ComposeComponent implements OnInit {
   article: Article;
 
   constructor(private articleService: ArticleService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private router: Router) { }
 
   ngOnInit() {
     let id = this.route.snapshot.queryParams["id"];
     this.articleService.getArticle(id).subscribe(article => {
-      return this.article = article;
+      this.article = article;
     });
   }
 
+  save() {
+    this.articleService.updateArticle(this.article).subscribe(article => {
+      this.article = article;
+    });
+  }
+
+  cancel() {
+    this.router.navigate(["/articles"]);
+  }
 }

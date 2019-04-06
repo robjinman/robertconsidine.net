@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Query } from 'apollo-angular';
+import { Query, Mutation } from 'apollo-angular';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import gql from 'graphql-tag';
 
 import { Article } from './types'
+import { LoggingService } from './logging.service';
 
 interface GetArticleResponse {
   article: Article;
@@ -56,11 +57,40 @@ class GetArticlesGql extends Query<GetArticlesResponse> {
 }
 
 @Injectable({
+  providedIn: "root"
+})
+class UpdateArticleGql extends Mutation {
+  document = gql`
+    mutation updateArticle($id: ID!,
+                    $title: String!,
+                    $summary: String!,
+                    $content: String!,
+                    $tags: [String!]!) {
+      updateArticle(
+        id: $id
+        title: $title
+        summary: $summary
+        content: $content
+        tags: $tags
+      ) {
+        id
+        title
+        summary
+        content
+        tags
+      }
+    }
+  `;
+}
+
+@Injectable({
   providedIn: 'root'
 })
 export class ArticleService {
-  constructor(private getArticleGql: GetArticleGql,
-              private getArticlesGql: GetArticlesGql) {}
+  constructor(private logger: LoggingService,
+              private getArticleGql: GetArticleGql,
+              private getArticlesGql: GetArticlesGql,
+              private updateArticleGql: UpdateArticleGql) {}
 
   getArticle(id: string): Observable<Article> {
     return this.getArticleGql.watch({id: id})
@@ -76,5 +106,20 @@ export class ArticleService {
       .pipe(
         map(result => result.data.articles)
       );
+  }
+
+  updateArticle(article: Article): Observable<Article> {
+    this.logger.add(`Saving article, id=${article.id}`);
+
+    return this.updateArticleGql.mutate({
+      id: article.id,
+      title: article.title,
+      summary: article.summary,
+      content: article.content,
+      tags: article.tags
+    })
+    .pipe(
+      map(result => result.data.updateArticle)
+    );
   }
 }
