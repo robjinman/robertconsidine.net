@@ -4,7 +4,13 @@
   </div>
   <as-split direction="vertical">
     <as-split-area [size]="80" class="middle">
-      <router-outlet></router-outlet>
+      <div *ngIf="authorised(); then thenBlock else elseBlock"></div>
+      <ng-template #thenBlock>
+        <router-outlet></router-outlet>
+      </ng-template>
+      <ng-template #elseBlock>
+        <app-login></app-login>
+      </ng-template>
     </as-split-area>
     <as-split-area [size]="20" class="app-logging">
     </as-split-area>

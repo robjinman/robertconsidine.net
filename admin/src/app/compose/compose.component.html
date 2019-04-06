@@ -1,9 +1,9 @@
-<div class="compose-article" *ngIf="article">
+<div class="compose-component" *ngIf="article">
   <div class="form">
-    <mat-form-field class="field-input">
+    <mat-form-field class="form-input">
       <input matInput placeholder="Title" [(ngModel)]="article.title" />
     </mat-form-field>
-    <mat-form-field class="field-input">
+    <mat-form-field class="form-input">
       <textarea matInput placeholder="Summary" [(ngModel)]="article.summary"></textarea>
     </mat-form-field>
   </div>

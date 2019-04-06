@@ -18,6 +18,7 @@ import { ComposeComponent } from './compose/compose.component';
 import { SubscribersComponent } from './subscribers/subscribers.component';
 import { LoggingComponent } from './logging/logging.component';
 import { MaterialUiModule } from './material-ui/material-ui.module';
+import { LoginComponent } from './login/login.component';
 
 // The root module for this app
 @NgModule({
@@ -28,7 +29,8 @@ import { MaterialUiModule } from './material-ui/material-ui.module';
     CommentsComponent,
     ComposeComponent,
     SubscribersComponent,
-    LoggingComponent
+    LoggingComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

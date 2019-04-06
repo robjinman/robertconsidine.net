@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { map, take } from 'rxjs/operators';
 
 import { ArticleService } from '../article.service';
 
@@ -29,18 +30,26 @@ export class ArticlesComponent implements OnInit {
   constructor(private articlesService: ArticleService) { }
 
   ngOnInit() {
-    this.articlesService.getArticles().subscribe(articles => {
-      this.articleTable = articles.map(article => {
-        return {
-          id: article.id,
-          published: article.createdAt,
-          lastModified: article.createdAt,
-          title: article.title,
-          draft: false,
-          comments: article.comments.length
-        };
-      })
-    });
+    this.articlesService.getArticles()
+      .pipe(
+        take(1),
+        map(articles => {
+          //console.log(articles);
+          return articles.map(article => {
+            return {
+              id: article.id,
+              published: article.createdAt,
+              lastModified: article.createdAt,
+              title: article.title,
+              draft: false,
+              comments: article.comments.length
+            };
+          });
+        })
+      )
+      .subscribe(articleTable => {
+        this.articleTable = articleTable;
+      });
   }
 
 }
