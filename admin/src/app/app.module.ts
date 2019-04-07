@@ -20,8 +20,8 @@ import { LoggingComponent } from './logging/logging.component';
 import { MaterialUiModule } from './material-ui/material-ui.module';
 import { LoginComponent } from './login/login.component';
 import { LoginGql, AuthService, AuthMiddleware } from './auth.service';
+import { LoggingService } from './logging.service';
 
-// The root module for this app
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,8 +48,10 @@ import { LoginGql, AuthService, AuthMiddleware } from './auth.service';
   providers: [
     {
       provide: AuthService,
-      useFactory: (loginGql: LoginGql) => new AuthService(loginGql),
-      deps: [LoginGql]
+      useFactory: (logger: LoggingService, loginGql: LoginGql) => {
+        return new AuthService(logger, loginGql);
+      },
+      deps: [LoggingService, LoginGql]
     },
     {
       provide: AuthMiddleware,

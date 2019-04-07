@@ -6,6 +6,8 @@ import { map } from 'rxjs/operators';
 import gql from 'graphql-tag';
 import { ApolloLink } from 'apollo-link';
 
+import { LoggingService } from './logging.service';
+
 @Injectable({
   providedIn: "root"
 })
@@ -48,12 +50,14 @@ export class AuthService {
   userName: string = null;
   token: string = null;
 
-  constructor(private loginGql: LoginGql) {
+  constructor(private logger: LoggingService, private loginGql: LoginGql) {
     this.userName = localStorage.getItem("userName");
     this.token = localStorage.getItem("token");
   }
 
   login(email: string, password: string): Observable<string> {
+    this.logger.add("Logging in");
+
     let ob = this.loginGql.mutate({ email, password })
       .pipe(
         map(result => result.data.login)
@@ -71,6 +75,8 @@ export class AuthService {
   }
 
   logout() {
+    this.logger.add("Logging out");
+
     this.userName = null;
     this.token = null;
     localStorage.removeItem("userName");
