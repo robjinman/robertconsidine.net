@@ -20,16 +20,7 @@ import { SubscribersComponent } from './subscribers/subscribers.component';
 import { LoggingComponent } from './logging/logging.component';
 import { MaterialUiModule } from './material-ui/material-ui.module';
 import { LoginComponent } from './login/login.component';
-
-const middleware = new ApolloLink((operation, forward) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    operation.setContext({
-      headers: new HttpHeaders().set("Authorization", `Bearer ${token}`)
-    });
-  }
-  return forward(operation);
-});
+import { LoginGql, AuthService } from './auth.service';
 
 // The root module for this app
 @NgModule({
@@ -55,20 +46,37 @@ const middleware = new ApolloLink((operation, forward) => {
     QuillModule,
     MaterialUiModule
   ],
-  providers: [{
-    provide: APOLLO_OPTIONS,
-    useFactory: (httpLink: HttpLink) => {
-      const http = httpLink.create({
-        uri: "http://localhost:4000"
-      });
-
-      return {
-        cache: new InMemoryCache(),
-        link: middleware.concat(http)
-      }
+  providers: [
+    {
+      provide: AuthService,
+      useFactory: (loginGql: LoginGql) => new AuthService(loginGql),
+      deps: [LoginGql]
     },
-    deps: [HttpLink]
-  }],
+    {
+      provide: APOLLO_OPTIONS,
+      useFactory: (httpLink: HttpLink, authService: AuthService) => {
+        const middleware = new ApolloLink((operation, forward) => {
+          const token = authService.token;
+          if (token) {
+            operation.setContext({
+              headers: new HttpHeaders().set("Authorization", `Bearer ${token}`)
+            });
+          }
+          return forward(operation);
+        });
+
+        const http = httpLink.create({
+          uri: "http://localhost:4000"
+        });
+
+        return {
+          cache: new InMemoryCache(),
+          link: middleware.concat(http)
+        }
+      },
+      deps: [HttpLink, AuthService]
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
