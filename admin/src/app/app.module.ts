@@ -1,14 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { HttpClientModule, HttpHeaders } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { AngularSplitModule } from 'angular-split';
 import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { QuillModule } from 'ngx-quill';
-import { ApolloLink } from 'apollo-link';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,7 +19,7 @@ import { SubscribersComponent } from './subscribers/subscribers.component';
 import { LoggingComponent } from './logging/logging.component';
 import { MaterialUiModule } from './material-ui/material-ui.module';
 import { LoginComponent } from './login/login.component';
-import { LoginGql, AuthService } from './auth.service';
+import { LoginGql, AuthService, AuthMiddleware } from './auth.service';
 
 // The root module for this app
 @NgModule({
@@ -53,28 +52,23 @@ import { LoginGql, AuthService } from './auth.service';
       deps: [LoginGql]
     },
     {
+      provide: AuthMiddleware,
+      useFactory: (authService: AuthService) => new AuthMiddleware(authService),
+      deps: [AuthService]
+    },
+    {
       provide: APOLLO_OPTIONS,
-      useFactory: (httpLink: HttpLink, authService: AuthService) => {
-        const middleware = new ApolloLink((operation, forward) => {
-          const token = authService.token;
-          if (token) {
-            operation.setContext({
-              headers: new HttpHeaders().set("Authorization", `Bearer ${token}`)
-            });
-          }
-          return forward(operation);
-        });
-
+      useFactory: (httpLink: HttpLink, authMiddleware: AuthMiddleware) => {
         const http = httpLink.create({
           uri: "http://localhost:4000"
         });
 
         return {
           cache: new InMemoryCache(),
-          link: middleware.concat(http)
+          link: authMiddleware.concat(http)
         }
       },
-      deps: [HttpLink, AuthService]
+      deps: [HttpLink, AuthMiddleware]
     }
   ],
   bootstrap: [AppComponent]

@@ -1,8 +1,29 @@
 import { Injectable } from '@angular/core';
+import { HttpHeaders } from '@angular/common/http';
 import { Mutation } from 'apollo-angular';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import gql from 'graphql-tag';
+import { ApolloLink } from 'apollo-link';
+
+@Injectable({
+  providedIn: "root"
+})
+export class AuthMiddleware extends ApolloLink {
+  constructor(authService: AuthService) {
+    const handler = (operation: any, forward: any) => {
+      const token = authService.token;
+      if (token) {
+        operation.setContext({
+          headers: new HttpHeaders().set("Authorization", `Bearer ${token}`)
+        });
+      }
+      return forward(operation);
+    };
+
+    super(handler);
+  }
+}
 
 @Injectable({
   providedIn: "root"
@@ -11,7 +32,10 @@ export class LoginGql extends Mutation {
   document = gql`
       mutation login($email: String!, $password: String!) {
         login(email: $email, password: $password) {
-          token
+          token,
+          user {
+            name
+          }
         }
       }
   `;
@@ -36,7 +60,7 @@ export class AuthService {
       );
 
     ob.subscribe(auth => {
-      this.userName = auth.userName;
+      this.userName = auth.user.name;
       this.token = auth.token;
 
       localStorage.setItem("userName", this.userName);
