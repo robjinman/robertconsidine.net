@@ -1,6 +1,9 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const { APP_SECRET, ADMIN_USER, getUserId } = require('../utils')
+const { APP_SECRET,
+        ADMIN_USER,
+        getUserId,
+        assertAdminUser } = require('../utils')
 
 async function signup(parent, args, context, info) {
   const exists = await context.prisma.$exists.user({
@@ -45,14 +48,9 @@ async function login(parent, args, context, info) {
 }
 
 async function postArticle(parent, args, context, info) {
-  const userId = getUserId(context)
-  const user = await context.prisma.user({ id: userId })
+  await assertAdminUser(context);
 
-  if (user.name != ADMIN_USER) {
-    throw new Error("Not authorized")
-  }
-
-  return context.prisma.createArticle({
+  return await context.prisma.createArticle({
     title: args.title,
     summary: args.summary,
     content: args.content,
@@ -61,14 +59,9 @@ async function postArticle(parent, args, context, info) {
 }
 
 async function updateArticle(parent, args, context, info) {
-  const userId = getUserId(context)
-  const user = await context.prisma.user({ id: userId })
+  await assertAdminUser(context);
 
-  if (user.name != ADMIN_USER) {
-    throw new Error("Not authorized")
-  }
-
-  return context.prisma.updateArticle({
+  return await context.prisma.updateArticle({
     data: {
       title: args.title,
       summary: args.summary,
@@ -81,10 +74,25 @@ async function updateArticle(parent, args, context, info) {
   })
 }
 
+async function publishArticle(parent, args, context, info) {
+  await assertAdminUser(context);
+
+  let article = await context.prisma.updateArticle({
+    data: {
+      draft: !args.publish
+    },
+    where: {
+      id: args.id
+    }
+  })
+
+  return article.id
+}
+
 async function postComment(parent, args, context, info) {
   const userId = getUserId(context)
 
-  return context.prisma.createComment({
+  return await context.prisma.createComment({
     content: args.content,
     user: { connect: { id: userId } },
     article: { connect: { id: args.articleId } },
@@ -111,6 +119,7 @@ module.exports = {
   login,
   postArticle,
   updateArticle,
+  publishArticle,
   postComment,
   deleteComment,
 }

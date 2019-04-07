@@ -1,5 +1,6 @@
 type Article {
   id: ID! @unique
+  draft: Boolean!
   createdAt: DateTime!
   title: String!
   summary: String!

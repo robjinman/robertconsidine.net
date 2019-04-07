@@ -19,6 +19,7 @@ class GetArticleGql extends Query<GetArticleResponse> {
     query article($id: ID!) {
       article(id: $id) {
         id
+        draft
         createdAt
         title
         summary
@@ -33,17 +34,18 @@ class GetArticleGql extends Query<GetArticleResponse> {
 }
 
 interface GetArticlesResponse {
-  articles: Article[];
+  allArticles: Article[];
 }
 
 @Injectable({
   providedIn: "root"
 })
-class GetArticlesGql extends Query<GetArticlesResponse> {
+class GetAllArticlesGql extends Query<GetArticlesResponse> {
   document = gql`
     query {
-      articles {
+      allArticles {
         id
+        draft
         createdAt
         title
         summary
@@ -62,10 +64,10 @@ class GetArticlesGql extends Query<GetArticlesResponse> {
 class UpdateArticleGql extends Mutation {
   document = gql`
     mutation updateArticle($id: ID!,
-                    $title: String!,
-                    $summary: String!,
-                    $content: String!,
-                    $tags: [String!]!) {
+                           $title: String!,
+                           $summary: String!,
+                           $content: String!,
+                           $tags: [String!]!) {
       updateArticle(
         id: $id
         title: $title
@@ -74,6 +76,7 @@ class UpdateArticleGql extends Mutation {
         tags: $tags
       ) {
         id
+        draft
         title
         summary
         content
@@ -84,13 +87,29 @@ class UpdateArticleGql extends Mutation {
 }
 
 @Injectable({
+  providedIn: "root"
+})
+class PublishArticleGql extends Mutation {
+  document = gql`
+    mutation publishArticle($id: ID!,
+                            $publish: Boolean!) {
+      publishArticle(
+        id: $id
+        publish: $publish
+      )
+    }
+  `;
+}
+
+@Injectable({
   providedIn: 'root'
 })
 export class ArticleService {
   constructor(private logger: LoggingService,
               private getArticleGql: GetArticleGql,
-              private getArticlesGql: GetArticlesGql,
-              private updateArticleGql: UpdateArticleGql) {}
+              private getArticlesGql: GetAllArticlesGql,
+              private updateArticleGql: UpdateArticleGql,
+              private publishArticleGql: PublishArticleGql) {}
 
   getArticle(id: string): Observable<Article> {
     return this.getArticleGql.watch({id: id})
@@ -104,7 +123,7 @@ export class ArticleService {
     return this.getArticlesGql.watch()
       .valueChanges
       .pipe(
-        map(result => result.data.articles)
+        map(result => result.data.allArticles)
       );
   }
 
@@ -120,6 +139,23 @@ export class ArticleService {
     })
     .pipe(
       map(result => result.data.updateArticle)
+    );
+  }
+
+  publishArticle(id: string, publish: boolean): Observable<string> {
+    if (publish) {
+      this.logger.add(`Publishing article, id=${id}`);
+    }
+    else {
+      this.logger.add(`Unpublishing article, id=${id}`);
+    }
+
+    return this.publishArticleGql.mutate({
+      id,
+      publish
+    })
+    .pipe(
+      map(result => result.data.publishArticle)
     );
   }
 }

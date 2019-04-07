@@ -14,8 +14,18 @@ function getUserId(context) {
   throw new Error('Not authenticated')
 }
 
+async function assertAdminUser(context) {
+  const userId = getUserId(context)
+  const user = await context.prisma.user({ id: userId })
+
+  if (user.name != ADMIN_USER) {
+    throw new Error("Not authorized")
+  }
+}
+
 module.exports = {
   APP_SECRET,
   ADMIN_USER,
   getUserId,
+  assertAdminUser
 }

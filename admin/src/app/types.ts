@@ -7,13 +7,17 @@ export type Maybe<T> = T | null;
 export interface Query {
   info: string;
 
-  articles: Article[];
+  publishedArticles: Article[];
+
+  allArticles: Article[];
 
   article?: Maybe<Article>;
 }
 
 export interface Article {
   id: string;
+
+  draft: boolean;
 
   createdAt: string;
 
@@ -59,6 +63,10 @@ export interface Mutation {
 
   postArticle: Article;
 
+  updateArticle: Article;
+
+  publishArticle: string;
+
   postComment: Comment;
 
   deleteComment?: Maybe<Comment>;
@@ -80,7 +88,7 @@ export interface Subscription {
 // Arguments
 // ====================================================
 
-export interface ArticlesQueryArgs {
+export interface PublishedArticlesQueryArgs {
   tags?: Maybe<string[]>;
 
   skip?: Maybe<number>;
@@ -88,6 +96,11 @@ export interface ArticlesQueryArgs {
   first?: Maybe<number>;
 
   filter?: Maybe<string>;
+}
+export interface AllArticlesQueryArgs {
+  skip?: Maybe<number>;
+
+  first?: Maybe<number>;
 }
 export interface ArticleQueryArgs {
   id: string;
@@ -112,6 +125,22 @@ export interface PostArticleMutationArgs {
   content: string;
 
   tags: string[];
+}
+export interface UpdateArticleMutationArgs {
+  id: string;
+
+  title: string;
+
+  summary: string;
+
+  content: string;
+
+  tags: string[];
+}
+export interface PublishArticleMutationArgs {
+  id: string;
+
+  publish: boolean;
 }
 export interface PostCommentMutationArgs {
   articleId: string;

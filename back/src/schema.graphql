@@ -1,6 +1,7 @@
 type Query {
   info: String!
-  articles(tags: [String!], skip: Int, first: Int, filter: String): [Article!]!
+  publishedArticles(tags: [String!], skip: Int, first: Int, filter: String): [Article!]!
+  allArticles(skip: Int, first: Int): [Article!]!
   article(id: ID!): Article
 }
 
@@ -9,6 +10,7 @@ type Mutation {
   login(email: String!, password: String!): AuthPayload
   postArticle(title: String!, summary: String!, content: String!, tags: [String!]!): Article!
   updateArticle(id: ID!, title: String!, summary: String!, content: String!, tags: [String!]!): Article!
+  publishArticle(id: ID!, publish: Boolean!): ID!
   postComment(articleId: ID!, content: String!): Comment!
   deleteComment(commentId: ID!): Comment
 }
@@ -20,6 +22,7 @@ type Subscription {
 
 type Article {
   id: ID!
+  draft: Boolean!
   createdAt: String!
   title: String!
   summary: String!

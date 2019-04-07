@@ -33,19 +33,16 @@ export class ArticlesComponent implements OnInit {
     this.articlesService.getArticles()
       .pipe(
         take(1),
-        map(articles => {
-          //console.log(articles);
-          return articles.map(article => {
-            return {
-              id: article.id,
-              published: article.createdAt,
-              lastModified: article.createdAt,
-              title: article.title,
-              draft: false,
-              comments: article.comments.length
-            };
-          });
-        })
+        map(articles => articles.map(article => {
+          return {
+            id: article.id,
+            published: article.createdAt,
+            lastModified: article.createdAt,
+            title: article.title,
+            draft: article.draft,
+            comments: article.comments.length
+          };
+        }))
       )
       .subscribe(articleTable => {
         this.articleTable = articleTable;
