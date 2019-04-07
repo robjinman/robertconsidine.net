@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { APP_SECRET,
         ADMIN_USER,
+        currentDateString,
         getUserId,
         assertAdminUser } = require('../utils')
 
@@ -50,11 +51,15 @@ async function login(parent, args, context, info) {
 async function postArticle(parent, args, context, info) {
   await assertAdminUser(context);
 
+  const timestamp = currentDateString();
+
   return await context.prisma.createArticle({
+    draft: true,
     title: args.title,
     summary: args.summary,
     content: args.content,
     tags: { set: args.tags },
+    modifiedAt: timestamp
   })
 }
 
@@ -77,14 +82,31 @@ async function updateArticle(parent, args, context, info) {
 async function publishArticle(parent, args, context, info) {
   await assertAdminUser(context);
 
+  const timestamp = currentDateString();
+
+  let data = {
+    draft: !args.publish,
+    modifiedAt: timestamp
+  };
+
+  if (args.publish) {
+    data.publishedAt = timestamp
+  }
+
   return await context.prisma.updateArticle({
-    data: {
-      draft: !args.publish
-    },
+    data,
     where: {
       id: args.id
     }
   })
+}
+
+async function deleteArticle(parent, args, context, info) {
+  await assertAdminUser(context);
+
+  return await context.prisma.deleteArticle({
+    id: args.id
+  });
 }
 
 async function postComment(parent, args, context, info) {
@@ -118,6 +140,7 @@ module.exports = {
   postArticle,
   updateArticle,
   publishArticle,
+  deleteArticle,
   postComment,
   deleteComment,
 }

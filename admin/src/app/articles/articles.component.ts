@@ -5,8 +5,9 @@ import { ArticleService } from '../article.service';
 
 export interface ArticleTableRow {
   id: string,
-  published: string;
-  lastModified: string;
+  createdAt: string;
+  modifiedAt: string;
+  publishedAt: string;
   title: string;
   draft: boolean;
   comments: number;
@@ -21,8 +22,9 @@ export class ArticlesComponent implements OnInit {
   articleTable: ArticleTableRow[] = [];
   displayedColumns: string[] = [
     "title",
-    "published",
-    "lastModified",
+    "createdAt",
+    "modifiedAt",
+    "publishedAt",
     "draft",
     "comments"
   ];
@@ -36,8 +38,9 @@ export class ArticlesComponent implements OnInit {
         map(articles => articles.map(article => {
           return {
             id: article.id,
-            published: article.createdAt,
-            lastModified: article.createdAt,
+            createdAt: article.createdAt,
+            modifiedAt: article.modifiedAt,
+            publishedAt: article.publishedAt,
             title: article.title,
             draft: article.draft,
             comments: article.comments.length

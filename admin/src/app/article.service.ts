@@ -21,6 +21,8 @@ class GetArticleGql extends Query<GetArticleResponse> {
         id
         draft
         createdAt
+        modifiedAt
+        publishedAt
         title
         summary
         content
@@ -47,6 +49,8 @@ class GetAllArticlesGql extends Query<GetArticlesResponse> {
         id
         draft
         createdAt
+        modifiedAt
+        publishedAt
         title
         summary
         tags
@@ -77,6 +81,7 @@ class UpdateArticleGql extends Mutation {
       ) {
         id
         draft
+        modifiedAt
         title
         summary
         content
@@ -99,6 +104,7 @@ class PublishArticleGql extends Mutation {
       ) {
         id
         draft
+        publishedAt
       }
     }
   `;

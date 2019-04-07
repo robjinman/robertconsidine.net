@@ -21,6 +21,10 @@ export interface Article {
 
   createdAt: string;
 
+  modifiedAt: string;
+
+  publishedAt?: Maybe<string>;
+
   title: string;
 
   summary: string;
@@ -66,6 +70,8 @@ export interface Mutation {
   updateArticle: Article;
 
   publishArticle: Article;
+
+  deleteArticle: Article;
 
   postComment: Comment;
 
@@ -141,6 +147,9 @@ export interface PublishArticleMutationArgs {
   id: string;
 
   publish: boolean;
+}
+export interface DeleteArticleMutationArgs {
+  id: string;
 }
 export interface PostCommentMutationArgs {
   articleId: string;

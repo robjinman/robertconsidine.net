@@ -2,6 +2,10 @@ const jwt = require('jsonwebtoken')
 const APP_SECRET = 'MyAppSecret123'
 const ADMIN_USER = 'rob'
 
+function currentDateString() {
+  return (new Date()).toISOString();
+}
+
 function getUserId(context) {
   const authorization = context.request.get('Authorization')
   if (authorization) {
@@ -27,5 +31,6 @@ module.exports = {
   APP_SECRET,
   ADMIN_USER,
   getUserId,
-  assertAdminUser
+  assertAdminUser,
+  currentDateString
 }

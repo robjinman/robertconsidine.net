@@ -11,6 +11,7 @@ type Mutation {
   postArticle(title: String!, summary: String!, content: String!, tags: [String!]!): Article!
   updateArticle(id: ID!, title: String!, summary: String!, content: String!, tags: [String!]!): Article!
   publishArticle(id: ID!, publish: Boolean!): Article!
+  deleteArticle(id: ID!): Article!
   postComment(articleId: ID!, content: String!): Comment!
   deleteComment(commentId: ID!): Comment
 }
@@ -24,6 +25,8 @@ type Article {
   id: ID!
   draft: Boolean!
   createdAt: String!
+  modifiedAt: String!
+  publishedAt: String
   title: String!
   summary: String!
   content: String!
