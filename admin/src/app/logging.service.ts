@@ -4,10 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class LoggingService {
-  messages: string[] = [
-    "This is a message",
-    "This is another one" // TODO
-  ]
+  messages: string[] = []
 
   constructor() { }
 

@@ -10,7 +10,7 @@ type Mutation {
   login(email: String!, password: String!): AuthPayload
   postArticle(title: String!, summary: String!, content: String!, tags: [String!]!): Article!
   updateArticle(id: ID!, title: String!, summary: String!, content: String!, tags: [String!]!): Article!
-  publishArticle(id: ID!, publish: Boolean!): ID!
+  publishArticle(id: ID!, publish: Boolean!): Article!
   postComment(articleId: ID!, content: String!): Comment!
   deleteComment(commentId: ID!): Comment
 }

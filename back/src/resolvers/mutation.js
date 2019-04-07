@@ -77,7 +77,7 @@ async function updateArticle(parent, args, context, info) {
 async function publishArticle(parent, args, context, info) {
   await assertAdminUser(context);
 
-  let article = await context.prisma.updateArticle({
+  return await context.prisma.updateArticle({
     data: {
       draft: !args.publish
     },
@@ -85,8 +85,6 @@ async function publishArticle(parent, args, context, info) {
       id: args.id
     }
   })
-
-  return article.id
 }
 
 async function postComment(parent, args, context, info) {

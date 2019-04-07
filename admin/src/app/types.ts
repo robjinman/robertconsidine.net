@@ -65,7 +65,7 @@ export interface Mutation {
 
   updateArticle: Article;
 
-  publishArticle: string;
+  publishArticle: Article;
 
   postComment: Comment;
 

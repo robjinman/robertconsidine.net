@@ -96,7 +96,10 @@ class PublishArticleGql extends Mutation {
       publishArticle(
         id: $id
         publish: $publish
-      )
+      ) {
+        id
+        draft
+      }
     }
   `;
 }
@@ -112,6 +115,8 @@ export class ArticleService {
               private publishArticleGql: PublishArticleGql) {}
 
   getArticle(id: string): Observable<Article> {
+    this.logger.add(`Fetching article, id=${id}`);
+
     return this.getArticleGql.watch({id: id})
       .valueChanges
       .pipe(
@@ -120,6 +125,8 @@ export class ArticleService {
   }
 
   getArticles(): Observable<Article[]> {
+    this.logger.add("Fetching all articles");
+
     return this.getArticlesGql.watch()
       .valueChanges
       .pipe(
@@ -142,7 +149,7 @@ export class ArticleService {
     );
   }
 
-  publishArticle(id: string, publish: boolean): Observable<string> {
+  publishArticle(id: string, publish: boolean): Observable<Article> {
     if (publish) {
       this.logger.add(`Publishing article, id=${id}`);
     }
