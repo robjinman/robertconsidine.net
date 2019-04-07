@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+
 import { LoggingService } from '../logging.service';
 
 @Component({
@@ -7,7 +8,14 @@ import { LoggingService } from '../logging.service';
   styleUrls: ['./logging.component.styl']
 })
 export class LoggingComponent implements OnInit {
-  constructor(public logger: LoggingService) { }
+  @ViewChild('logWindow') logWindow: ElementRef;
+
+  constructor(public logger: LoggingService) {
+    this.logger.subject.subscribe(() => {
+      let e = this.logWindow.nativeElement;
+      e.scrollTop = e.scrollHeight;
+    });
+  }
 
   ngOnInit() { }
 }

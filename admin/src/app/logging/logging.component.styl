@@ -3,9 +3,23 @@
 .logging-component
   height: 100%
   background-color: white
-  overflow-y: scroll
+  box-sizing: border-box
   padding: 10px
+  display: flex
+  flex-direction: column
+  overflow: hidden;
 
-  .log-msg
-    line-height: 16px
-    border-bottom: 1px solid var_colour_1
+  h2
+    display: inline-block
+    margin-right: 10px
+
+  .log-window
+      height: 100%
+      overflow-y: scroll
+
+    .log-msgs-wrap
+      padding-bottom: 24px
+
+      .log-msg
+        line-height: 16px
+        border-bottom: 1px solid var_colour_1

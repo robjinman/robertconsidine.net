@@ -1,7 +1,13 @@
 <div class="logging-component">
-  <h2>Activity Log</h2>
+  <div>
+    <h2>Activity Log</h2>
     <button mat-button class="btn-clear"
             (click)="logger.clear()">clear</button>
-    <div class="log-msg"
-          *ngFor="let message of logger.messages">{{message}}</div>
+  </div>
+  <div class="log-window" #logWindow>
+    <div class="log-msgs-wrap">
+      <div class="log-msg"
+           *ngFor="let message of logger.messages">{{message}}</div>
+    </div>
+  </div>
 <div>
