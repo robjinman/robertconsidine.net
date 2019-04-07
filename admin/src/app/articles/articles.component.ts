@@ -20,9 +20,9 @@ export interface ArticleTableRow {
 export class ArticlesComponent implements OnInit {
   articleTable: ArticleTableRow[] = [];
   displayedColumns: string[] = [
+    "title",
     "published",
     "lastModified",
-    "title",
     "draft",
     "comments"
   ];
