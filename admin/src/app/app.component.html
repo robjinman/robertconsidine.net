@@ -1,6 +1,8 @@
 <div class="wrap">
   <div class="header" routerLink="/">
     <h1>RobJinman.com Admin Console</h1>
+    <button class="btn-logout" *ngIf="authorised()" (click)=logout()
+            mat-button>Logout</button>
   </div>
   <as-split direction="vertical">
     <as-split-area [size]="80" class="middle">

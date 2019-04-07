@@ -70,6 +70,13 @@ export class AuthService {
     return ob;
   }
 
+  logout() {
+    this.userName = null;
+    this.token = null;
+    localStorage.removeItem("userName");
+    localStorage.removeItem("token");
+  }
+
   authorised(): boolean {
     return this.token != null && this.token.length > 0;
   }

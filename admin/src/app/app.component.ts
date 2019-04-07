@@ -15,4 +15,8 @@ export class AppComponent {
   authorised(): boolean {
     return this.authService.authorised();
   }
+
+  logout() {
+    this.authService.logout();
+  }
 }
