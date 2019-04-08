@@ -1,0 +1,6 @@
+replace: true
+schema: http://localhost:4000
+generates:
+  src/app/types.ts:
+    - typescript-common
+    - typescript-server

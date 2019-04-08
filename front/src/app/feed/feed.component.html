@@ -1,0 +1,6 @@
+<div class="feed">
+  <div class="feed-item" *ngFor="let article of articles | async">
+    <div class="item-title">{{ article.title }}</div>
+    <div class="item-date">{{ article.publishedAt | date }}</div>
+  </div>
+</div>

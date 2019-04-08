@@ -1,12 +1,16 @@
 const { assertAdminUser } = require('../utils');
 
 async function publishedArticles(root, args, context, info) {
-  const where = args.filter ? {
-    OR: [
+  let where = {
+    draft: false
+  };
+
+  if (args.filter) {
+    where.OR = [
       { title_contains: args.filter },
       { summary_contains: args.filter },
-    ]
-  } : {};
+    ];
+  };
 
   return await context.prisma.articles({
     where,
