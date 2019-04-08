@@ -1,9 +1,9 @@
 <div class="wrap">
-  <div class="header" routerLink="/">
-    <h1>RobJinman.com Admin Console</h1>
+  <mat-card class="header" routerLink="/">
+    <h1>Admin Console</h1>
     <button class="btn-logout" *ngIf="authorised()" (click)=logout()
             mat-button>Logout</button>
-  </div>
+  </mat-card>
   <as-split direction="vertical">
     <as-split-area [size]="80" class="middle">
       <div *ngIf="authorised(); then thenBlock else elseBlock"></div>
@@ -14,8 +14,10 @@
         <app-login></app-login>
       </ng-template>
     </as-split-area>
-    <as-split-area [size]="20" class="app-logging">
+    <as-split-area *ngIf="authorised()" [size]="20" class="app-logging">
     </as-split-area>
   </as-split>
-  <div class="footer">Copyright Rob Jinman 2019. All rights reserved.</div>
+  <mat-card class="footer">
+    Copyright Rob Jinman 2019. All rights reserved.
+  </mat-card>
 </div>
