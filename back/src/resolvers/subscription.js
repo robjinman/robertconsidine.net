@@ -1,5 +1,5 @@
 function newArticleSubscribe(parent, args, context, info) {
-  return context.prisma.$subscribe.article({ mutation_in: ['CREATED'] }).node()
+  return context.prisma.$subscribe.article({ mutation_in: ['CREATED'] }).node();
 }
 
 const newArticle = {
@@ -7,8 +7,8 @@ const newArticle = {
   resolve: payload => {
     return payload
   },
-}
+};
 
 module.exports = {
   newArticle,
-}
+};

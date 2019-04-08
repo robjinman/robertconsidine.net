@@ -1,11 +1,11 @@
-const { GraphQLServer } = require('graphql-yoga')
-const { prisma } = require('./generated/prisma-client')
-const query = require('./resolvers/query')
-const mutation = require('./resolvers/mutation')
-const user = require('./resolvers/user')
-const article = require('./resolvers/article')
-const comment = require('./resolvers/comment')
-const subscription = require('./resolvers/subscription')
+const { GraphQLServer } = require('graphql-yoga');
+const { prisma } = require('./generated/prisma-client');
+const query = require('./resolvers/query');
+const mutation = require('./resolvers/mutation');
+const user = require('./resolvers/user');
+const article = require('./resolvers/article');
+const comment = require('./resolvers/comment');
+const subscription = require('./resolvers/subscription');
 
 const resolvers = {
   Query: {
@@ -18,7 +18,7 @@ const resolvers = {
   User: user,
   Article: article,
   Comment: comment,
-}
+};
 
 const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
@@ -29,6 +29,6 @@ const server = new GraphQLServer({
       prisma,
     }
   },
-})
+});
 
-server.start(() => console.log(`Server is running on http://localhost:4000`))
+server.start(() => console.log(`Server is running on http://localhost:4000`));
