@@ -14,7 +14,7 @@
   <div class="buttons">
     <button (click)="cancel()" mat-button>Cancel</button>
     <button (click)="save()" mat-button>Save</button>
-    <button (click)="togglePublished()" mat-button>
+    <button *ngIf="article.id" (click)="togglePublished()" mat-button>
       {{ article.draft ? "Publish" : "Unpublish" }}</button>
   </div>
 </div>

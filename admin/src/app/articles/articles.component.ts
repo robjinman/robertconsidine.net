@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { map, take } from 'rxjs/operators';
 
 import { ArticleService } from '../article.service';
@@ -29,7 +30,8 @@ export class ArticlesComponent implements OnInit {
     "comments"
   ];
 
-  constructor(private articlesService: ArticleService) { }
+  constructor(private router: Router,
+              private articlesService: ArticleService) { }
 
   ngOnInit() {
     this.articlesService.getArticles()
@@ -52,4 +54,7 @@ export class ArticlesComponent implements OnInit {
       });
   }
 
+  newArticle() {
+    this.router.navigate(["/compose"]);
+  }
 }

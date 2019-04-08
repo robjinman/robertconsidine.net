@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Query, Mutation } from 'apollo-angular';
+import { Query, Mutation, Apollo } from 'apollo-angular';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import gql from 'graphql-tag';
@@ -94,6 +94,33 @@ class UpdateArticleGql extends Mutation {
 @Injectable({
   providedIn: "root"
 })
+class PostArticleGql extends Mutation {
+  document = gql`
+    mutation postArticle($title: String!,
+                         $summary: String!,
+                         $content: String!,
+                         $tags: [String!]!) {
+      postArticle(
+        title: $title
+        summary: $summary
+        content: $content
+        tags: $tags
+      ) {
+        id
+        draft
+        modifiedAt
+        title
+        summary
+        content
+        tags
+      }
+    }
+  `;
+}
+
+@Injectable({
+  providedIn: "root"
+})
 class PublishArticleGql extends Mutation {
   document = gql`
     mutation publishArticle($id: ID!,
@@ -111,14 +138,32 @@ class PublishArticleGql extends Mutation {
 }
 
 @Injectable({
+  providedIn: "root"
+})
+class DeleteArticleGql extends Mutation {
+  document = gql`
+    mutation deleteArticle($id: ID!) {
+      deleteArticle(
+        id: $id
+      ) {
+        id
+      }
+    }
+  `;
+}
+
+@Injectable({
   providedIn: 'root'
 })
 export class ArticleService {
-  constructor(private logger: LoggingService,
+  constructor(private apollo: Apollo,
+              private logger: LoggingService,
               private getArticleGql: GetArticleGql,
               private getArticlesGql: GetAllArticlesGql,
+              private postArticleGql: PostArticleGql,
               private updateArticleGql: UpdateArticleGql,
-              private publishArticleGql: PublishArticleGql) {}
+              private publishArticleGql: PublishArticleGql,
+              private deleteArticleGql: DeleteArticleGql) {}
 
   getArticle(id: string): Observable<Article> {
     this.logger.add(`Fetching article, id=${id}`);
@@ -138,6 +183,26 @@ export class ArticleService {
       .pipe(
         map(result => result.data.allArticles)
       );
+  }
+
+  postArticle(article: Article): Observable<Article> {
+    this.logger.add("Creating article");
+
+    return this.apollo.mutate({
+      mutation: this.postArticleGql.document,
+      variables: {
+        title: article.title,
+        summary: article.summary,
+        content: article.content,
+        tags: article.tags
+      },
+      refetchQueries: [{
+        query: this.getArticlesGql.document
+      }]
+    })
+    .pipe(
+      map(result => result.data.postArticle)
+    );
   }
 
   updateArticle(article: Article): Observable<Article> {
@@ -169,6 +234,17 @@ export class ArticleService {
     })
     .pipe(
       map(result => result.data.publishArticle)
+    );
+  }
+
+  deleteArticle(id: string): Observable<Article> {
+    this.logger.add(`Deleting article, id=${id}`);
+
+    return this.deleteArticleGql.mutate({
+      id
+    })
+    .pipe(
+      map(result => result.data.deleteArticle)
     );
   }
 }

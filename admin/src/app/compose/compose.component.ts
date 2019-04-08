@@ -11,27 +11,50 @@ import { ArticleService } from '../article.service';
   styleUrls: ['./compose.component.styl']
 })
 export class ComposeComponent implements OnInit {
-  article: Article;
+  article: Article = {
+    id: null,
+    draft: true,
+    createdAt: null,
+    modifiedAt: null,
+    publishedAt: null,
+    title: "",
+    summary: "",
+    content: "",
+    tags: [],
+    comments: []
+  };
 
   constructor(private articleService: ArticleService,
               private route: ActivatedRoute,
               private router: Router) { }
 
   ngOnInit() {
-    let id = this.route.snapshot.queryParams["id"];
-    this.articleService.getArticle(id)
-      .pipe(take(1))
-      .subscribe(article => {
-        this.article = article;
-      });
+    this.article.id = this.route.snapshot.queryParams["id"];
+
+    if (this.article.id) {
+      this.articleService.getArticle(this.article.id)
+        .pipe(take(1))
+        .subscribe(article => {
+          this.article = article;
+        });
+    }
   }
 
   save() {
-    this.articleService.updateArticle(this.article)
-      .pipe(take(1))
-      .subscribe(article => {
-        this.article = article;
-      });
+    if (this.article.id) {
+      this.articleService.updateArticle(this.article)
+        .pipe(take(1))
+        .subscribe(article => {
+          this.article = article;
+        });
+    }
+    else {
+      this.articleService.postArticle(this.article)
+        .pipe(take(1))
+        .subscribe(article => {
+          this.article = article;
+        });
+    }
   }
 
   cancel() {
