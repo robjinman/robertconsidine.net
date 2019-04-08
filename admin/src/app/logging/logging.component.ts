@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { LoggingService } from '../logging.service';
 
@@ -8,14 +9,19 @@ import { LoggingService } from '../logging.service';
   styleUrls: ['./logging.component.styl']
 })
 export class LoggingComponent implements OnInit {
+  private subscription: Subscription;
   @ViewChild('logWindow') logWindow: ElementRef;
 
   constructor(public logger: LoggingService) {
-    this.logger.subject.subscribe(() => {
+    this.subscription = this.logger.subject.subscribe(() => {
       let e = this.logWindow.nativeElement;
       e.scrollTop = e.scrollHeight;
     });
   }
 
   ngOnInit() { }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 }

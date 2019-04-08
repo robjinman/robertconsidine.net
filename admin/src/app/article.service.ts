@@ -240,8 +240,12 @@ export class ArticleService {
   deleteArticle(id: string): Observable<Article> {
     this.logger.add(`Deleting article, id=${id}`);
 
-    return this.deleteArticleGql.mutate({
-      id
+    return this.apollo.mutate({
+      mutation: this.deleteArticleGql.document,
+      variables: { id },
+      refetchQueries: [{
+        query: this.getArticlesGql.document
+      }]
     })
     .pipe(
       map(result => result.data.deleteArticle)

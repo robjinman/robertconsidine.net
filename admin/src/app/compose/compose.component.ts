@@ -61,6 +61,12 @@ export class ComposeComponent implements OnInit {
     this.router.navigate(["/articles"]);
   }
 
+  delete() {
+    this.articleService.deleteArticle(this.article.id)
+      .pipe(take(1))
+      .subscribe();
+  }
+
   togglePublished() {
     let publish = this.article.draft;
 

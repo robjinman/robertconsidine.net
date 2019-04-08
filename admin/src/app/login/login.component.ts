@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { take } from 'rxjs/operators';
 
 import { AuthService } from '../auth.service';
 
@@ -14,7 +15,9 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService) { }
 
   login(): void {
-    this.authService.login(this.email, this.password).subscribe();
+    this.authService.login(this.email, this.password)
+      .pipe(take(1))
+      .subscribe();
   }
 
   ngOnInit() {
