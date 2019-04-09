@@ -8,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FeedComponent } from './feed/feed.component';
+import { MaterialUiModule } from './material-ui/material-ui.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { FeedComponent } from './feed/feed.component';
     AppRoutingModule,
     HttpClientModule,
     ApolloModule,
-    HttpLinkModule
+    HttpLinkModule,
+    MaterialUiModule
   ],
   providers: [
     {

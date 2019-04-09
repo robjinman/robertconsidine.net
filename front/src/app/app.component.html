@@ -1,7 +1,11 @@
 <div class="wrap">
-  <div class="header">Rob Jinman's Blog</div>
-  <div class="main">
+  <mat-card class="header" routerLink="/">
+    <h1>Rob Jinman Blog</h1>
+  </mat-card>
+  <div class="middle">
     <router-outlet></router-outlet>
   </div>
-  <div class="footer">Copyright Rob Jinman 2019. All rights reserved.</div>
+  <mat-card class="footer">
+    Copyright Rob Jinman 2019. All rights reserved.
+  </mat-card>
 </div>
