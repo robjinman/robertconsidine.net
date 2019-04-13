@@ -1,0 +1,33 @@
+@require '../../styles/palette'
+
+.header-component
+  background-color: var_colour_3
+  color: white
+  line-height: 40px
+  flex-grow: 0
+  cursor: pointer
+  overflow-y: hidden
+  user-select: none
+
+  .top-bar
+    position: relative
+
+    h1
+      margin-top: 0
+      margin-bottom: 0
+      font-weight: normal
+
+    .menu-icon
+      position: absolute
+      top: 0
+      right: 20px
+      width: 40px
+      height: 40px
+
+  .nav-menu
+    text-align: center
+    height: 0
+    overflow: hidden
+
+    &.open
+      height: auto

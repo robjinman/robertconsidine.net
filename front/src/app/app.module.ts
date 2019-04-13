@@ -19,6 +19,7 @@ import { AuthService,
          LoginGql,
          SignupGql,
          AuthMiddleware } from './auth.service';
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { AuthService,
     ArticleComponent,
     CommentsComponent,
     LoginComponent,
-    SignupComponent
+    SignupComponent,
+    HeaderComponent
   ],
   imports: [
     FormsModule,
