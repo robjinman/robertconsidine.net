@@ -1,0 +1,17 @@
+<div class="signup-component">
+    <mat-form-field class="form-field">
+      <input [(ngModel)]="email" matInput placeholder="Email"/>
+    </mat-form-field>
+    <mat-form-field class="form-field">
+      <input [(ngModel)]="name" matInput placeholder="Name"/>
+    </mat-form-field>
+    <mat-form-field class="form-field">
+      <input type="password" [(ngModel)]="password1" matInput
+             placeholder="Password"/>
+    </mat-form-field>
+    <mat-form-field class="form-field">
+      <input type="password" [(ngModel)]="password2" matInput
+             placeholder="Repeat password"/>
+    </mat-form-field>
+    <button mat-button (click)="signup()">Signup</button>
+  </div>

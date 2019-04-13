@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import gql from 'graphql-tag';
 
-import { Article } from './types'
+import { Article, Comment } from './types'
 
 interface GetArticleResponse {
   article: Article;
@@ -55,6 +55,28 @@ class GetPublishedArticlesGql extends Query<GetArticlesResponse> {
   `;
 }
 
+@Injectable({
+  providedIn: "root"
+})
+class GetCommentsGql extends Query<GetArticleResponse> {
+  document = gql`
+    query article($id: ID!) {
+      article(id: $id) {
+        id
+        comments {
+          id
+          createdAt
+          content
+          user {
+            id
+            name
+          }
+        }
+      }
+    }
+  `;
+}
+
 interface PostCommentResponse {
   comment: Comment
 }
@@ -64,16 +86,16 @@ interface PostCommentResponse {
 })
 class PostCommentGql extends Mutation<PostCommentResponse> {
   document = gql`
-    mutation postComment($articleId: String!, $content: String!) {
+    mutation postComment($articleId: ID!, $content: String!) {
       postComment(
         articleId: $articleId,
         content: $content
       ) {
-        id,
-        createdAt,
-        content,
+        id
+        createdAt
+        content
         user {
-          id,
+          id
           name
         }
       }
@@ -87,7 +109,8 @@ class PostCommentGql extends Mutation<PostCommentResponse> {
 export class ArticleService {
   constructor(private getArticleGql: GetArticleGql,
               private getArticlesGql: GetPublishedArticlesGql,
-              private postCommentGql: PostCommentGql) {}
+              private postCommentGql: PostCommentGql,
+              private getCommentsGql: GetCommentsGql) {}
 
   getArticle(id: string): Observable<Article> {
     return this.getArticleGql.watch({id: id})
@@ -102,6 +125,14 @@ export class ArticleService {
       .valueChanges
       .pipe(
         map(result => result.data.publishedArticles)
+      );
+  }
+
+  getComments(articleId: string): Observable<Comment[]> {
+    return this.getCommentsGql.watch({id: articleId})
+      .valueChanges
+      .pipe(
+        map(result => result.data.article.comments)
       );
   }
 

@@ -1,0 +1,9 @@
+<div class="login-component">
+  <mat-form-field class="form-field">
+    <input [(ngModel)]="email" matInput placeholder="Email"/>
+  </mat-form-field>
+  <mat-form-field class="form-field">
+    <input type="password" [(ngModel)]="password" matInput placeholder="Password"/>
+  </mat-form-field>
+  <button mat-button (click)="login()">Login</button>
+</div>

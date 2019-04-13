@@ -1,15 +1,31 @@
 <mat-card class="comments-component">
   <h1>Discussion</h1>
-  <div *ngFor="let comment of comments" class="comment">
-    <div class="comment-content">{{ comment.content }}</div>
+  <div class="">
+    <mat-tab-group dynamicHeight="true" class="authorisation" *ngIf="!authorised()">
+      <mat-tab label="Sign up">
+        <div class="tab-wrap"><app-signup></app-signup></div>
+      </mat-tab>
+      <mat-tab label="Log in">
+        <div class="tab-wrap"><app-login></app-login></div>
+      </mat-tab>
+    </mat-tab-group>
+    <div *ngIf="authorised()" class="comment-form">
+      <mat-form-field class="form-input">
+        <textarea [(ngModel)]="comment" matInput placeholder="Comment">
+        </textarea>
+      </mat-form-field>
+      <button (click)="submit()" mat-button>Submit</button>
+      <div class="err-msg">{{ errMsg }}</div>
+    </div>
   </div>
-  <div *ngIf="comments.length == 0">
-    No comments yet
+  <div class="comments-section">
+    <div *ngIf="(comments | async)?.length == 0">
+      No comments yet
+    </div>
+    <div *ngFor="let comment of comments | async" class="comment">
+      <div class="comment-date">{{ comment.createdAt | date }}</div>
+      <div class="comment-author">{{ comment.user.name }}</div>
+      <div class="comment-content">{{ comment.content }}</div>
+    </div>
   </div>
-  <div class="comment-form">
-    <mat-form-field class="form-input">
-      <textarea matInput placeholder="Comment"></textarea>
-    </mat-form-field>
-    <button (click)="submit()" mat-button>Submit</button>
-  </div>
-  </mat-card>
+</mat-card>
