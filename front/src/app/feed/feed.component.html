@@ -1,6 +1,8 @@
-<div class="feed">
-  <div class="feed-item" *ngFor="let article of articles | async">
-    <div class="item-title">{{ article.title }}</div>
+<div class="feed-component">
+  <mat-card class="feed-item" *ngFor="let article of articles | async"
+       [routerLink]="['/article', article.id]">
+    <h3 class="item-title">{{ article.title }}</h3>
     <div class="item-date">{{ article.publishedAt | date }}</div>
-  </div>
+    <div class="item-summary" [innerHTML]="article.summary"></div>
+  </mat-card>
 </div>
