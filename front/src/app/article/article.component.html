@@ -1,7 +1,10 @@
 <div class="article-component">
   <div *ngIf="article">
-    <h1 class="article-title">{{ article.title }}</h1>
-    <div class="article-published-at">{{ article.publishedAt | date }}</div>
-    <div class="article-content" [innerHTML]="article.content"></div>
+    <mat-card class="article">
+      <h1 class="article-title">{{ article.title }}</h1>
+      <div class="article-published-at">{{ article.publishedAt | date }}</div>
+      <div class="article-content" [innerHTML]="article.content"></div>
+    </mat-card>
+    <app-comments [comments]="article.comments"></app-comments>
   </div>
 </div>

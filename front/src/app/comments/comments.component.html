@@ -1,0 +1,15 @@
+<mat-card class="comments-component">
+  <h1>Discussion</h1>
+  <div *ngFor="let comment of comments" class="comment">
+    <div class="comment-content">{{ comment.content }}</div>
+  </div>
+  <div *ngIf="comments.length == 0">
+    No comments yet
+  </div>
+  <div class="comment-form">
+    <mat-form-field class="form-input">
+      <textarea matInput placeholder="Comment"></textarea>
+    </mat-form-field>
+    <button (click)="submit()" mat-button>Submit</button>
+  </div>
+  </mat-card>

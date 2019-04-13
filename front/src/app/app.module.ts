@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http';
@@ -10,15 +11,18 @@ import { AppComponent } from './app.component';
 import { FeedComponent } from './feed/feed.component';
 import { MaterialUiModule } from './material-ui/material-ui.module';
 import { ArticleComponent } from './article/article.component';
+import { CommentsComponent } from './comments/comments.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FeedComponent,
-    ArticleComponent
+    ArticleComponent,
+    CommentsComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
     ApolloModule,
