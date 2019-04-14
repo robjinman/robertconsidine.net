@@ -55,6 +55,6 @@ export class ArticlesComponent implements OnInit {
   }
 
   newArticle() {
-    this.router.navigate(["/compose"]);
+    this.router.navigate(["/compose-article"]);
   }
 }

@@ -111,10 +111,10 @@ export class PageService {
               private updatePageGql: UpdatePageGql,
               private deletePageGql: DeletePageGql) {}
 
-  getPage(id: string): Observable<Page> {
-    this.logger.add(`Fetching page, id=${id}`);
+  getPage(name: string): Observable<Page> {
+    this.logger.add(`Fetching page, name=${name}`);
 
-    return this.getPageGql.watch({id: id})
+    return this.getPageGql.watch({name: name})
       .valueChanges
       .pipe(
         map(result => result.data.page)

@@ -7,10 +7,10 @@ import { ArticleService } from '../article.service';
 
 @Component({
   selector: 'app-compose',
-  templateUrl: './compose.component.html',
-  styleUrls: ['./compose.component.styl']
+  templateUrl: './compose-article.component.html',
+  styleUrls: ['./compose-article.component.styl']
 })
-export class ComposeComponent implements OnInit {
+export class ComposeArticleComponent implements OnInit {
   article: Article = {
     id: null,
     draft: true,

@@ -14,6 +14,8 @@ export interface Query {
   article?: Maybe<Article>;
 
   page?: Maybe<Page>;
+
+  pages: Page[];
 }
 
 export interface Article {

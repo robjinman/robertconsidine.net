@@ -1,0 +1,15 @@
+<div class="compose-page-component">
+  <div class="form">
+    <mat-form-field class="form-input">
+      <input matInput placeholder="Name" [(ngModel)]="page.name" />
+    </mat-form-field>
+  </div>
+  <div class="content-input">
+    <quill-editor [(ngModel)]="page.content"></quill-editor>
+  </div>
+  <div class="buttons">
+    <button (click)="cancel()" mat-button>Cancel</button>
+    <button (click)="save()" mat-button>Save</button>
+    <button (click)="delete()" mat-button>Delete</button>
+  </div>
+</div>

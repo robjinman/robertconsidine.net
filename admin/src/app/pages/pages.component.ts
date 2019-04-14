@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { Page } from '../types';
@@ -12,9 +13,14 @@ import { PageService } from '../page.service';
 export class PagesComponent implements OnInit {
   public pages: Observable<Page[]>;
 
-  constructor(private pageService: PageService) { }
+  constructor(private router: Router,
+              private pageService: PageService) { }
 
   ngOnInit() {
     this.pages = this.pageService.getPages();
+  }
+
+  newPage() {
+    this.router.navigate(["/compose-page"]);
   }
 }

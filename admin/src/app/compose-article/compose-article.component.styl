@@ -1,0 +1,26 @@
+@require '../../styles/palette'
+
+.compose-article-component
+  width: 90%
+  height: 600px
+  max-width: 1000px
+  margin: 10px auto 0 auto
+  padding: 10px
+  background-color: white
+  display: flex
+  flex-direction: column
+
+  .form-input
+    display: block
+
+  .content-input
+    display: block
+    margin-bottom: 10px
+
+    quill-editor
+      display: block
+
+  button
+    display: inline-block
+    max-width: 100px
+    margin-right: 5px

@@ -29,7 +29,7 @@
       <td mat-cell *matCellDef="let element">{{ element.comments }}</td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr routerLink="/compose" [queryParams]="{ 'id': row.id }" mat-row
+    <tr routerLink="/compose-article" [queryParams]="{ 'id': row.id }" mat-row
         *matRowDef="let row; columns: displayedColumns;"
         class="tbl-articles-row"></tr>
   </table>
