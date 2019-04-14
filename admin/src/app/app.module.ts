@@ -26,6 +26,34 @@ import { PagesComponent } from './pages/pages.component';
 import { UsersComponent } from './users/users.component';
 import { ComposePageComponent } from './compose-page/compose-page.component';
 
+const quillToolbarOptions = [
+  ['bold', 'italic', 'underline', 'strike'],
+  ['blockquote', 'code-block'],
+
+  [{ 'header': 1 }, { 'header': 2 }],
+  [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+  [{ 'script': 'sub'}, { 'script': 'super' }],
+  [{ 'indent': '-1'}, { 'indent': '+1' }],
+  [{ 'direction': 'rtl' }],
+
+  [{ 'size': ['small', false, 'large', 'huge'] }],
+  [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+  [{ 'color': [] }, { 'background': [] }],
+  [{ 'font': [] }],
+  [{ 'align': [] }],
+
+  ['clean'],
+
+  ['link', 'image', 'video']
+];
+
+function imageHandler() {
+  const range = this.quill.getSelection();
+  const value = prompt("What is the image URL");
+  this.quill.insertEmbed(range.index, "image", value, "user");
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,7 +76,17 @@ import { ComposePageComponent } from './compose-page/compose-page.component';
     HttpClientModule,
     ApolloModule,
     HttpLinkModule,
-    QuillModule,
+    QuillModule.forRoot({
+      modules: {
+        toolbar: {
+          container: quillToolbarOptions,
+          handlers: {
+            image: imageHandler
+          }
+        }
+      },
+      theme: "snow"
+    }),
     MaterialUiModule
   ],
   providers: [
