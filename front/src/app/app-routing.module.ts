@@ -3,15 +3,18 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { FeedComponent } from './feed/feed.component';
 import { ArticleComponent } from './article/article.component';
-import { PortfolioComponent } from './portfolio/portfolio.component';
-import { AboutComponent } from './about/about.component';
+import { PageComponent } from './page/page.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'feed', pathMatch: 'full' },
   { path: 'feed', component: FeedComponent },
   { path: 'article/:id', component: ArticleComponent },
-  { path: 'portfolio', component: PortfolioComponent },
-  { path: 'about', component: AboutComponent }
+  { path: 'portfolio',
+    component: PageComponent,
+    data: { pageName: "portfolio" } },
+  { path: 'about',
+    component: PageComponent,
+    data: { pageName: "about" } },
 ];
 
 @NgModule({

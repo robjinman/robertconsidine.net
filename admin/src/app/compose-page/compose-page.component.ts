@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 
 import { Page } from '../types';
@@ -18,6 +18,7 @@ export class ComposePageComponent implements OnInit {
   };
 
   constructor(private route: ActivatedRoute,
+              private router: Router,
               private pageService: PageService) { }
 
   ngOnInit() {
@@ -30,5 +31,32 @@ export class ComposePageComponent implements OnInit {
           this.page = page;
         });
     }
+  }
+
+  save() {
+    if (this.page.id) {
+      this.pageService.updatePage(this.page)
+        .pipe(take(1))
+        .subscribe(page => {
+          this.page = page;
+        });
+    }
+    else {
+      this.pageService.postPage(this.page)
+        .pipe(take(1))
+        .subscribe(page => {
+          this.page = page;
+        });
+    }
+  }
+
+  cancel() {
+    this.router.navigate(["/pages"]);
+  }
+
+  delete() {
+    this.pageService.deletePage(this.page.id)
+      .pipe(take(1))
+      .subscribe();
   }
 }
