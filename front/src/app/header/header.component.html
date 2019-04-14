@@ -1,11 +1,9 @@
-<mat-card class="header-component">
-  <div class="top-bar" (click)="toggleMenu()">
-    <h1>robjinman</h1>
-    <mat-icon svgIcon="menu" class="menu-icon"></mat-icon>
-  </div>
+<mat-card class="header-component" (click)="toggleMenu()">
+  <h1 (click)="navigateTo('/feed', $event)">robjinman</h1>
+  <mat-icon svgIcon="menu" class="menu-icon"></mat-icon>
   <div class="nav-menu" [ngClass]="{'open': open}">
-    <div class="navbar-link" (click)="navigateTo('/feed')">Blog</div>
-    <div class="navbar-link" (click)="navigateTo('/portfolio')">Portfolio</div>
-    <div class="navbar-link" (click)="navigateTo('/about')">About</div>
+    <div class="navbar-link" (click)="navigateTo('/feed', $event)">Blog</div>
+    <div class="navbar-link" (click)="navigateTo('/portfolio', $event)">Portfolio</div>
+    <div class="navbar-link" (click)="navigateTo('/about', $event)">About</div>
   </div>
 </mat-card>

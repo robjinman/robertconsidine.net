@@ -29,8 +29,10 @@ export class HeaderComponent implements OnInit {
     this.open = !this.open;
   }
 
-  navigateTo(route: string) {
+  navigateTo(route: string, $event: any) {
     this.open = false;
     this.router.navigate([route]);
+
+    $event.stopPropagation();
   }
 }
