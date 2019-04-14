@@ -44,9 +44,14 @@ async function page(root, args, context, info) {
   });
 }
 
+async function pages(root, args, context, info) {
+  return await context.prisma.pages();
+}
+
 module.exports = {
   publishedArticles,
   allArticles,
   article,
-  page
+  page,
+  pages
 };

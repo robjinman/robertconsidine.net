@@ -4,6 +4,7 @@ type Query {
   allArticles(skip: Int, first: Int): [Article!]!
   article(id: ID!): Article
   page(name: String!): Page
+  pages: [Page!]!
 }
 
 type Mutation {

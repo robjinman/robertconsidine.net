@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+
+import { Page } from '../types';
+import { PageService } from '../page.service';
 
 @Component({
   selector: 'app-pages',
@@ -6,10 +10,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./pages.component.styl']
 })
 export class PagesComponent implements OnInit {
+  public pages: Observable<Page[]>;
 
-  constructor() { }
+  constructor(private pageService: PageService) { }
 
   ngOnInit() {
+    this.pages = this.pageService.getPages();
   }
-
 }

@@ -112,18 +112,16 @@ async function deleteArticle(parent, args, context, info) {
 async function postPage(parent, args, context, info) {
   await assertAdminUser(context);
 
-  return await context.prisma.postArticle({
-    data: {
-      name: args.name,
-      content: args.content,
-    }
+  return await context.prisma.createPage({
+    name: args.name,
+    content: args.content,
   });
 }
 
 async function updatePage(parent, args, context, info) {
   await assertAdminUser(context);
 
-  return await context.prisma.updateArticle({
+  return await context.prisma.updatePage({
     data: {
       content: args.content,
     },
