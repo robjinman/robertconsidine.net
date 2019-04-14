@@ -49,6 +49,7 @@ client, then restart the back-end app. From project_root/back
 
 Regenerate types.ts (configured in codegen.yml)
 
+        rm src/app/types.ts
         gql-gen
 
 Create a new Angular component

@@ -38,8 +38,15 @@ async function article(root, args, context, info) {
   return article;
 }
 
+async function page(root, args, context, info) {
+  return await context.prisma.page({
+    name: args.name
+  });
+}
+
 module.exports = {
   publishedArticles,
   allArticles,
   article,
+  page
 };

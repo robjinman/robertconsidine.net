@@ -109,6 +109,38 @@ async function deleteArticle(parent, args, context, info) {
   });
 }
 
+async function postPage(parent, args, context, info) {
+  await assertAdminUser(context);
+
+  return await context.prisma.postArticle({
+    data: {
+      name: args.name,
+      content: args.content,
+    }
+  });
+}
+
+async function updatePage(parent, args, context, info) {
+  await assertAdminUser(context);
+
+  return await context.prisma.updateArticle({
+    data: {
+      content: args.content,
+    },
+    where: {
+      name: args.name
+    }
+  });
+}
+
+async function deletePage(parent, args, context, info) {
+  await assertAdminUser(context);
+
+  return await context.prisma.deletePage({
+    name: args.name
+  });
+}
+
 async function postComment(parent, args, context, info) {
   const userId = getUserId(context);
 
@@ -137,6 +169,9 @@ async function deleteComment(parent, args, context) {
 module.exports = {
   signup,
   login,
+  postPage,
+  updatePage,
+  deletePage,
   postArticle,
   updateArticle,
   publishArticle,

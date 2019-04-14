@@ -3,6 +3,7 @@ type Query {
   publishedArticles(tags: [String!], skip: Int, first: Int, filter: String): [Article!]!
   allArticles(skip: Int, first: Int): [Article!]!
   article(id: ID!): Article
+  page(name: String!): Page
 }
 
 type Mutation {
@@ -14,11 +15,19 @@ type Mutation {
   deleteArticle(id: ID!): Article!
   postComment(articleId: ID!, content: String!): Comment!
   deleteComment(commentId: ID!): Comment
+  postPage(name: String!, content: String!): Page!
+  updatePage(name: String!, content: String!): Page!
+  deletePage(name: String!): Page
 }
 
 type Subscription {
   newArticle: Article
   newComment: Comment
+}
+
+type Page {
+  name: String!
+  content: String!
 }
 
 type Article {

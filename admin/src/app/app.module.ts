@@ -15,12 +15,13 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ArticlesComponent } from './articles/articles.component';
 import { CommentsComponent } from './comments/comments.component';
 import { ComposeComponent } from './compose/compose.component';
-import { SubscribersComponent } from './subscribers/subscribers.component';
 import { LoggingComponent } from './logging/logging.component';
 import { MaterialUiModule } from './material-ui/material-ui.module';
 import { LoginComponent } from './login/login.component';
 import { LoginGql, AuthService, AuthMiddleware } from './auth.service';
 import { LoggingService } from './logging.service';
+import { PagesComponent } from './pages/pages.component';
+import { UsersComponent } from './users/users.component';
 
 @NgModule({
   declarations: [
@@ -29,9 +30,10 @@ import { LoggingService } from './logging.service';
     ArticlesComponent,
     CommentsComponent,
     ComposeComponent,
-    SubscribersComponent,
     LoggingComponent,
-    LoginComponent
+    LoginComponent,
+    PagesComponent,
+    UsersComponent
   ],
   imports: [
     BrowserModule,

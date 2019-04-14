@@ -11,6 +11,11 @@ type Article {
   comments: [Comment!]!
 }
 
+type Page {
+  name: String! @unique
+  content: String!
+}
+
 type AuthPayload {
   token: String
   user: User

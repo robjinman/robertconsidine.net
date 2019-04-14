@@ -12,6 +12,8 @@ export interface Query {
   allArticles: Article[];
 
   article?: Maybe<Article>;
+
+  page?: Maybe<Page>;
 }
 
 export interface Article {
@@ -60,6 +62,12 @@ export interface User {
   admin: boolean;
 }
 
+export interface Page {
+  name: string;
+
+  content: string;
+}
+
 export interface Mutation {
   signup?: Maybe<AuthPayload>;
 
@@ -76,6 +84,12 @@ export interface Mutation {
   postComment: Comment;
 
   deleteComment?: Maybe<Comment>;
+
+  postPage: Page;
+
+  updatePage: Page;
+
+  deletePage?: Maybe<Page>;
 }
 
 export interface AuthPayload {
@@ -110,6 +124,9 @@ export interface AllArticlesQueryArgs {
 }
 export interface ArticleQueryArgs {
   id: string;
+}
+export interface PageQueryArgs {
+  name: string;
 }
 export interface SignupMutationArgs {
   email: string;
@@ -158,4 +175,17 @@ export interface PostCommentMutationArgs {
 }
 export interface DeleteCommentMutationArgs {
   commentId: string;
+}
+export interface PostPageMutationArgs {
+  name: string;
+
+  content: string;
+}
+export interface UpdatePageMutationArgs {
+  name: string;
+
+  content: string;
+}
+export interface DeletePageMutationArgs {
+  name: string;
 }
