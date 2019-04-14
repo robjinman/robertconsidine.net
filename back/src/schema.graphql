@@ -26,6 +26,7 @@ type Subscription {
 }
 
 type Page {
+  id: ID!
   name: String!
   content: String!
 }

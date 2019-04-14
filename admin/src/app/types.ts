@@ -63,6 +63,8 @@ export interface User {
 }
 
 export interface Page {
+  id: string;
+
   name: string;
 
   content: string;

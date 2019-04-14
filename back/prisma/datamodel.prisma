@@ -12,6 +12,7 @@ type Article {
 }
 
 type Page {
+  id: ID! @unique
   name: String! @unique
   content: String!
 }
