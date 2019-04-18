@@ -1,10 +1,10 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const { APP_SECRET,
         ADMIN_USER,
         currentDateString,
         getUserId,
-        assertAdminUser } = require('../utils');
+        assertAdminUser } = require("../utils");
 
 async function signup(parent, args, context, info) {
   const exists = await context.prisma.$exists.user({
@@ -12,7 +12,7 @@ async function signup(parent, args, context, info) {
   });
 
   if (exists) {
-    throw new Error('User already exists');
+    throw new Error("User already exists");
   }
 
   const pwHash = await bcrypt.hash(args.password, 10);
@@ -32,12 +32,12 @@ async function signup(parent, args, context, info) {
 async function login(parent, args, context, info) {
   const user = await context.prisma.user({ email: args.email });
   if (!user) {
-    throw new Error('No such user found');
+    throw new Error("No such user found");
   }
 
   const valid = await bcrypt.compare(args.password, user.pwHash);
   if (!valid) {
-    throw new Error('Invalid password');
+    throw new Error("Invalid password");
   }
 
   const token = jwt.sign({ userId: user.id }, APP_SECRET);
@@ -164,6 +164,42 @@ async function deleteComment(parent, args, context) {
   }
 }
 
+async function uploadFile(parent, args, context, info) {
+  await assertAdminUser(context);
+
+  let file = null;
+  let page = await context.prisma.page({ id: args.documentId });
+
+  if (page) {
+    file = await context.prisma.createFile({
+      name: args.name,
+      extension: args.extension,
+      page: { connect: { id: args.documentId } },
+      article: null
+    });
+  }
+  else {
+    file = await context.prisma.createFile({
+      name: args.name,
+      extension: args.extension,
+      page: null,
+      article: { connect: { id: args.documentId } }
+    });
+  }
+
+  context.s3Service.upload(file.id, args.data, file.extension);
+
+  return file;
+}
+
+async function deleteFile(parent, args, context, info) {
+  await assertAdminUser(context);
+
+  return await context.prisma.deleteFile({
+    id: args.id
+  });
+}
+
 module.exports = {
   signup,
   login,
@@ -176,4 +212,6 @@ module.exports = {
   deleteArticle,
   postComment,
   deleteComment,
+  uploadFile,
+  deleteFile
 };

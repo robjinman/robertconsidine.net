@@ -7,6 +7,7 @@ type Article {
   title: String!
   summary: String!
   content: String!
+  files: [File!]!
   tags: [String!]!
   comments: [Comment!]!
 }
@@ -15,6 +16,29 @@ type Page {
   id: ID! @unique
   name: String! @unique
   content: String!
+  files: [File]!
+}
+
+# Ideally, we would define an interface like this, which would be implemented
+# by Page and Article, but Prisma doesn't support this yet.
+#
+# interface Document {
+#   id: ID! @unique
+#   content: String!
+# }
+
+type File {
+  id: ID! @unique
+
+  # Prisma doesn't support polymorphism through interfaces yet
+  # document: Document!
+  #
+  # Instead, one of these will be null
+  article: Article
+  page: Page
+
+  name: String!
+  extension: String!
 }
 
 type AuthPayload {

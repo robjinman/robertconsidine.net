@@ -1,3 +1,9 @@
+interface Document {
+  id: ID!
+  content: String!
+  files: [File!]!
+}
+
 type Query {
   info: String!
   publishedArticles(tags: [String!], skip: Int, first: Int, filter: String): [Article!]!
@@ -19,6 +25,15 @@ type Mutation {
   postPage(name: String!, content: String!): Page!
   updatePage(name: String!, content: String!): Page!
   deletePage(name: String!): Page
+  uploadFile(documentId: ID!, data: String!, name: String!, extension: String!): File!
+  deleteFile(id: ID!): File!
+}
+
+type File {
+  id: ID!
+  name: String!
+  extension: String!
+  document: Document!
 }
 
 type Subscription {
@@ -26,13 +41,14 @@ type Subscription {
   newComment: Comment
 }
 
-type Page {
+type Page implements Document {
   id: ID!
   name: String!
   content: String!
+  files: [File!]!
 }
 
-type Article {
+type Article implements Document {
   id: ID!
   draft: Boolean!
   createdAt: String!
@@ -41,6 +57,7 @@ type Article {
   title: String!
   summary: String!
   content: String!
+  files: [File!]!
   tags: [String!]!
   comments: [Comment!]!
 }

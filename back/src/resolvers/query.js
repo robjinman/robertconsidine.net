@@ -1,4 +1,4 @@
-const { assertAdminUser } = require('../utils');
+const { assertAdminUser } = require("../utils");
 
 async function publishedArticles(root, args, context, info) {
   let where = {
