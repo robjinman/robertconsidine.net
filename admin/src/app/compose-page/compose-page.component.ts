@@ -14,7 +14,8 @@ export class ComposePageComponent implements OnInit {
   page: Page = {
     id: null,
     name: null,
-    content: null
+    content: null,
+    files: []
   };
 
   constructor(private route: ActivatedRoute,
@@ -22,7 +23,7 @@ export class ComposePageComponent implements OnInit {
               private pageService: PageService) { }
 
   ngOnInit() {
-    this.page.name = this.route.snapshot.queryParams["name"];
+    this.page.name = this.route.snapshot.queryParams['name'];
 
     if (this.page.name) {
       this.pageService.getPage(this.page.name)
@@ -51,7 +52,7 @@ export class ComposePageComponent implements OnInit {
   }
 
   cancel() {
-    this.router.navigate(["/pages"]);
+    this.router.navigate(['/pages']);
   }
 
   delete() {

@@ -12,7 +12,7 @@ interface GetPageResponse {
 }
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 class GetPageGql extends Query<GetPageResponse> {
   document = gql`
@@ -31,7 +31,7 @@ interface GetPagesResponse {
 }
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 class GetPagesGql extends Query<GetPagesResponse> {
   document = gql`
@@ -46,7 +46,7 @@ class GetPagesGql extends Query<GetPagesResponse> {
 }
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 class UpdatePageGql extends Mutation {
   document = gql`
@@ -65,7 +65,7 @@ class UpdatePageGql extends Mutation {
 }
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 class PostPageGql extends Mutation {
   document = gql`
@@ -84,7 +84,7 @@ class PostPageGql extends Mutation {
 }
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 class DeletePageGql extends Mutation {
   document = gql`
@@ -122,7 +122,7 @@ export class PageService {
   }
 
   getPages(): Observable<Page[]> {
-    this.logger.add("Fetching all pages");
+    this.logger.add('Fetching all pages');
 
     return this.getPagesGql.watch()
       .valueChanges
@@ -132,7 +132,7 @@ export class PageService {
   }
 
   postPage(page: Page): Observable<Page> {
-    this.logger.add("Creating page");
+    this.logger.add('Creating page');
 
     return this.apollo.mutate({
       mutation: this.postPageGql.document,

@@ -5,7 +5,7 @@ import { map, take } from 'rxjs/operators';
 import { ArticleService } from '../article.service';
 
 export interface ArticleTableRow {
-  id: string,
+  id: string;
   createdAt: string;
   modifiedAt: string;
   publishedAt: string;
@@ -22,12 +22,12 @@ export interface ArticleTableRow {
 export class ArticlesComponent implements OnInit {
   articleTable: ArticleTableRow[] = [];
   displayedColumns: string[] = [
-    "title",
-    "createdAt",
-    "modifiedAt",
-    "publishedAt",
-    "draft",
-    "comments"
+    'title',
+    'createdAt',
+    'modifiedAt',
+    'publishedAt',
+    'draft',
+    'comments'
   ];
 
   constructor(private router: Router,
@@ -55,6 +55,6 @@ export class ArticlesComponent implements OnInit {
   }
 
   newArticle() {
-    this.router.navigate(["/compose-article"]);
+    this.router.navigate(['/compose-article']);
   }
 }

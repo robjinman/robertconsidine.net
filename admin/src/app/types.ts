@@ -1,6 +1,18 @@
 export type Maybe<T> = T | null;
 
 // ====================================================
+// Interfaces
+// ====================================================
+
+export interface Document {
+  id: string;
+
+  content: string;
+
+  files: File[];
+}
+
+// ====================================================
 // Types
 // ====================================================
 
@@ -18,7 +30,7 @@ export interface Query {
   pages: Page[];
 }
 
-export interface Article {
+export interface Article extends Document {
   id: string;
 
   draft: boolean;
@@ -35,9 +47,21 @@ export interface Article {
 
   content: string;
 
+  files: File[];
+
   tags: string[];
 
   comments: Comment[];
+}
+
+export interface File {
+  id: string;
+
+  name: string;
+
+  extension: string;
+
+  document: Document;
 }
 
 export interface Comment {
@@ -64,12 +88,14 @@ export interface User {
   admin: boolean;
 }
 
-export interface Page {
+export interface Page extends Document {
   id: string;
 
   name: string;
 
   content: string;
+
+  files: File[];
 }
 
 export interface Mutation {
@@ -94,6 +120,10 @@ export interface Mutation {
   updatePage: Page;
 
   deletePage?: Maybe<Page>;
+
+  uploadFile: File;
+
+  deleteFile: File;
 }
 
 export interface AuthPayload {
@@ -192,4 +222,16 @@ export interface UpdatePageMutationArgs {
 }
 export interface DeletePageMutationArgs {
   name: string;
+}
+export interface UploadFileMutationArgs {
+  documentId: string;
+
+  data: string;
+
+  name: string;
+
+  extension: string;
+}
+export interface DeleteFileMutationArgs {
+  id: string;
 }

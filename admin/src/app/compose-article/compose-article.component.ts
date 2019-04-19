@@ -17,10 +17,11 @@ export class ComposeArticleComponent implements OnInit {
     createdAt: null,
     modifiedAt: null,
     publishedAt: null,
-    title: "",
-    summary: "",
-    content: "",
+    title: '',
+    summary: '',
+    content: '',
     tags: [],
+    files: [],
     comments: []
   };
 
@@ -29,13 +30,14 @@ export class ComposeArticleComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit() {
-    this.article.id = this.route.snapshot.queryParams["id"];
+    this.article.id = this.route.snapshot.queryParams['id'];
 
     if (this.article.id) {
       this.articleService.getArticle(this.article.id)
         .pipe(take(1))
         .subscribe(article => {
           this.article = article;
+          console.log(this.article);
         });
     }
   }
@@ -58,7 +60,7 @@ export class ComposeArticleComponent implements OnInit {
   }
 
   cancel() {
-    this.router.navigate(["/articles"]);
+    this.router.navigate(['/articles']);
   }
 
   delete() {

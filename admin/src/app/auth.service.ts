@@ -9,7 +9,7 @@ import { ApolloLink } from 'apollo-link';
 import { LoggingService } from './logging.service';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class AuthMiddleware extends ApolloLink {
   constructor(authService: AuthService) {
@@ -17,7 +17,7 @@ export class AuthMiddleware extends ApolloLink {
       const token = authService.token;
       if (token) {
         operation.setContext({
-          headers: new HttpHeaders().set("Authorization", `Bearer ${token}`)
+          headers: new HttpHeaders().set('Authorization', `Bearer ${token}`)
         });
       }
       return forward(operation);
@@ -28,7 +28,7 @@ export class AuthMiddleware extends ApolloLink {
 }
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class LoginGql extends Mutation {
   document = gql`
@@ -51,12 +51,12 @@ export class AuthService {
   token: string = null;
 
   constructor(private logger: LoggingService, private loginGql: LoginGql) {
-    this.userName = localStorage.getItem("userName");
-    this.token = localStorage.getItem("token");
+    this.userName = localStorage.getItem('userName');
+    this.token = localStorage.getItem('token');
   }
 
   login(email: string, password: string): Observable<string> {
-    this.logger.add("Logging in");
+    this.logger.add('Logging in');
 
     let ob = this.loginGql.mutate({ email, password })
       .pipe(
@@ -68,20 +68,20 @@ export class AuthService {
       this.userName = auth.user.name;
       this.token = auth.token;
 
-      localStorage.setItem("userName", this.userName);
-      localStorage.setItem("token", this.token);
+      localStorage.setItem('userName', this.userName);
+      localStorage.setItem('token', this.token);
     });
 
     return ob;
   }
 
   logout() {
-    this.logger.add("Logging out");
+    this.logger.add('Logging out');
 
     this.userName = null;
     this.token = null;
-    localStorage.removeItem("userName");
-    localStorage.removeItem("token");
+    localStorage.removeItem('userName');
+    localStorage.removeItem('token');
   }
 
   authorised(): boolean {

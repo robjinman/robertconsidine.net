@@ -25,6 +25,7 @@ import { LoggingService } from './logging.service';
 import { PagesComponent } from './pages/pages.component';
 import { UsersComponent } from './users/users.component';
 import { ComposePageComponent } from './compose-page/compose-page.component';
+import { AttachmentsComponent } from './attachments/attachments.component';
 
 const quillToolbarOptions = [
   ['bold', 'italic', 'underline', 'strike'],
@@ -50,8 +51,8 @@ const quillToolbarOptions = [
 
 function imageHandler() {
   const range = this.quill.getSelection();
-  const value = prompt("What is the image URL");
-  this.quill.insertEmbed(range.index, "image", value, "user");
+  const value = prompt('What is the image URL');
+  this.quill.insertEmbed(range.index, 'image', value, 'user');
 }
 
 @NgModule({
@@ -65,7 +66,8 @@ function imageHandler() {
     LoginComponent,
     PagesComponent,
     UsersComponent,
-    ComposePageComponent
+    ComposePageComponent,
+    AttachmentsComponent
   ],
   imports: [
     BrowserModule,
@@ -85,7 +87,7 @@ function imageHandler() {
           }
         }
       },
-      theme: "snow"
+      theme: 'snow'
     }),
     MaterialUiModule
   ],
@@ -106,7 +108,7 @@ function imageHandler() {
       provide: APOLLO_OPTIONS,
       useFactory: (httpLink: HttpLink, authMiddleware: AuthMiddleware) => {
         const http = httpLink.create({
-          uri: "http://localhost:4000"
+          uri: 'http://localhost:4000'
         });
 
         return {

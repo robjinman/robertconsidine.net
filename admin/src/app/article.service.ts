@@ -12,7 +12,7 @@ interface GetArticleResponse {
 }
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 class GetArticleGql extends Query<GetArticleResponse> {
   document = gql`
@@ -27,6 +27,11 @@ class GetArticleGql extends Query<GetArticleResponse> {
         summary
         content
         tags
+        files {
+          id
+          name
+          extension
+        }
         comments {
           id
         }
@@ -40,7 +45,7 @@ interface GetArticlesResponse {
 }
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 class GetAllArticlesGql extends Query<GetArticlesResponse> {
   document = gql`
@@ -63,7 +68,7 @@ class GetAllArticlesGql extends Query<GetArticlesResponse> {
 }
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 class UpdateArticleGql extends Mutation {
   document = gql`
@@ -92,7 +97,7 @@ class UpdateArticleGql extends Mutation {
 }
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 class PostArticleGql extends Mutation {
   document = gql`
@@ -119,7 +124,7 @@ class PostArticleGql extends Mutation {
 }
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 class PublishArticleGql extends Mutation {
   document = gql`
@@ -138,7 +143,7 @@ class PublishArticleGql extends Mutation {
 }
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 class DeleteArticleGql extends Mutation {
   document = gql`
@@ -176,7 +181,7 @@ export class ArticleService {
   }
 
   getArticles(): Observable<Article[]> {
-    this.logger.add("Fetching all articles");
+    this.logger.add('Fetching all articles');
 
     return this.getArticlesGql.watch()
       .valueChanges
@@ -186,7 +191,7 @@ export class ArticleService {
   }
 
   postArticle(article: Article): Observable<Article> {
-    this.logger.add("Creating article");
+    this.logger.add('Creating article');
 
     return this.apollo.mutate({
       mutation: this.postArticleGql.document,

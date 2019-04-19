@@ -21,6 +21,6 @@ export class PagesComponent implements OnInit {
   }
 
   newPage() {
-    this.router.navigate(["/compose-page"]);
+    this.router.navigate(['/compose-page']);
   }
 }
