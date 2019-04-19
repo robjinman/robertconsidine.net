@@ -18,7 +18,7 @@
     </div>
     <button mat-button color="primary" (click)="upload()">Upload</button>
   </div>
-  <mat-card>
+  <mat-card *ngIf="files.length > 0">
     <table mat-table class="tbl-files" [dataSource]="files">
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Name</th>
