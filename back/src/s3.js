@@ -17,7 +17,7 @@ class S3Service {
     let params = {
       Bucket: this.bucket,
       Body: buf,
-      Key: id + fileExt
+      Key: id
     };
 
     this.s3.putObject(params, (err, data) => {

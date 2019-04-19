@@ -1,7 +1,12 @@
-import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
+import { Component,
+         OnInit,
+         Input,
+         ElementRef,
+         ViewChild,
+         SimpleChanges } from '@angular/core';
 import { take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
-import { File } from '../types';
 import { FileService } from '../file.service';
 import { base64ArrayBuffer } from '../base64';
 
@@ -18,12 +23,13 @@ interface FileToUpload {
   styleUrls: ['./attachments.component.styl']
 })
 export class AttachmentsComponent implements OnInit {
-  @ViewChild('fileInput') fileInput: ElementRef;
   @Input() documentId: string;
-  @Input() files: File[];
+  @ViewChild('fileInput') fileInput: ElementRef;
   displayedColumns: string[] = [
     'name',
-    'id'
+    'extension',
+    'url',
+    'action'
   ];
   fileToUpload: FileToUpload = {
     fullName: null,
@@ -31,13 +37,35 @@ export class AttachmentsComponent implements OnInit {
     extension: null,
     file: null
   };
+  files: Observable<File[]>;
 
   constructor(private fileService: FileService) { }
 
   ngOnInit() {}
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.documentId) {
+      this.files = this.fileService.getFiles(this.documentId);
+    }
+  }
+
+  getUrl(id: string): string {
+    return this.fileService.getUrl(id);
+  }
+
   chooseFile() {
     this.fileInput.nativeElement.click();
+  }
+
+  copyLink(id: string) {
+    const elem = document.getElementById("link-" + id) as HTMLInputElement;
+    elem.select();
+    document.execCommand("copy");
+  }
+
+  deleteFile(id: string) {
+    this.fileService.deleteFile(this.documentId, id)
+      .pipe(take(1)).subscribe();
   }
 
   upload() {

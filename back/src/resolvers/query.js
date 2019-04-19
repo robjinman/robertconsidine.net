@@ -48,10 +48,30 @@ async function pages(root, args, context, info) {
   return await context.prisma.pages();
 }
 
+async function files(root, args, context, info) {
+  return await context.prisma.files({
+    where: {
+      OR: [
+        {
+          page: {
+            id: args.documentId
+          },
+        },
+        {
+          article: {
+            id: args.documentId
+          }
+        }
+      ]
+    }
+  });
+}
+
 module.exports = {
   publishedArticles,
   allArticles,
   article,
   page,
-  pages
+  pages,
+  files
 };

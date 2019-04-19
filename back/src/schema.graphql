@@ -11,6 +11,7 @@ type Query {
   article(id: ID!): Article
   page(name: String!): Page
   pages: [Page!]!
+  files(documentId: ID!): [File!]!
 }
 
 type Mutation {

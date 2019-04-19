@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Mutation, Apollo } from 'apollo-angular';
+import { Mutation, Apollo, Query } from 'apollo-angular';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import gql from 'graphql-tag';
@@ -7,11 +7,32 @@ import gql from 'graphql-tag';
 import { File } from './types'
 import { LoggingService } from './logging.service';
 
+const BUCKET_URL = "https://s3.eu-west-2.amazonaws.com/assets.robjinman.com";
+
 export interface FileDesc {
   documentId: string;
   data: string;
   name: string;
   extension: string;
+}
+
+interface GetFilesResponse {
+  files: File[]
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GetFilesGql extends Query<GetFilesResponse> {
+  document = gql`
+    query files($documentId: ID!) {
+      files(documentId: $documentId) {
+        id
+        name
+        extension
+      }
+    }
+  `;
 }
 
 @Injectable({
@@ -30,9 +51,6 @@ class UploadFileGql extends Mutation {
         extension: $extension
       ) {
         id
-        document {
-          id
-        }
         name
         extension
       }
@@ -50,9 +68,6 @@ class DeleteFileGql extends Mutation {
         id: $id
       ) {
         id
-        document {
-          id
-        }
         name
         extension
       }
@@ -66,8 +81,21 @@ class DeleteFileGql extends Mutation {
 export class FileService {
   constructor(private apollo: Apollo,
               private logger: LoggingService,
+              private getFilesGql: GetFilesGql,
               private uploadFileGql: UploadFileGql,
               private deleteFileGql: DeleteFileGql) {}
+
+  getUrl(id: string): string {
+    return BUCKET_URL + "/" + id;
+  }
+
+  getFiles(documentId: string): Observable<File[]> {
+    return this.getFilesGql.watch({documentId: documentId})
+      .valueChanges
+      .pipe(
+        map(result => result.data.files)
+      );
+  }
 
   uploadFile(file: FileDesc): Observable<File> {
     this.logger.add('Uploading file');
@@ -79,19 +107,27 @@ export class FileService {
         data: file.data,
         name: file.name,
         extension: file.extension
-      }
+      },
+      refetchQueries: [{
+        query: this.getFilesGql.document,
+        variables: { documentId: file.documentId }
+      }]
     })
     .pipe(
       map(result => result.data.uploadFile)
     );
   }
 
-  deleteFile(id: string): Observable<File> {
+  deleteFile(documentId: string, id: string): Observable<File> {
     this.logger.add(`Deleting file, id=${id}`);
 
     return this.apollo.mutate({
       mutation: this.deleteFileGql.document,
-      variables: { id }
+      variables: { id },
+      refetchQueries: [{
+        query: this.getFilesGql.document,
+        variables: { documentId: documentId }
+      }]
     })
     .pipe(
       map(result => result.data.deleteFile)

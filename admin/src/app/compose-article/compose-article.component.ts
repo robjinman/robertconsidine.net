@@ -34,10 +34,8 @@ export class ComposeArticleComponent implements OnInit {
 
     if (this.article.id) {
       this.articleService.getArticle(this.article.id)
-        .pipe(take(1))
         .subscribe(article => {
           this.article = article;
-          console.log(this.article);
         });
     }
   }

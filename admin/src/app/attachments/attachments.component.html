@@ -1,6 +1,6 @@
 <div class="attachments-component">
   <h2>Attachments</h2>
-  <mat-card class="file-upload">
+  <div class="file-upload">
     <div class="file-selector">
       <input hidden type="file" #fileInput (change)="onFileSelected()" />
       <button mat-button (click)="chooseFile()">
@@ -17,18 +17,39 @@
       </mat-form-field>
     </div>
     <button mat-button color="primary" (click)="upload()">Upload</button>
+  </div>
+  <mat-card>
+    <table mat-table class="tbl-files" [dataSource]="files">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let file">{{ file.name }}</td>
+      </ng-container>
+      <ng-container matColumnDef="extension">
+        <th mat-header-cell *matHeaderCellDef>Extension</th>
+        <td mat-cell *matCellDef="let file">{{ file.extension }}</td>
+      </ng-container>
+      <ng-container matColumnDef="url">
+        <th mat-header-cell *matHeaderCellDef>URL</th>
+        <td mat-cell *matCellDef="let file">
+          <mat-form-field class="form-input txt-url">
+            <input id="{{ 'link-' + file.id }}" matInput readonly
+                   [ngModel]="getUrl(file.id)" />
+          </mat-form-field>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>Action</th>
+        <td mat-cell *matCellDef="let file">
+          <mat-icon (click)="copyLink(file.id)" svgIcon="copy"
+                    class="file-action"></mat-icon>
+          <mat-icon (click)="deleteFile(file.id)" svgIcon="delete"
+                    class="file-action">
+          </mat-icon>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+          class="tbl-files-row"></tr>
+    </table>
   </mat-card>
-  <table mat-table class="tbl-files" [dataSource]="files">
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>Name</th>
-      <td mat-cell *matCellDef="let file">{{ file.name }}</td>
-    </ng-container>
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef>UUID</th>
-      <td mat-cell *matCellDef="let file">{{ file.id }}</td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-        class="tbl-files-row"></tr>
-  </table>
 </div>

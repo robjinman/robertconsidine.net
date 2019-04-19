@@ -18,6 +18,5 @@
       {{ article.draft ? "Publish" : "Unpublish" }}</button>
     <button (click)="delete()" color="error" mat-button>Delete</button>
   </div>
-  <app-attachments [documentId]="article.id" [files]="article.files">
-  </app-attachments>
+  <app-attachments [documentId]="article.id"></app-attachments>
 </div>
