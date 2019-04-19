@@ -7,6 +7,7 @@ import { Component,
 import { take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
+import { File } from '../types';
 import { FileService } from '../file.service';
 import { base64ArrayBuffer } from '../base64';
 
