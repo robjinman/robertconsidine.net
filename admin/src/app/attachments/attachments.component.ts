@@ -6,10 +6,12 @@ import { Component,
          SimpleChanges } from '@angular/core';
 import { take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { MatSnackBar } from '@angular/material';
 
 import { File } from '../types';
 import { FileService } from '../file.service';
 import { base64ArrayBuffer } from '../base64';
+import { SUCCESS_SNACKBAR_OPTIONS, ERROR_SNACKBAR_OPTIONS } from '../utils';
 
 interface FileToUpload {
   fullName: string;
@@ -40,11 +42,12 @@ export class AttachmentsComponent implements OnInit {
   };
   files$: Observable<File[]>;
 
-  constructor(private fileService: FileService) { }
+  constructor(private fileService: FileService,
+              private snackbar: MatSnackBar) { }
 
   ngOnInit() {}
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges() {
     if (this.documentId) {
       this.files$ = this.fileService.getFiles(this.documentId);
     }
@@ -62,11 +65,19 @@ export class AttachmentsComponent implements OnInit {
     const elem = document.getElementById("link-" + id) as HTMLInputElement;
     elem.select();
     document.execCommand("copy");
+
+    this.snackbar.open('Link copied', 'Dismiss', SUCCESS_SNACKBAR_OPTIONS);
   }
 
   deleteFile(id: string) {
     this.fileService.deleteFile(this.documentId, id)
-      .pipe(take(1)).subscribe();
+      .pipe(take(1)).subscribe(() => {
+        this.snackbar.open('Attachment removed', 'Dismiss',
+                           SUCCESS_SNACKBAR_OPTIONS);
+      }, () => {
+        this.snackbar.open('Error removing attachment', 'Dismiss',
+                           ERROR_SNACKBAR_OPTIONS);
+      });
   }
 
   upload() {
@@ -81,7 +92,14 @@ export class AttachmentsComponent implements OnInit {
         data: data,
         name: this.fileToUpload.name,
         extension: this.fileToUpload.extension
-      }).pipe(take(1)).subscribe();
+      })
+      .pipe(take(1)).subscribe(() => {
+        this.snackbar.open('File uploaded', 'Dismiss',
+                           SUCCESS_SNACKBAR_OPTIONS);
+      }, () => {
+        this.snackbar.open('Error uploading file', 'Dismiss',
+                           ERROR_SNACKBAR_OPTIONS);
+      });
     }
   }
 
