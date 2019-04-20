@@ -56,8 +56,6 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<string> {
-    this.logger.add('Logging in');
-
     let ob = this.loginGql.mutate({ email, password })
       .pipe(
         take(1),
@@ -70,18 +68,22 @@ export class AuthService {
 
       localStorage.setItem('userName', this.userName);
       localStorage.setItem('token', this.token);
+
+      this.logger.add('Logged in');
+    }, () => {
+      this.logger.add('Login failed');
     });
 
     return ob;
   }
 
   logout() {
-    this.logger.add('Logging out');
-
     this.userName = null;
     this.token = null;
     localStorage.removeItem('userName');
     localStorage.removeItem('token');
+
+    this.logger.add('Logged out');
   }
 
   authorised(): boolean {

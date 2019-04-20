@@ -8,6 +8,7 @@ import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { QuillModule } from 'ngx-quill';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -117,6 +118,12 @@ function imageHandler() {
         }
       },
       deps: [HttpLink, AuthMiddleware]
+    },
+    {
+      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {
+        duration: 2000,
+        panelClass: ['snackbar']
+      }
     }
   ],
   bootstrap: [AppComponent]

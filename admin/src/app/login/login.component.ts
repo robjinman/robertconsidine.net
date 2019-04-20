@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { take } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material';
 
 import { AuthService } from '../auth.service';
+import { SUCCESS_SNACKBAR_OPTIONS, ERROR_SNACKBAR_OPTIONS } from '../utils';
 
 @Component({
   selector: 'app-login',
@@ -12,12 +14,22 @@ export class LoginComponent implements OnInit {
   email: string = null;
   password: string = null;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService,
+              private snackBar: MatSnackBar) { }
 
-  login(): void {
+  login() {
     this.authService.login(this.email, this.password)
       .pipe(take(1))
-      .subscribe();
+      .subscribe(
+        () => {
+          this.snackBar.open("Access granted", "Dismiss",
+                             SUCCESS_SNACKBAR_OPTIONS);
+        },
+        () => {
+          this.snackBar.open("Nice try, asshole", "Dismiss",
+                             ERROR_SNACKBAR_OPTIONS);
+        }
+      );
   }
 
   ngOnInit() {

@@ -4,8 +4,10 @@
       <input [(ngModel)]="email" matInput placeholder="Email"/>
     </mat-form-field>
     <mat-form-field class="form-input">
-      <input [(ngModel)]="password" matInput placeholder="Password"/>
+      <input type="password" [(ngModel)]="password" matInput
+             placeholder="Password" (keyup.enter)="login()" />
     </mat-form-field>
-    <button class="btn-login" (click)="login()" mat-button>Login</button>
+    <button class="btn-login" (click)="login()" mat-raised-button
+            color="primary">Login</button>
   </mat-card>
 </div>
