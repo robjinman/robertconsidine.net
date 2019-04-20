@@ -9,8 +9,8 @@
   </div>
   <div class="buttons">
     <button (click)="cancel()" mat-button>Cancel</button>
-    <button (click)="save()" mat-button>Save</button>
-    <button (click)="delete()" mat-button>Delete</button>
+    <button (click)="save()" color="primary" mat-button>Save</button>
+    <button (click)="delete()" color="error" mat-button>Delete</button>
   </div>
   <app-attachments [documentId]="page.id">
   </app-attachments>
