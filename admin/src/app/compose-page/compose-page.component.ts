@@ -1,9 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material';
 
 import { Page } from '../types';
 import { PageService } from '../page.service';
+import { SUCCESS_SNACKBAR_OPTIONS, ERROR_SNACKBAR_OPTIONS } from '../utils';
 
 @Component({
   selector: 'app-compose-page',
@@ -20,7 +22,8 @@ export class ComposePageComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private pageService: PageService) { }
+              private pageService: PageService,
+              private snackbar: MatSnackBar) { }
 
   ngOnInit() {
     this.page.name = this.route.snapshot.queryParams['name'];
@@ -30,6 +33,10 @@ export class ComposePageComponent implements OnInit {
         .pipe(take(1))
         .subscribe(page => {
           this.page = page;
+        }, () => {
+          this.snackbar.open('Error loading page', 'Dismiss',
+                             ERROR_SNACKBAR_OPTIONS);
+          this.page = null;
         });
     }
   }
@@ -39,14 +46,22 @@ export class ComposePageComponent implements OnInit {
       this.pageService.updatePage(this.page)
         .pipe(take(1))
         .subscribe(page => {
+          this.snackbar.open('Page saved', 'Dismiss', SUCCESS_SNACKBAR_OPTIONS);
           this.page = page;
+        }, () => {
+          this.snackbar.open('Error saving page', 'Dismiss',
+                             ERROR_SNACKBAR_OPTIONS);
         });
     }
     else {
       this.pageService.postPage(this.page)
         .pipe(take(1))
         .subscribe(page => {
+          this.snackbar.open('Page saved', 'Dismiss', SUCCESS_SNACKBAR_OPTIONS);
           this.page = page;
+        }, () => {
+          this.snackbar.open('Error saving page', 'Dismiss',
+                             ERROR_SNACKBAR_OPTIONS);
         });
     }
   }
@@ -58,6 +73,11 @@ export class ComposePageComponent implements OnInit {
   delete() {
     this.pageService.deletePage(this.page.id)
       .pipe(take(1))
-      .subscribe();
+      .subscribe(() => {
+        this.snackbar.open('Page deleted', 'Dismiss', SUCCESS_SNACKBAR_OPTIONS);
+      }, () => {
+        this.snackbar.open('Error deleting page', 'Dismiss',
+                           ERROR_SNACKBAR_OPTIONS);
+      });
   }
 }

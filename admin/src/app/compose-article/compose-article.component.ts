@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material';
 
 import { Article } from '../types';
 import { ArticleService } from '../article.service';
-import { ERROR_SNACKBAR_OPTIONS } from '../utils';
+import { ERROR_SNACKBAR_OPTIONS, SUCCESS_SNACKBAR_OPTIONS } from '../utils';
 
 @Component({
   selector: 'app-compose',
@@ -41,7 +41,7 @@ export class ComposeArticleComponent implements OnInit {
         .subscribe(article => {
           this.article = article;
         }, () => {
-          this.snackbar.open('Failed to load article', 'Dismiss',
+          this.snackbar.open('Error loading article', 'Dismiss',
                              ERROR_SNACKBAR_OPTIONS);
           this.article = null;
         });
@@ -54,6 +54,11 @@ export class ComposeArticleComponent implements OnInit {
         .pipe(take(1))
         .subscribe(article => {
           this.article = article;
+          this.snackbar.open('Article saved', 'Dismiss',
+                             SUCCESS_SNACKBAR_OPTIONS);
+        }, () => {
+          this.snackbar.open('Error saving article', 'Dismiss',
+                             ERROR_SNACKBAR_OPTIONS);
         });
     }
     else {
@@ -61,6 +66,11 @@ export class ComposeArticleComponent implements OnInit {
         .pipe(take(1))
         .subscribe(article => {
           this.article = article;
+          this.snackbar.open('Article saved', 'Dismiss',
+                             SUCCESS_SNACKBAR_OPTIONS);
+        }, () => {
+          this.snackbar.open('Error saving article', 'Dismiss',
+                             ERROR_SNACKBAR_OPTIONS);
         });
     }
   }
@@ -72,7 +82,15 @@ export class ComposeArticleComponent implements OnInit {
   delete() {
     this.articleService.deleteArticle(this.article.id)
       .pipe(take(1))
-      .subscribe();
+      .subscribe(
+        () => {
+          this.snackbar.open('Article deleted', 'Dismiss',
+                             SUCCESS_SNACKBAR_OPTIONS);
+        }, () => {
+          this.snackbar.open('Error deleting article', 'Dismiss',
+                             ERROR_SNACKBAR_OPTIONS);
+        }
+      );
   }
 
   togglePublished() {
@@ -82,6 +100,11 @@ export class ComposeArticleComponent implements OnInit {
       .pipe(take(1))
       .subscribe(() => {
         this.article.draft = !publish;
+        this.snackbar.open('Article published', 'Dismiss',
+                           SUCCESS_SNACKBAR_OPTIONS);
+      }, () => {
+        this.snackbar.open('Error publishing article', 'Dismiss',
+                           ERROR_SNACKBAR_OPTIONS);
       });
   }
 }
