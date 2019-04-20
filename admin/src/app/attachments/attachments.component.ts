@@ -38,7 +38,7 @@ export class AttachmentsComponent implements OnInit {
     extension: null,
     file: null
   };
-  files: Observable<File[]>;
+  files$: Observable<File[]>;
 
   constructor(private fileService: FileService) { }
 
@@ -46,7 +46,7 @@ export class AttachmentsComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.documentId) {
-      this.files = this.fileService.getFiles(this.documentId);
+      this.files$ = this.fileService.getFiles(this.documentId);
     }
   }
 

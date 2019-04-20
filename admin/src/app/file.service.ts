@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Mutation, Apollo, Query } from 'apollo-angular';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import gql from 'graphql-tag';
 
 import { File } from './types'
@@ -93,13 +93,17 @@ export class FileService {
     return this.getFilesGql.watch({documentId: documentId})
       .valueChanges
       .pipe(
-        map(result => result.data.files)
+        map(result => result.data.files),
+        tap(() => {
+          this.logger.add(`Fetched files for document, id=${documentId}`);
+        }, () => {
+          this.logger.add(
+            `Failed to Fetch files for document, id=${documentId}`);
+        })
       );
   }
 
   uploadFile(file: FileDesc): Observable<File> {
-    this.logger.add('Uploading file');
-
     return this.apollo.mutate({
       mutation: this.uploadFileGql.document,
       variables: {
@@ -114,13 +118,16 @@ export class FileService {
       }]
     })
     .pipe(
-      map(result => result.data.uploadFile)
+      map(result => result.data.uploadFile),
+      tap(() => {
+        this.logger.add(`Uploaded file ${file.name}.${file.extension}`);
+      }, () => {
+        this.logger.add(`Failed to upload file ${file.name}.${file.extension}`);
+      })
     );
   }
 
   deleteFile(documentId: string, id: string): Observable<File> {
-    this.logger.add(`Deleting file, id=${id}`);
-
     return this.apollo.mutate({
       mutation: this.deleteFileGql.document,
       variables: { id },
@@ -130,7 +137,12 @@ export class FileService {
       }]
     })
     .pipe(
-      map(result => result.data.deleteFile)
+      map(result => result.data.deleteFile),
+      tap(() => {
+        this.logger.add(`Deleted file, id=${id}`);
+      }, () => {
+        this.logger.add(`Failed to delete file, id=${id}`);
+      })
     );
   }
 }

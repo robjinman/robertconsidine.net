@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Query, Mutation, Apollo } from 'apollo-angular';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import gql from 'graphql-tag';
 
 import { Article } from './types'
@@ -171,28 +171,32 @@ export class ArticleService {
               private deleteArticleGql: DeleteArticleGql) {}
 
   getArticle(id: string): Observable<Article> {
-    this.logger.add(`Fetching article, id=${id}`);
-
     return this.getArticleGql.watch({id: id})
       .valueChanges
       .pipe(
-        map(result => result.data.article)
+        map(result => result.data.article),
+        tap(() => {
+          this.logger.add(`Fetched article, id=${id}`);
+        }, () => {
+          this.logger.add(`Failed to fetch article, id=${id}`);
+        })
       );
   }
 
   getArticles(): Observable<Article[]> {
-    this.logger.add('Fetching all articles');
-
     return this.getArticlesGql.watch()
       .valueChanges
       .pipe(
-        map(result => result.data.allArticles)
+        map(result => result.data.allArticles),
+        tap(() => {
+          this.logger.add('Fetched articles');
+        }, () => {
+          this.logger.add('Failed to fetch articles');
+        })
       );
   }
 
   postArticle(article: Article): Observable<Article> {
-    this.logger.add('Creating article');
-
     return this.apollo.mutate({
       mutation: this.postArticleGql.document,
       variables: {
@@ -206,13 +210,17 @@ export class ArticleService {
       }]
     })
     .pipe(
-      map(result => result.data.postArticle)
+      map(result => result.data.postArticle),
+      tap(result => {
+        const article = result.data.postArticle;
+        this.logger.add(`Created article, id=${article.id}`);
+      }, () => {
+        this.logger.add('Failed to create article');
+      })
     );
   }
 
   updateArticle(article: Article): Observable<Article> {
-    this.logger.add(`Saving article, id=${article.id}`);
-
     return this.updateArticleGql.mutate({
       id: article.id,
       title: article.title,
@@ -221,30 +229,33 @@ export class ArticleService {
       tags: article.tags
     })
     .pipe(
-      map(result => result.data.updateArticle)
+      map(result => result.data.updateArticle),
+      tap(() => {
+        this.logger.add(`Saved article, id=${article.id}`);
+      }, () => {
+        this.logger.add(`Failed to save article, id=${article.id}`);
+      })
     );
   }
 
   publishArticle(id: string, publish: boolean): Observable<Article> {
-    if (publish) {
-      this.logger.add(`Publishing article, id=${id}`);
-    }
-    else {
-      this.logger.add(`Unpublishing article, id=${id}`);
-    }
-
     return this.publishArticleGql.mutate({
       id,
       publish
     })
     .pipe(
-      map(result => result.data.publishArticle)
+      map(result => result.data.publishArticle),
+      tap(() => {
+        const verb = publish ? 'Published' : 'Unpublished';
+        this.logger.add(`${verb} article, id=${id}`);
+      }, () => {
+        const verb = publish ? 'Publish' : 'Unpublish';
+        this.logger.add(`Failed to ${verb} article, id=${id}`);
+      })
     );
   }
 
   deleteArticle(id: string): Observable<Article> {
-    this.logger.add(`Deleting article, id=${id}`);
-
     return this.apollo.mutate({
       mutation: this.deleteArticleGql.document,
       variables: { id },
@@ -253,7 +264,12 @@ export class ArticleService {
       }]
     })
     .pipe(
-      map(result => result.data.deleteArticle)
+      map(result => result.data.deleteArticle),
+      tap(() => {
+        this.logger.add(`Deleted article, id=${id}`);
+      }, () => {
+        this.logger.add(`Failed to delete article, id=${id}`);
+      })
     );
   }
 }

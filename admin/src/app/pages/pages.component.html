@@ -2,7 +2,7 @@
   <button mat-raised-button color="primary" class="btn-create"
           (click)="newPage()">New Page</button>
   <div class="pages-list">
-    <mat-card class="pages-list-item" *ngFor="let page of pages | async"
+    <mat-card class="pages-list-item" *ngFor="let page of pages$ | async"
               routerLink="/compose-page" [queryParams]="{ 'name': page.name }">
       {{ page.name }}</mat-card>
   </div>

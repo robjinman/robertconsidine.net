@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { Mutation } from 'apollo-angular';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { map, take, tap } from 'rxjs/operators';
 import gql from 'graphql-tag';
 import { ApolloLink } from 'apollo-link';
 
@@ -56,25 +56,21 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<string> {
-    let ob = this.loginGql.mutate({ email, password })
+    return this.loginGql.mutate({ email, password })
       .pipe(
-        take(1),
-        map(result => result.data.login)
+        map(result => result.data.login),
+        tap(auth => {
+          this.userName = auth.user.name;
+          this.token = auth.token;
+    
+          localStorage.setItem('userName', this.userName);
+          localStorage.setItem('token', this.token);
+    
+          this.logger.add('Logged in');
+        }, () => {
+          this.logger.add('Login failed');
+        })
       );
-
-    ob.subscribe(auth => {
-      this.userName = auth.user.name;
-      this.token = auth.token;
-
-      localStorage.setItem('userName', this.userName);
-      localStorage.setItem('token', this.token);
-
-      this.logger.add('Logged in');
-    }, () => {
-      this.logger.add('Login failed');
-    });
-
-    return ob;
   }
 
   logout() {

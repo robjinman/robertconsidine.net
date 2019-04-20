@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material';
 
 import { Article } from '../types';
 import { ArticleService } from '../article.service';
+import { ERROR_SNACKBAR_OPTIONS } from '../utils';
 
 @Component({
   selector: 'app-compose',
@@ -27,15 +29,21 @@ export class ComposeArticleComponent implements OnInit {
 
   constructor(private articleService: ArticleService,
               private route: ActivatedRoute,
-              private router: Router) { }
+              private router: Router,
+              private snackbar: MatSnackBar) { }
 
   ngOnInit() {
     this.article.id = this.route.snapshot.queryParams['id'];
 
     if (this.article.id) {
       this.articleService.getArticle(this.article.id)
+        .pipe(take(1))
         .subscribe(article => {
           this.article = article;
+        }, () => {
+          this.snackbar.open('Failed to load article', 'Dismiss',
+                             ERROR_SNACKBAR_OPTIONS);
+          this.article = null;
         });
     }
   }

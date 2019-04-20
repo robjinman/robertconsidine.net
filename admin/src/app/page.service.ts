@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Query, Mutation, Apollo } from 'apollo-angular';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import gql from 'graphql-tag';
 
 import { Page } from './types'
@@ -112,28 +112,32 @@ export class PageService {
               private deletePageGql: DeletePageGql) {}
 
   getPage(name: string): Observable<Page> {
-    this.logger.add(`Fetching page, name=${name}`);
-
     return this.getPageGql.watch({name: name})
       .valueChanges
       .pipe(
-        map(result => result.data.page)
+        map(result => result.data.page),
+        tap(() => {
+          this.logger.add(`Fetched ${name} page`);
+        }, () => {
+          this.logger.add(`Failed to fetch ${name} page`);
+        })
       );
   }
 
   getPages(): Observable<Page[]> {
-    this.logger.add('Fetching all pages');
-
     return this.getPagesGql.watch()
       .valueChanges
       .pipe(
-        map(result => result.data.pages)
+        map(result => result.data.pages),
+        tap(() => {
+          this.logger.add('Fetched pages');
+        }, () => {
+          this.logger.add('Failed to fetch pages');
+        })
       );
   }
 
   postPage(page: Page): Observable<Page> {
-    this.logger.add('Creating page');
-
     return this.apollo.mutate({
       mutation: this.postPageGql.document,
       variables: {
@@ -145,25 +149,31 @@ export class PageService {
       }]
     })
     .pipe(
-      map(result => result.data.postPage)
+      map(result => result.data.postPage),
+      tap(() => {
+        this.logger.add(`Created ${page.name} page`);
+      }, () => {
+        this.logger.add(`Failed to create ${page.name} page`);
+      })
     );
   }
 
   updatePage(page: Page): Observable<Page> {
-    this.logger.add(`Saving page, name=${page.name}`);
-
     return this.updatePageGql.mutate({
       name: page.name,
       content: page.content
     })
     .pipe(
-      map(result => result.data.updatePage)
+      map(result => result.data.updatePage),
+      tap(() => {
+        this.logger.add(`Saved ${page.name} page`);
+      }, () => {
+        this.logger.add(`Failed to save ${page.name} page`);
+      })
     );
   }
 
   deletePage(name: string): Observable<Page> {
-    this.logger.add(`Deleting page, name=${name}`);
-
     return this.apollo.mutate({
       mutation: this.deletePageGql.document,
       variables: { name },
@@ -172,7 +182,12 @@ export class PageService {
       }]
     })
     .pipe(
-      map(result => result.data.deletePage)
+      map(result => result.data.deletePage),
+      tap(() => {
+        this.logger.add(`Deleted ${name} page`);
+      }, () => {
+        this.logger.add(`Failed to delete ${name} page`);
+      })
     );
   }
 }

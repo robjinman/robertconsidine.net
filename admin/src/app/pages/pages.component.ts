@@ -11,13 +11,13 @@ import { PageService } from '../page.service';
   styleUrls: ['./pages.component.styl']
 })
 export class PagesComponent implements OnInit {
-  public pages: Observable<Page[]>;
+  public pages$: Observable<Page[]>;
 
   constructor(private router: Router,
               private pageService: PageService) { }
 
   ngOnInit() {
-    this.pages = this.pageService.getPages();
+    this.pages$ = this.pageService.getPages();
   }
 
   newPage() {
