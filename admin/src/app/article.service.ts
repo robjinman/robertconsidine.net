@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import gql from 'graphql-tag';
 
-import { Article } from './types'
+import { Article, Comment } from './types'
 import { LoggingService } from './logging.service';
 
 export interface GetArticleResponse {
@@ -62,6 +62,48 @@ class GetAllArticlesGql extends Query<GetArticlesResponse> {
         comments {
           id
         }
+      }
+    }
+  `;
+}
+
+interface GetCommentsResponse {
+  comments: Comment[];
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+class GetCommentsGql extends Query<GetCommentsResponse> {
+  document = gql`
+    query {
+      comments {
+        id
+        createdAt
+        content
+        article {
+          id
+          title
+        }
+        user {
+          id
+          name
+        }
+      }
+    }
+  `;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+class DeleteCommentGql extends Mutation {
+  document = gql`
+    mutation deleteComment($id: ID!) {
+      deleteComment(
+        id: $id
+      ) {
+        id
       }
     }
   `;
@@ -165,10 +207,12 @@ export class ArticleService {
               private logger: LoggingService,
               private getArticleGql: GetArticleGql,
               private getArticlesGql: GetAllArticlesGql,
+              private getCommentsGql: GetCommentsGql,
               private postArticleGql: PostArticleGql,
               private updateArticleGql: UpdateArticleGql,
               private publishArticleGql: PublishArticleGql,
-              private deleteArticleGql: DeleteArticleGql) {}
+              private deleteArticleGql: DeleteArticleGql,
+              private deleteCommentGql: DeleteCommentGql) {}
 
   getArticle(id: string): Observable<Article> {
     return this.getArticleGql.watch({id: id})
@@ -192,6 +236,19 @@ export class ArticleService {
           this.logger.add('Fetched articles');
         }, () => {
           this.logger.add('Failed to fetch articles');
+        })
+      );
+  }
+
+  getComments(): Observable<Comment[]> {
+    return this.getCommentsGql.watch()
+      .valueChanges
+      .pipe(
+        map(result => result.data.comments),
+        tap(() => {
+          this.logger.add('Fetched comments');
+        }, () => {
+          this.logger.add('Failed to fetch comments');
         })
       );
   }
@@ -269,6 +326,24 @@ export class ArticleService {
         this.logger.add(`Deleted article, id=${id}`);
       }, () => {
         this.logger.add(`Failed to delete article, id=${id}`);
+      })
+    );
+  }
+
+  deleteComment(id: string): Observable<Article> {
+    return this.apollo.mutate({
+      mutation: this.deleteCommentGql.document,
+      variables: { id },
+      refetchQueries: [{
+        query: this.getCommentsGql.document
+      }]
+    })
+    .pipe(
+      map(result => result.data.deleteComment),
+      tap(() => {
+        this.logger.add(`Deleted comment, id=${id}`);
+      }, () => {
+        this.logger.add(`Failed to delete comment, id=${id}`);
       })
     );
   }

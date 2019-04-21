@@ -38,6 +38,13 @@ async function article(root, args, context, info) {
   return article;
 }
 
+async function comments(root, args, context, info) {
+  return await context.prisma.comments({
+    skip: args.skip,
+    first: args.first,
+  });
+}
+
 async function page(root, args, context, info) {
   return await context.prisma.page({
     name: args.name
@@ -71,6 +78,7 @@ module.exports = {
   publishedArticles,
   allArticles,
   article,
+  comments,
   page,
   pages,
   files

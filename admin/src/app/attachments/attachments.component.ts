@@ -2,8 +2,7 @@ import { Component,
          OnInit,
          Input,
          ElementRef,
-         ViewChild,
-         SimpleChanges } from '@angular/core';
+         ViewChild } from '@angular/core';
 import { take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material';

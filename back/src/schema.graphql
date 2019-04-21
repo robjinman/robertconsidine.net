@@ -12,6 +12,7 @@ type Query {
   page(name: String!): Page
   pages: [Page!]!
   files(documentId: ID!): [File!]!
+  comments(skip: Int, first: Int): [Comment!]!
 }
 
 type Mutation {
@@ -22,7 +23,7 @@ type Mutation {
   publishArticle(id: ID!, publish: Boolean!): Article!
   deleteArticle(id: ID!): Article!
   postComment(articleId: ID!, content: String!): Comment!
-  deleteComment(commentId: ID!): Comment
+  deleteComment(id: ID!): Comment
   postPage(name: String!, content: String!): Page!
   updatePage(name: String!, content: String!): Page!
   deletePage(name: String!): Page

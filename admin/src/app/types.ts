@@ -28,6 +28,10 @@ export interface Query {
   page?: Maybe<Page>;
 
   pages: Page[];
+
+  files: File[];
+
+  comments: Comment[];
 }
 
 export interface Article extends Document {
@@ -162,6 +166,14 @@ export interface ArticleQueryArgs {
 export interface PageQueryArgs {
   name: string;
 }
+export interface FilesQueryArgs {
+  documentId: string;
+}
+export interface CommentsQueryArgs {
+  skip?: Maybe<number>;
+
+  first?: Maybe<number>;
+}
 export interface SignupMutationArgs {
   email: string;
 
@@ -208,7 +220,7 @@ export interface PostCommentMutationArgs {
   content: string;
 }
 export interface DeleteCommentMutationArgs {
-  commentId: string;
+  id: string;
 }
 export interface PostPageMutationArgs {
   name: string;

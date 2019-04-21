@@ -153,14 +153,14 @@ async function deleteComment(parent, args, context) {
   const userId = getUserId(context);
 
   const user = await context.prisma.user({ id: userId });
-  const comment = await context.prisma.comment({ id: args.commentId });
+  const comment = await context.prisma.comment({ id: args.id });
 
   if (comment) {
     if (user.name != ADMIN_USER && user.id != comment.user().id) {
       throw new Error("Not authorized");
     }
 
-    return await context.prisma.deleteComment({ id: args.commentId });
+    return await context.prisma.deleteComment({ id: args.id });
   }
 }
 
