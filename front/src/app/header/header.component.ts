@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 import { Subscription } from 'rxjs';
 
+import { AuthService } from '../auth.service';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -11,7 +13,8 @@ export class HeaderComponent implements OnInit {
   public open: boolean = false;
   private routerSub: Subscription;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,
+              private authService: AuthService) { }
 
   ngOnInit() {
     this.routerSub = this.router.events.subscribe(event => {
@@ -34,5 +37,9 @@ export class HeaderComponent implements OnInit {
     this.router.navigate([route]);
 
     $event.stopPropagation();
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }

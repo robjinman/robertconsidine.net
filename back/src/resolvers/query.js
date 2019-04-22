@@ -56,6 +56,8 @@ async function pages(root, args, context, info) {
 }
 
 async function files(root, args, context, info) {
+  await assertAdminUser(context);
+
   return await context.prisma.files({
     where: {
       OR: [
@@ -74,6 +76,15 @@ async function files(root, args, context, info) {
   });
 }
 
+async function users(root, args, context, info) {
+  await assertAdminUser(context);
+
+  return await context.prisma.users({
+    skip: args.skip,
+    first: args.first
+  });
+}
+
 module.exports = {
   publishedArticles,
   allArticles,
@@ -81,5 +92,6 @@ module.exports = {
   comments,
   page,
   pages,
-  files
+  files,
+  users
 };

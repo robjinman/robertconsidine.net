@@ -32,6 +32,8 @@ export interface Query {
   files: File[];
 
   comments: Comment[];
+
+  users: User[];
 }
 
 export interface Article extends Document {
@@ -83,6 +85,8 @@ export interface Comment {
 export interface User {
   id: string;
 
+  createdAt: string;
+
   name: string;
 
   email: string;
@@ -128,6 +132,8 @@ export interface Mutation {
   uploadFile: File;
 
   deleteFile: File;
+
+  deleteUser: User;
 }
 
 export interface AuthPayload {
@@ -170,6 +176,11 @@ export interface FilesQueryArgs {
   documentId: string;
 }
 export interface CommentsQueryArgs {
+  skip?: Maybe<number>;
+
+  first?: Maybe<number>;
+}
+export interface UsersQueryArgs {
   skip?: Maybe<number>;
 
   first?: Maybe<number>;
@@ -245,5 +256,8 @@ export interface UploadFileMutationArgs {
   extension: string;
 }
 export interface DeleteFileMutationArgs {
+  id: string;
+}
+export interface DeleteUserMutationArgs {
   id: string;
 }

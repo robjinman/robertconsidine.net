@@ -200,6 +200,14 @@ async function deleteFile(parent, args, context, info) {
   });
 }
 
+async function deleteUser(parent, args, context, info) {
+  await assertAdminUser(context);
+
+  return await context.prisma.deleteUser({
+    id: args.id
+  });
+}
+
 module.exports = {
   signup,
   login,
@@ -213,5 +221,6 @@ module.exports = {
   postComment,
   deleteComment,
   uploadFile,
-  deleteFile
+  deleteFile,
+  deleteUser
 };

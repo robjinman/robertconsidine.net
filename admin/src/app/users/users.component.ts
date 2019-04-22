@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
+
+import { UserService } from '../user.service';
+import { User } from '../types';
 
 @Component({
   selector: 'app-users',
@@ -6,10 +11,21 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./users.component.styl']
 })
 export class UsersComponent implements OnInit {
+  users$: Observable<User[]>;
+  displayedColumns = [
+    'name',
+    'createdAt',
+    'email',
+    'action'
+  ];
 
-  constructor() { }
+  constructor(private userService: UserService) { }
 
   ngOnInit() {
+    this.users$ = this.userService.getUsers();
   }
 
+  deleteUser(id: string) {
+    this.userService.deleteUser(id).pipe(take(1)).subscribe();
+  }
 }

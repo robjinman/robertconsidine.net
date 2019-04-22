@@ -13,6 +13,7 @@ type Query {
   pages: [Page!]!
   files(documentId: ID!): [File!]!
   comments(skip: Int, first: Int): [Comment!]!
+  users(skip: Int, first: Int): [User!]!
 }
 
 type Mutation {
@@ -29,6 +30,7 @@ type Mutation {
   deletePage(name: String!): Page
   uploadFile(documentId: ID!, data: String!, name: String!, extension: String!): File!
   deleteFile(id: ID!): File!
+  deleteUser(id: ID!): User!
 }
 
 type File {
@@ -71,6 +73,7 @@ type AuthPayload {
 
 type User {
   id: ID!
+  createdAt: String!
   name: String!
   email: String!
   comments: [Comment!]!

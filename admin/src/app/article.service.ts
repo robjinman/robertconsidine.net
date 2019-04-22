@@ -7,14 +7,14 @@ import gql from 'graphql-tag';
 import { Article, Comment } from './types'
 import { LoggingService } from './logging.service';
 
-export interface GetArticleResponse {
+interface GetArticleResponse {
   article: Article;
 }
 
 @Injectable({
   providedIn: 'root'
 })
-export class GetArticleGql extends Query<GetArticleResponse> {
+class GetArticleGql extends Query<GetArticleResponse> {
   document = gql`
     query article($id: ID!) {
       article(id: $id) {

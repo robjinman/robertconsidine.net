@@ -64,13 +64,21 @@ export class SignupGql extends Mutation {
   providedIn: 'root'
 })
 export class AuthService {
-  userName: string = null;
-  token: string = null;
+  private _userName: string = null;
+  private _token: string = null;
+
+  get userName(): string {
+    return this._userName;
+  }
+
+  get token(): string {
+    return this._token;
+  }
 
   constructor(private loginGql: LoginGql,
               private signupGql: SignupGql) {
-    this.userName = localStorage.getItem("userName");
-    this.token = localStorage.getItem("token");
+    this._userName = localStorage.getItem("userName");
+    this._token = localStorage.getItem("token");
   }
 
   login(email: string, password: string): Observable<User> {
@@ -81,11 +89,11 @@ export class AuthService {
       );
 
     ob.subscribe(auth => {
-      this.userName = auth.user.name;
-      this.token = auth.token;
+      this._userName = auth.user.name;
+      this._token = auth.token;
 
-      localStorage.setItem("userName", this.userName);
-      localStorage.setItem("token", this.token);
+      localStorage.setItem("userName", this._userName);
+      localStorage.setItem("token", this._token);
     });
 
     return ob;
@@ -99,24 +107,24 @@ export class AuthService {
       );
 
     ob.subscribe(auth => {
-      this.userName = auth.user.name;
-      this.token = auth.token;
+      this._userName = auth.user.name;
+      this._token = auth.token;
 
-      localStorage.setItem("userName", this.userName);
-      localStorage.setItem("token", this.token);
+      localStorage.setItem("userName", this._userName);
+      localStorage.setItem("token", this._token);
     });
 
     return ob;
   }
 
   logout() {
-    this.userName = null;
-    this.token = null;
+    this._userName = null;
+    this._token = null;
     localStorage.removeItem("userName");
     localStorage.removeItem("token");
   }
 
   authorised(): boolean {
-    return this.token != null && this.token.length > 0;
+    return this._token != null && this._token.length > 0;
   }
 }

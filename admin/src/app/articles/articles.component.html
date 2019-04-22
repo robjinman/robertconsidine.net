@@ -31,6 +31,6 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr routerLink="/compose-article" [queryParams]="{ 'id': row.id }" mat-row
         *matRowDef="let row; columns: displayedColumns;"
-        class="tbl-articles-row"></tr>
+        class="tbl-article-row"></tr>
   </table>
 </div>

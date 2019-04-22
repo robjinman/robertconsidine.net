@@ -48,6 +48,7 @@ type AuthPayload {
 
 type User {
   id: ID! @unique
+  createdAt: DateTime!
   name: String! @unique
   email: String! @unique
   pwHash: String!
