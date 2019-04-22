@@ -16,6 +16,7 @@ async function publishedArticles(root, args, context, info) {
     where,
     skip: args.skip,
     first: args.first,
+    orderBy: 'publishedAt_DESC'
   });
 }
 
@@ -23,6 +24,7 @@ async function allArticles(root, args, context, info) {
   return await context.prisma.articles({
     skip: args.skip,
     first: args.first,
+    orderBy: 'createdAt_DESC'
   });
 }
 
