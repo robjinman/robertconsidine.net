@@ -1,9 +1,15 @@
 <div class="login-component">
-  <mat-form-field class="form-field">
-    <input [(ngModel)]="email" matInput placeholder="Email"/>
-  </mat-form-field>
-  <mat-form-field class="form-field">
-    <input type="password" [(ngModel)]="password" matInput placeholder="Password"/>
-  </mat-form-field>
-  <button mat-button (click)="login()">Log in</button>
+  <form [formGroup]="loginForm">
+    <mat-form-field class="form-field">
+      <mat-error>Please enter a valid email address</mat-error>
+      <input formControlName="email" matInput placeholder="Email" />
+    </mat-form-field>
+    <mat-form-field class="form-field">
+      <mat-error>Please enter a password</mat-error>
+      <input type="password" formControlName="password" matInput
+             placeholder="Password"/>
+    </mat-form-field>
+    <button mat-button [disabled]="!loginForm.valid" (click)="login()">
+      Log in</button>
+  </form>
 </div>
