@@ -1,17 +1,26 @@
 <div class="signup-component">
+  <form [formGroup]="signupForm">
     <mat-form-field class="form-field">
-      <input [(ngModel)]="email" matInput placeholder="Email"/>
+      <mat-error>Please enter a valid email address</mat-error>
+      <input matInput placeholder="Email" formControlName="email" />
     </mat-form-field>
     <mat-form-field class="form-field">
-      <input [(ngModel)]="name" matInput placeholder="Name"/>
+      <mat-error>
+        Please enter a name containing only letter and numbers</mat-error>
+      <input matInput placeholder="Name" formControlName="name" />
     </mat-form-field>
     <mat-form-field class="form-field">
-      <input type="password" [(ngModel)]="password1" matInput
+      <mat-error>Please enter a password of at least 6 characters</mat-error>
+      <input type="password" matInput formControlName="password1"
              placeholder="Password"/>
     </mat-form-field>
     <mat-form-field class="form-field">
-      <input type="password" [(ngModel)]="password2" matInput
+      <input type="password" matInput formControlName="password2"
              placeholder="Repeat password"/>
     </mat-form-field>
-    <button mat-button (click)="signup()">Sign up</button>
-  </div>
+    <mat-error *ngIf="passwordsInvalid()">
+      Please ensure the passwords match</mat-error>
+    <button mat-button [disabled]="!signupForm.valid" (click)="signup()">
+      Sign up</button>
+  </form>
+</div>
