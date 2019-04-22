@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { Mutation } from 'apollo-angular';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import gql from 'graphql-tag';
 import { ApolloLink } from 'apollo-link';
 
-import { User } from './types';
+import { AuthPayload } from './types';
 
 @Injectable({
   providedIn: "root"
@@ -81,40 +81,34 @@ export class AuthService {
     this._token = localStorage.getItem("token");
   }
 
-  login(email: string, password: string): Observable<User> {
-    let ob = this.loginGql.mutate({ email, password })
+  login(email: string, password: string): Observable<AuthPayload> {
+    return this.loginGql.mutate({ email, password })
       .pipe(
-        take(1),
-        map(result => result.data.login)
+        map(result => result.data.login),
+        tap(auth => {
+          this._userName = auth.user.name;
+          this._token = auth.token;
+    
+          localStorage.setItem("userName", this._userName);
+          localStorage.setItem("token", this._token);
+        })
       );
-
-    ob.subscribe(auth => {
-      this._userName = auth.user.name;
-      this._token = auth.token;
-
-      localStorage.setItem("userName", this._userName);
-      localStorage.setItem("token", this._token);
-    });
-
-    return ob;
   }
 
-  signup(email: string, password: string, name: string): Observable<User> {
-    let ob = this.signupGql.mutate({ email, password, name })
+  signup(email: string,
+         password: string,
+         name: string): Observable<AuthPayload> {
+    return this.signupGql.mutate({ email, password, name })
       .pipe(
-        take(1),
-        map(result => result.data.signup)
+        map(result => result.data.signup),
+        tap(auth => {
+          this._userName = auth.user.name;
+          this._token = auth.token;
+    
+          localStorage.setItem("userName", this._userName);
+          localStorage.setItem("token", this._token);
+        })
       );
-
-    ob.subscribe(auth => {
-      this._userName = auth.user.name;
-      this._token = auth.token;
-
-      localStorage.setItem("userName", this._userName);
-      localStorage.setItem("token", this._token);
-    });
-
-    return ob;
   }
 
   logout() {

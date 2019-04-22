@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { Mutation } from 'apollo-angular';
 import { Observable } from 'rxjs';
-import { map, take, tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import gql from 'graphql-tag';
 import { ApolloLink } from 'apollo-link';
 
 import { LoggingService } from './logging.service';
+import { AuthPayload } from './types';
 
 @Injectable({
   providedIn: 'root'
@@ -55,7 +56,7 @@ export class AuthService {
     this.token = localStorage.getItem('token');
   }
 
-  login(email: string, password: string): Observable<string> {
+  login(email: string, password: string): Observable<AuthPayload> {
     return this.loginGql.mutate({ email, password })
       .pipe(
         map(result => result.data.login),

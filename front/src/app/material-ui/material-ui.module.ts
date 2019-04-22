@@ -6,7 +6,8 @@ import {
   MatTableModule,
   MatCardModule,
   MatTabsModule,
-  MatIconModule
+  MatIconModule,
+  MatSnackBarModule
 } from '@angular/material';
 
 const modules = [
@@ -15,7 +16,8 @@ const modules = [
   MatTableModule,
   MatCardModule,
   MatTabsModule,
-  MatIconModule
+  MatIconModule,
+  MatSnackBarModule
 ];
 
 @NgModule({

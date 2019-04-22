@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { take } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material';
 
 import { AuthService } from '../auth.service';
+import { SUCCESS_SNACKBAR_OPTIONS, ERROR_SNACKBAR_OPTIONS } from '../utils';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +22,8 @@ export class LoginComponent implements OnInit {
     ])
   });
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService,
+              private snackBar: MatSnackBar) { }
 
   ngOnInit() {
   }
@@ -27,6 +31,17 @@ export class LoginComponent implements OnInit {
   login() {
     const email = this.loginForm.get('email').value;
     const password = this.loginForm.get('password').value;
-    this.authService.login(email, password);
+    this.authService.login(email, password)
+      .pipe(take(1))
+      .subscribe(
+        () => {
+          this.snackBar.open("You are logged in", "Dismiss",
+                             SUCCESS_SNACKBAR_OPTIONS);
+        },
+        () => {
+          this.snackBar.open("Invalid credentials", "Dismiss",
+                             ERROR_SNACKBAR_OPTIONS);
+        }
+      );
   }
 }

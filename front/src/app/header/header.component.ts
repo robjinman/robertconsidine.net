@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { MatSnackBar } from '@angular/material';
 
 import { AuthService } from '../auth.service';
+import { SUCCESS_SNACKBAR_OPTIONS } from '../utils';
 
 @Component({
   selector: 'app-header',
@@ -14,7 +16,8 @@ export class HeaderComponent implements OnInit {
   private routerSub: Subscription;
 
   constructor(private router: Router,
-              private authService: AuthService) { }
+              private authService: AuthService,
+              private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.routerSub = this.router.events.subscribe(event => {
@@ -41,5 +44,6 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     this.authService.logout();
+    this.snackBar.open('Logged out', 'Dismiss', SUCCESS_SNACKBAR_OPTIONS);
   }
 }

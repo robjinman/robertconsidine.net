@@ -21,6 +21,7 @@ import { AuthService,
          AuthMiddleware } from './auth.service';
 import { HeaderComponent } from './header/header.component';
 import { PageComponent } from './page/page.component';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -70,6 +71,12 @@ import { PageComponent } from './page/page.component';
         }
       },
       deps: [HttpLink, AuthMiddleware]
+    },
+    {
+      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {
+        duration: 2000,
+        panelClass: ['snackbar']
+      }
     }
   ],
   bootstrap: [AppComponent]

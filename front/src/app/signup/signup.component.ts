@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { take } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material';
 
 import { AuthService } from '../auth.service';
+import { SUCCESS_SNACKBAR_OPTIONS, ERROR_SNACKBAR_OPTIONS } from '../utils';
 
 function nonMatchingPasswordsValidator(control: FormGroup) {
   const pw1 = control.get('password1');
@@ -39,7 +42,8 @@ export class SignupComponent implements OnInit {
     ])
   }, [ nonMatchingPasswordsValidator ]);
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService,
+              private snackBar: MatSnackBar) { }
 
   ngOnInit() {
   }
@@ -54,6 +58,17 @@ export class SignupComponent implements OnInit {
     const email = this.signupForm.get('email').value;
     const name = this.signupForm.get('name').value;
 
-    this.authService.signup(email, pw, name);
+    this.authService.signup(email, pw, name)
+      .pipe(take(1))
+      .subscribe(
+        () => {
+          this.snackBar.open("Check your email to activate account", "Dismiss",
+                             SUCCESS_SNACKBAR_OPTIONS);
+        },
+        () => {
+          this.snackBar.open("Failed to create user account", "Dismiss",
+                             ERROR_SNACKBAR_OPTIONS);
+        }
+      );
   }
 }
