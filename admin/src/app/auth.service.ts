@@ -13,9 +13,9 @@ import { AuthPayload } from './types';
   providedIn: 'root'
 })
 export class AuthMiddleware extends ApolloLink {
-  constructor(authService: AuthService) {
+  constructor(identityService: IdentityService) {
     const handler = (operation: any, forward: any) => {
-      const token = authService.token;
+      const token = identityService.token;
       if (token) {
         operation.setContext({
           headers: new HttpHeaders().set('Authorization', `Bearer ${token}`)
@@ -47,25 +47,57 @@ export class LoginGql extends Mutation {
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
-  userName: string = null;
-  token: string = null;
+export class IdentityService {
+  private _token: string = null;
+  private _userName: string = null;
 
-  constructor(private logger: LoggingService, private loginGql: LoginGql) {
-    this.userName = localStorage.getItem('userName');
-    this.token = localStorage.getItem('token');
+  constructor() {
+    this._userName = localStorage.getItem('userName');
+    this._token = localStorage.getItem('token');
   }
+
+  get userName(): string {
+    return this._userName;
+  }
+
+  set userName(value: string) {
+    this._userName = value;
+    localStorage.setItem('userName', this._userName);
+  }
+
+  get token(): string {
+    return this._token;
+  }
+
+  set token(value: string) {
+    this._token = value;
+    localStorage.setItem('token', this._token);
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+  get userName(): string {
+    return this.identityService.userName;
+  }
+
+  get token(): string {
+    return this.identityService.token;
+  }
+
+  constructor(private logger: LoggingService,
+              private identityService: IdentityService,
+              private loginGql: LoginGql) {}
 
   login(email: string, password: string): Observable<AuthPayload> {
     return this.loginGql.mutate({ email, password })
       .pipe(
         map(result => result.data.login),
         tap(auth => {
-          this.userName = auth.user.name;
-          this.token = auth.token;
-    
-          localStorage.setItem('userName', this.userName);
-          localStorage.setItem('token', this.token);
+          this.identityService.userName = auth.user;
+          this.identityService.token = auth.token;
     
           this.logger.add('Logged in');
         }, () => {
@@ -75,10 +107,8 @@ export class AuthService {
   }
 
   logout() {
-    this.userName = null;
-    this.token = null;
-    localStorage.removeItem('userName');
-    localStorage.removeItem('token');
+    this.identityService.userName = null;
+    this.identityService.token = null;
 
     this.logger.add('Logged out');
   }

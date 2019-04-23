@@ -51,6 +51,8 @@ type User {
   createdAt: DateTime!
   name: String! @unique
   email: String! @unique
+  # When null, the account has been activated
+  activationCode: String
   pwHash: String!
   comments: [Comment!]!
 }

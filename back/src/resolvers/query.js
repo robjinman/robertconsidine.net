@@ -1,4 +1,4 @@
-const { assertAdminUser } = require("../utils");
+const { assertAdminUser, getUserId, ADMIN_USER } = require("../utils");
 
 async function publishedArticles(root, args, context, info) {
   let where = {
@@ -87,6 +87,17 @@ async function users(root, args, context, info) {
   });
 }
 
+async function user(root, args, context, info) {
+  const userId = getUserId(context);
+  const user = await context.prisma.user({ id: userId });
+
+  if (user.name != ADMIN_USER && user.name != args.name) {
+    throw new Error("Not authorized");
+  }
+
+  return user;
+}
+
 module.exports = {
   publishedArticles,
   allArticles,
@@ -95,5 +106,6 @@ module.exports = {
   page,
   pages,
   files,
-  users
+  users,
+  user
 };

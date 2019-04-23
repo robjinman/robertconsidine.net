@@ -34,6 +34,8 @@ export interface Query {
   comments: Comment[];
 
   users: User[];
+
+  user?: Maybe<User>;
 }
 
 export interface Article extends Document {
@@ -94,6 +96,8 @@ export interface User {
   comments: Comment[];
 
   admin: boolean;
+
+  activated: boolean;
 }
 
 export interface Page extends Document {
@@ -184,6 +188,9 @@ export interface UsersQueryArgs {
   skip?: Maybe<number>;
 
   first?: Maybe<number>;
+}
+export interface UserQueryArgs {
+  name: string;
 }
 export interface SignupMutationArgs {
   email: string;

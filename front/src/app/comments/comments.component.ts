@@ -23,10 +23,6 @@ export class CommentsComponent implements OnInit {
     this.comments = this.articleService.getComments(this.articleId);
   }
 
-  authorised(): boolean {
-    return this.authService.authorised();
-  }
-
   submit() {
     this.articleService.postComment(this.articleId, this.comment)
       .subscribe(

@@ -21,8 +21,7 @@ import {
 import { LoggingComponent } from './logging/logging.component';
 import { MaterialUiModule } from './material-ui/material-ui.module';
 import { LoginComponent } from './login/login.component';
-import { LoginGql, AuthService, AuthMiddleware } from './auth.service';
-import { LoggingService } from './logging.service';
+import { AuthMiddleware, IdentityService } from './auth.service';
 import { PagesComponent } from './pages/pages.component';
 import { UsersComponent } from './users/users.component';
 import { ComposePageComponent } from './compose-page/compose-page.component';
@@ -94,16 +93,11 @@ function imageHandler() {
   ],
   providers: [
     {
-      provide: AuthService,
-      useFactory: (logger: LoggingService, loginGql: LoginGql) => {
-        return new AuthService(logger, loginGql);
-      },
-      deps: [LoggingService, LoginGql]
-    },
-    {
       provide: AuthMiddleware,
-      useFactory: (authService: AuthService) => new AuthMiddleware(authService),
-      deps: [AuthService]
+      useFactory: (identityService: IdentityService) => {
+        return new AuthMiddleware(identityService);
+      },
+      deps: [IdentityService]
     },
     {
       provide: APOLLO_OPTIONS,

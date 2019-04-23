@@ -14,6 +14,7 @@ type Query {
   files(documentId: ID!): [File!]!
   comments(skip: Int, first: Int): [Comment!]!
   users(skip: Int, first: Int): [User!]!
+  user(name: String!): User
 }
 
 type Mutation {
@@ -78,6 +79,7 @@ type User {
   email: String!
   comments: [Comment!]!
   admin: Boolean!
+  activated: Boolean!
 }
 
 type Comment {

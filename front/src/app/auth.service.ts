@@ -1,24 +1,24 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
-import { Mutation } from 'apollo-angular';
+import { Mutation, Query } from 'apollo-angular';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, take } from 'rxjs/operators';
 import gql from 'graphql-tag';
 import { ApolloLink } from 'apollo-link';
 
-import { AuthPayload } from './types';
+import { AuthPayload, User } from './types';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class AuthMiddleware extends ApolloLink {
-  constructor(authService: AuthService) {
+  constructor(identityService: IdentityService) {
     const handler = (operation: any, forward: any) => {
-      const token = authService.token;
+      const token = identityService.token;
 
       if (token) {
         operation.setContext({
-          headers: new HttpHeaders().set("Authorization", `Bearer ${token}`)
+          headers: new HttpHeaders().set('Authorization', `Bearer ${token}`)
         });
       }
       return forward(operation);
@@ -28,8 +28,26 @@ export class AuthMiddleware extends ApolloLink {
   }
 }
 
+interface GetUserResponse {
+  user: User;
+}
+
 @Injectable({
   providedIn: "root"
+})
+export class GetUserGql extends Query<GetUserResponse> {
+  document = gql`
+    query user($name: String!) {
+      user(name: $name) {
+        name,
+        activated
+      }
+    }
+  `;
+}
+
+@Injectable({
+  providedIn: 'root'
 })
 export class LoginGql extends Mutation {
   document = gql`
@@ -37,7 +55,8 @@ export class LoginGql extends Mutation {
         login(email: $email, password: $password) {
           token,
           user {
-            name
+            name,
+            activated
           }
         }
       }
@@ -45,7 +64,7 @@ export class LoginGql extends Mutation {
 }
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class SignupGql extends Mutation {
   document = gql`
@@ -63,22 +82,76 @@ export class SignupGql extends Mutation {
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
-  private _userName: string = null;
+export class IdentityService {
   private _token: string = null;
+  private _userName: string = null;
+
+  constructor() {
+    this._userName = localStorage.getItem('userName');
+    this._token = localStorage.getItem('token');
+  }
 
   get userName(): string {
     return this._userName;
+  }
+
+  set userName(value: string) {
+    this._userName = value;
+    localStorage.setItem('userName', this._userName);
   }
 
   get token(): string {
     return this._token;
   }
 
-  constructor(private loginGql: LoginGql,
-              private signupGql: SignupGql) {
-    this._userName = localStorage.getItem("userName");
-    this._token = localStorage.getItem("token");
+  set token(value: string) {
+    this._token = value;
+    localStorage.setItem('token', this._token);
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+  private _userActivated: boolean = false;
+
+  constructor(private identityService: IdentityService,
+              private loginGql: LoginGql,
+              private signupGql: SignupGql,
+              private getUserGql: GetUserGql) {
+
+    if (this.authorised) {
+      this.getUser(this.userName)
+        .pipe(take(1))
+        .subscribe(user => {
+          this._userActivated = user.activated;
+        });
+    }
+  }
+
+  get userName(): string {
+    return this.identityService.userName;
+  }
+
+  get token(): string {
+    return this.identityService.token;
+  }
+
+  get authorised(): boolean {
+    return this.token != null && this.token.length > 0;
+  }
+
+  get activated(): boolean {
+    return this._userActivated;
+  }
+
+  getUser(name: string): Observable<User> {
+    return this.getUserGql.watch({ name })
+      .valueChanges
+      .pipe(
+        map(result => result.data.user)
+      );
   }
 
   login(email: string, password: string): Observable<AuthPayload> {
@@ -86,11 +159,8 @@ export class AuthService {
       .pipe(
         map(result => result.data.login),
         tap(auth => {
-          this._userName = auth.user.name;
-          this._token = auth.token;
-    
-          localStorage.setItem("userName", this._userName);
-          localStorage.setItem("token", this._token);
+          this.identityService.userName = auth.user;
+          this.identityService.token = auth.token;
         })
       );
   }
@@ -102,23 +172,14 @@ export class AuthService {
       .pipe(
         map(result => result.data.signup),
         tap(auth => {
-          this._userName = auth.user.name;
-          this._token = auth.token;
-    
-          localStorage.setItem("userName", this._userName);
-          localStorage.setItem("token", this._token);
+          this.identityService.userName = auth.user;
+          this.identityService.token = auth.token;
         })
       );
   }
 
   logout() {
-    this._userName = null;
-    this._token = null;
-    localStorage.removeItem("userName");
-    localStorage.removeItem("token");
-  }
-
-  authorised(): boolean {
-    return this._token != null && this._token.length > 0;
+    this.identityService.userName = null;
+    this.identityService.token = null;
   }
 }

@@ -1,9 +1,10 @@
 <mat-card class="header-component">
   <h1 (click)="navigateTo('/feed', $event)">robjinman</h1>
   <mat-icon svgIcon="menu" class="menu-icon" (click)="toggleMenu()"></mat-icon>
-  <div class="logout" *ngIf="authService.authorised()">
+  <div class="logout" *ngIf="authService.authorised">
     <button mat-button class="btn-logout" (click)="logout()">Logout</button>
-    <div class="username">({{ authService.userName }})</div>
+    <div class="username" [ngClass]="{ 'not-activated': !authService.activated }">
+      ({{ authService.userName }})</div>
   </div>
   <div class="nav-menu" [ngClass]="{'open': open}">
     <div class="navbar-link" (click)="navigateTo('/feed', $event)">Blog</div>

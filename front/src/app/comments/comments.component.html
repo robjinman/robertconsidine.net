@@ -1,7 +1,8 @@
 <mat-card class="comments-component">
   <h1>Discussion</h1>
   <div class="">
-    <mat-tab-group dynamicHeight="true" class="authorisation" *ngIf="!authorised()">
+    <mat-tab-group dynamicHeight="true" class="authorisation"
+                   *ngIf="!authService.authorised">
       <mat-tab label="Sign up">
         <div class="tab-wrap"><app-signup></app-signup></div>
       </mat-tab>
@@ -9,7 +10,7 @@
         <div class="tab-wrap"><app-login></app-login></div>
       </mat-tab>
     </mat-tab-group>
-    <div *ngIf="authorised()" class="comment-form">
+    <div *ngIf="authService.authorised" class="comment-form">
       <mat-form-field class="form-input">
         <textarea [(ngModel)]="comment" matInput placeholder="Comment">
         </textarea>

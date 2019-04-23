@@ -9,6 +9,7 @@ const article = require("./resolvers/article");
 const comment = require("./resolvers/comment");
 const file = require("./resolvers/file");
 const subscription = require("./resolvers/subscription");
+const accountActivation = require('./account_activation');
 
 const resolvers = {
   Query: {
@@ -45,6 +46,10 @@ const server = new GraphQLServer({
       s3Service: new s3.S3Service()
     }
   },
+});
+
+server.express.get('/activate', (req, res) => {
+  accountActivation.processActivation(req, res, prisma);
 });
 
 server.start(() => console.log(`Server is running on http://localhost:4000`));

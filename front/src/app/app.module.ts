@@ -15,10 +15,7 @@ import { ArticleComponent } from './article/article.component';
 import { CommentsComponent } from './comments/comments.component';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
-import { AuthService,
-         LoginGql,
-         SignupGql,
-         AuthMiddleware } from './auth.service';
+import { AuthMiddleware, IdentityService} from './auth.service';
 import { HeaderComponent } from './header/header.component';
 import { PageComponent } from './page/page.component';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material';
@@ -47,16 +44,11 @@ import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material';
   ],
   providers: [
     {
-      provide: AuthService,
-      useFactory: (loginGql: LoginGql, signupGql: SignupGql) => {
-        return new AuthService(loginGql, signupGql);
-      },
-      deps: [LoginGql, SignupGql]
-    },
-    {
       provide: AuthMiddleware,
-      useFactory: (authService: AuthService) => new AuthMiddleware(authService),
-      deps: [AuthService]
+      useFactory: (identityService: IdentityService) => {
+        return new AuthMiddleware(identityService);
+      },
+      deps: [IdentityService]
     },
     {
       provide: APOLLO_OPTIONS,
