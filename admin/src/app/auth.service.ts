@@ -96,7 +96,7 @@ export class AuthService {
       .pipe(
         map(result => result.data.login),
         tap(auth => {
-          this.identityService.userName = auth.user;
+          this.identityService.userName = auth.user.name;
           this.identityService.token = auth.token;
     
           this.logger.add('Logged in');
