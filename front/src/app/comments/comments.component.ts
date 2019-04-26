@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { Comment } from '../types';
@@ -15,20 +15,30 @@ export class CommentsComponent implements OnInit {
   comments: Observable<Comment[]>;
   comment: string = "";
   errMsg: string = "";
+  private captchaToken: string = "";
 
   constructor(private authService: AuthService,
-              private articleService: ArticleService) { }
+              private articleService: ArticleService,
+              private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.comments = this.articleService.getComments(this.articleId);
+  }
+
+  captchaComplete(token: string) {
+    this.captchaToken = token;
+    this.changeDetector.detectChanges();
+  }
+
+  formReady(): boolean {
+    return this.comment.length > 0 && this.captchaToken.length > 0;
   }
 
   submit() {
     this.articleService.postComment(this.articleId, this.comment)
       .subscribe(
         () => {},
-        err => {
-          console.log(err);
+        () => {
           this.errMsg = "Error posting comment";
         })
   }

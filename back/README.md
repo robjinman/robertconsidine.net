@@ -9,24 +9,20 @@ Dev environment setup
 
 Download and install nodejs to /opt.
 
-Install yarn as per the instructions on the website.
-
 Install VS Code via the .deb from the official website.
 
-Set the NODE_PATH environment variable, and add the bin directories of both yarn
-and node to the PATH. To ~/.bashrc append the following:
+Set the NODE_PATH environment variable, and add the bin directory of node to
+the PATH. To ~/.bashrc append the following:
 
 ```
     export NODE_PATH=/opt/node-v10.15.0-linux-x64
     PATH="$NODE_PATH/bin:$PATH"
-
-    PATH="/home/rob/.yarn/bin:$PATH"
 ```
 
-Install the prisma CLI via yarn
+Install the prisma CLI via npm
 
 ```
-    yarn global add prisma
+    npm install -g prisma
 ```
 
 

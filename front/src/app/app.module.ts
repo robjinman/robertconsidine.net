@@ -19,6 +19,7 @@ import { AuthMiddleware, IdentityService} from './auth.service';
 import { HeaderComponent } from './header/header.component';
 import { PageComponent } from './page/page.component';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material';
+import { CaptchaComponent } from './captcha/captcha.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material';
     LoginComponent,
     SignupComponent,
     HeaderComponent,
-    PageComponent
+    PageComponent,
+    CaptchaComponent
   ],
   imports: [
     FormsModule,

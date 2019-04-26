@@ -15,7 +15,10 @@
         <textarea [(ngModel)]="comment" matInput placeholder="Comment">
         </textarea>
       </mat-form-field>
-      <button (click)="submit()" mat-button>Submit</button>
+      <app-captcha uniqueId="comment-form-captcha"
+                   (captchaComplete)="captchaComplete($event)"></app-captcha>
+      <button class="btn-submit" (click)="submit()" mat-button
+              [disabled]="!formReady()">Submit</button>
       <div class="err-msg">{{ errMsg }}</div>
     </div>
   </div>
