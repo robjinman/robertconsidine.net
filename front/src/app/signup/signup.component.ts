@@ -67,8 +67,8 @@ export class SignupComponent implements OnInit {
           this.snackBar.open("Check your email to activate account", "Dismiss",
                              SUCCESS_SNACKBAR_OPTIONS);
         },
-        () => {
-          this.snackBar.open("Failed to create user account", "Dismiss",
+        err => {
+          this.snackBar.open(err.graphQLErrors[0].message, "Dismiss",
                              ERROR_SNACKBAR_OPTIONS);
         }
       );
@@ -77,5 +77,9 @@ export class SignupComponent implements OnInit {
   captchaComplete(token: string) {
     this.captchaToken = token;
     this.changeDetector.detectChanges();
+  }
+
+  formReady(): boolean {
+    return this.signupForm.valid && this.captchaToken.length > 0;
   }
 }

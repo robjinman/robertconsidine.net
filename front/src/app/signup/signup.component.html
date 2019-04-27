@@ -22,7 +22,7 @@
                  (captchaComplete)="captchaComplete($event)"></app-captcha>
     <mat-error *ngIf="passwordsInvalid()">
       Please ensure the passwords match</mat-error>
-    <button mat-button [disabled]="!signupForm.valid" (click)="signup()">
+    <button mat-button [disabled]="!formReady()" (click)="signup()">
       Sign up</button>
   </form>
 </div>

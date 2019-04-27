@@ -6,25 +6,36 @@ const { APP_SECRET,
         getUserId,
         assertAdminUser } = require("../utils");
 const captcha = require("../captcha");
+const activation = require("../account_activation");
 
 async function signup(parent, args, context, info) {
   await captcha.verifyCaptcha(args.captcha);
 
   const exists = await context.prisma.$exists.user({
-    name: args.name
+    OR: [
+      {
+        name: args.name
+      }, {
+        email: args.email
+      }
+    ]
   });
 
   if (exists) {
-    throw new Error("User already exists");
+    throw new Error("User with that name or email already exists");
   }
 
+  const code = Math.random().toString(36).substring(2, 10);
   const pwHash = await bcrypt.hash(args.password, 10);
   const user = await context.prisma.createUser({
     name: args.name,
     email: args.email,
     pwHash: pwHash,
+    activationCode: code
   });
   const token = jwt.sign({ userId: user.id }, APP_SECRET);
+
+  activation.dispatchActivationEmail(args.name, args.email, code);
 
   return {
     token,
