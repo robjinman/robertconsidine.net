@@ -24,7 +24,7 @@ type Mutation {
   updateArticle(id: ID!, title: String!, summary: String!, content: String!, tags: [String!]!): Article!
   publishArticle(id: ID!, publish: Boolean!): Article!
   deleteArticle(id: ID!): Article!
-  postComment(articleId: ID!, content: String!): Comment!
+  postComment(articleId: ID!, content: String!, captcha: String!): Comment!
   deleteComment(id: ID!): Comment
   postPage(name: String!, content: String!): Page!
   updatePage(name: String!, content: String!): Page!

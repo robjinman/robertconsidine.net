@@ -86,10 +86,13 @@ interface PostCommentResponse {
 })
 class PostCommentGql extends Mutation<PostCommentResponse> {
   document = gql`
-    mutation postComment($articleId: ID!, $content: String!) {
+    mutation postComment($articleId: ID!,
+                         $content: String!,
+                         $captcha: String!) {
       postComment(
         articleId: $articleId,
-        content: $content
+        content: $content,
+        captcha: $captcha
       ) {
         id
         createdAt
@@ -136,10 +139,13 @@ export class ArticleService {
       );
   }
 
-  postComment(articleId: string, comment: string): Observable<Comment> {
+  postComment(articleId: string,
+              comment: string,
+              captcha: string): Observable<Comment> {
     return this.postCommentGql.mutate({
       articleId: articleId,
-      content: comment
+      content: comment,
+      captcha: captcha
     })
     .pipe(
       map(result => result.data.postComment)

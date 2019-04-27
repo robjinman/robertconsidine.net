@@ -51,7 +51,7 @@ Deploy latest prisma configuration and apply DB migrations
 Run the app
 
 ```
-    node src/index.js
+    RECAPTCHA_SECRET_KEY=XXXXXX node src/index.js
 ```
 
 

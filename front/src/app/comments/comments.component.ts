@@ -35,7 +35,9 @@ export class CommentsComponent implements OnInit {
   }
 
   submit() {
-    this.articleService.postComment(this.articleId, this.comment)
+    this.articleService.postComment(this.articleId,
+                                    this.comment,
+                                    this.captchaToken)
       .subscribe(
         () => {},
         () => {

@@ -236,6 +236,8 @@ export interface PostCommentMutationArgs {
   articleId: string;
 
   content: string;
+
+  captcha: string;
 }
 export interface DeleteCommentMutationArgs {
   id: string;

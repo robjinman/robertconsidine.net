@@ -11,7 +11,7 @@ class S3Service {
     });
   }
 
-  upload(id, data, fileExt) {
+  upload(id, data) {
     let buf = new Buffer(data, "base64");
 
     let params = {
@@ -21,13 +21,9 @@ class S3Service {
     };
 
     this.s3.putObject(params, (err, data) => {
-      // TODO:
       if (err) {
-        console.log("Failed");
-        console.log(err, err.stack);
-      }
-      else {
-        console.log("Success!");
+        console.error(err, err.stack);
+        throw new Error("Failed to upload item to S3");
       }
     });
   }

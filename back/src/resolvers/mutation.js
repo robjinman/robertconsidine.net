@@ -5,6 +5,7 @@ const { APP_SECRET,
         currentDateString,
         getUserId,
         assertAdminUser } = require("../utils");
+const captcha = require("../captcha");
 
 async function signup(parent, args, context, info) {
   const exists = await context.prisma.$exists.user({
@@ -140,6 +141,8 @@ async function deletePage(parent, args, context, info) {
 }
 
 async function postComment(parent, args, context, info) {
+  await captcha.verifyCaptcha(args.captcha);
+
   const userId = getUserId(context);
 
   return await context.prisma.createComment({
@@ -187,7 +190,7 @@ async function uploadFile(parent, args, context, info) {
     });
   }
 
-  context.s3Service.upload(file.id, args.data, file.extension);
+  context.s3Service.upload(file.id, args.data);
 
   return file;
 }
