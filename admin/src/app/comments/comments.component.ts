@@ -50,7 +50,7 @@ export class CommentsComponent implements OnInit {
             createdAt: comment.createdAt,
             articleId: comment.article.id,
             articleTitle: comment.article.title,
-            userName: comment.user.name,
+            userName: comment.user ? comment.user.name : "[deleted]",
             preview: preview + dots,
             content: comment.content,
             showMore: false
