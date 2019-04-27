@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { take } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material';
@@ -41,8 +41,10 @@ export class SignupComponent implements OnInit {
       Validators.required
     ])
   }, [ nonMatchingPasswordsValidator ]);
+  private captchaToken: string = "";
 
-  constructor(private authService: AuthService,
+  constructor(private changeDetector: ChangeDetectorRef,
+              private authService: AuthService,
               private snackBar: MatSnackBar) { }
 
   ngOnInit() {
@@ -58,7 +60,7 @@ export class SignupComponent implements OnInit {
     const email = this.signupForm.get('email').value;
     const name = this.signupForm.get('name').value;
 
-    this.authService.signup(email, pw, name)
+    this.authService.signup(email, pw, name, this.captchaToken)
       .pipe(take(1))
       .subscribe(
         () => {
@@ -70,5 +72,10 @@ export class SignupComponent implements OnInit {
                              ERROR_SNACKBAR_OPTIONS);
         }
       );
+  }
+
+  captchaComplete(token: string) {
+    this.captchaToken = token;
+    this.changeDetector.detectChanges();
   }
 }

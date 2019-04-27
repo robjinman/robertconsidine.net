@@ -198,6 +198,8 @@ export interface SignupMutationArgs {
   password: string;
 
   name: string;
+
+  captcha: string;
 }
 export interface LoginMutationArgs {
   email: string;

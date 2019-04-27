@@ -8,6 +8,8 @@ const { APP_SECRET,
 const captcha = require("../captcha");
 
 async function signup(parent, args, context, info) {
+  await captcha.verifyCaptcha(args.captcha);
+
   const exists = await context.prisma.$exists.user({
     name: args.name
   });

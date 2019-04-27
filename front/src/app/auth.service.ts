@@ -68,8 +68,14 @@ export class LoginGql extends Mutation {
 })
 export class SignupGql extends Mutation {
   document = gql`
-      mutation signup($email: String!, $password: String!, $name: String!) {
-        signup(email: $email, password: $password, name: $name) {
+      mutation signup($email: String!,
+                      $password: String!,
+                      $name: String!,
+                      $captcha: String!) {
+        signup(email: $email,
+               password: $password,
+               name: $name,
+               captcha: $captcha) {
           token,
           user {
             name
@@ -97,7 +103,12 @@ export class IdentityService {
 
   set userName(value: string) {
     this._userName = value;
-    localStorage.setItem('userName', this._userName);
+    if (this._userName) {
+      localStorage.setItem('userName', this._userName);
+    }
+    else {
+      localStorage.removeItem('userName');
+    }
   }
 
   get token(): string {
@@ -106,7 +117,12 @@ export class IdentityService {
 
   set token(value: string) {
     this._token = value;
-    localStorage.setItem('token', this._token);
+    if (this._token) {
+      localStorage.setItem('token', this._token);
+    }
+    else {
+      localStorage.removeItem('token');
+    }
   }
 }
 
@@ -167,8 +183,9 @@ export class AuthService {
 
   signup(email: string,
          password: string,
-         name: string): Observable<AuthPayload> {
-    return this.signupGql.mutate({ email, password, name })
+         name: string,
+         captcha: string): Observable<AuthPayload> {
+    return this.signupGql.mutate({ email, password, name, captcha })
       .pipe(
         map(result => result.data.signup),
         tap(auth => {

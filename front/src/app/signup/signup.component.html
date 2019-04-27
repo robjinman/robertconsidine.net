@@ -18,6 +18,8 @@
       <input type="password" matInput formControlName="password2"
              placeholder="Repeat password"/>
     </mat-form-field>
+    <app-captcha uniqueId="signup-form-captcha"
+                 (captchaComplete)="captchaComplete($event)"></app-captcha>
     <mat-error *ngIf="passwordsInvalid()">
       Please ensure the passwords match</mat-error>
     <button mat-button [disabled]="!signupForm.valid" (click)="signup()">
