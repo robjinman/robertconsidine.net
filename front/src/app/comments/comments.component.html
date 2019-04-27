@@ -28,7 +28,11 @@
     </div>
     <div *ngFor="let comment of comments | async" class="comment">
       <div class="comment-date">{{ comment.createdAt | date }}</div>
-      <div class="comment-author">{{ comment.user.name }}</div>
+      <div class="comment-author" [ngClass]="{'deleted': !comment.user}">
+        {{ comment.user ? comment.user.name : "deleted" }}
+        <span *ngIf="commentHidden(comment)" class="hidden">
+          Hidden until activated</span>
+      </div>
       <div class="comment-content">{{ comment.content }}</div>
     </div>
   </div>

@@ -1,7 +1,28 @@
+const { getUserId } = require("../utils");
+
 function comments(parent, args, context) {
+  const userId = getUserId(context);
+
   return context.prisma.article({ id: parent.id }).comments(
     {
-      orderBy: 'createdAt_DESC'
+      orderBy: 'createdAt_DESC',
+      where: {
+        OR: [
+          {
+            user: {
+              activationCode: null
+            }
+          },
+          {
+            user: null
+          },
+          {
+            user: {
+              id: userId
+            }
+          }
+        ]
+      }
     }
   );
 }

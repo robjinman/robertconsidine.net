@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const APP_SECRET = 'MyAppSecret123';
+const APP_SECRET = process.env.APP_SECRET;
 const ADMIN_USER = 'rob';
 
 function currentDateString() {
@@ -15,7 +15,7 @@ function getUserId(context) {
     return userId;
   }
 
-  throw new Error('Not authenticated');
+  return null;
 }
 
 async function assertAdminUser(context) {
@@ -27,10 +27,15 @@ async function assertAdminUser(context) {
   }
 }
 
+function lowerCase(s) {
+  return s === null ? null : s.toLowerCase();
+}
+
 module.exports = {
   APP_SECRET,
   ADMIN_USER,
   getUserId,
   assertAdminUser,
-  currentDateString
+  currentDateString,
+  lowerCase
 };

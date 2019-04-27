@@ -22,6 +22,7 @@ class GetUsersGql extends Query<GetUsersResponse> {
         createdAt
         name
         email
+        activated
       }
     }
   `;

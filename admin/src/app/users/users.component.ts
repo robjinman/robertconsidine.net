@@ -16,6 +16,7 @@ export class UsersComponent implements OnInit {
     'name',
     'createdAt',
     'email',
+    'activated',
     'action'
   ];
 

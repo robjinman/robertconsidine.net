@@ -30,6 +30,10 @@ export class CommentsComponent implements OnInit {
     this.changeDetector.detectChanges();
   }
 
+  commentHidden(comment: Comment): boolean {
+    return comment.user != null && !comment.user.activated;
+  }
+
   formReady(): boolean {
     return this.comment.length > 0 && this.captchaToken.length > 0;
   }

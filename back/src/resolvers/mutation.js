@@ -4,19 +4,22 @@ const { APP_SECRET,
         ADMIN_USER,
         currentDateString,
         getUserId,
-        assertAdminUser } = require("../utils");
+        assertAdminUser,
+        lowerCase } = require("../utils");
 const captcha = require("../captcha");
 const activation = require("../account_activation");
 
 async function signup(parent, args, context, info) {
   await captcha.verifyCaptcha(args.captcha);
 
+  const email = lowerCase(args.email);
+
   const exists = await context.prisma.$exists.user({
     OR: [
       {
         name: args.name
       }, {
-        email: args.email
+        email
       }
     ]
   });
@@ -29,13 +32,13 @@ async function signup(parent, args, context, info) {
   const pwHash = await bcrypt.hash(args.password, 10);
   const user = await context.prisma.createUser({
     name: args.name,
-    email: args.email,
+    email: email,
     pwHash: pwHash,
     activationCode: code
   });
   const token = jwt.sign({ userId: user.id }, APP_SECRET);
 
-  activation.dispatchActivationEmail(args.name, args.email, code);
+  activation.dispatchActivationEmail(args.name, email, code);
 
   return {
     token,
@@ -44,7 +47,8 @@ async function signup(parent, args, context, info) {
 }
 
 async function login(parent, args, context, info) {
-  const user = await context.prisma.user({ email: args.email });
+  const email = lowerCase(args.email);
+  const user = await context.prisma.user({ email: email });
   if (!user) {
     throw new Error("No such user found");
   }
@@ -218,6 +222,18 @@ async function deleteFile(parent, args, context, info) {
 
 async function deleteUser(parent, args, context, info) {
   await assertAdminUser(context);
+
+  const user = context.prisma.user({
+    id: args.id
+  });
+
+  if (user.activationCode) {
+    await context.prisma.deleteManyComments({
+      user: {
+        id: args.id
+      }
+    });
+  }
 
   return await context.prisma.deleteUser({
     id: args.id

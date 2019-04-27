@@ -61,6 +61,6 @@ type Comment {
   id: ID! @unique
   createdAt: DateTime!
   content: String!
-  user: User!
+  user: User
   article: Article!
 }

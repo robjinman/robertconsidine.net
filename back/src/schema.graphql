@@ -86,6 +86,6 @@ type Comment {
   id: ID!
   createdAt: String!
   content: String!
-  user: User!
+  user: User
   article: Article!
 }

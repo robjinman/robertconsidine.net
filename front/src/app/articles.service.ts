@@ -70,6 +70,7 @@ class GetCommentsGql extends Query<GetArticleResponse> {
           user {
             id
             name
+            activated
           }
         }
       }
