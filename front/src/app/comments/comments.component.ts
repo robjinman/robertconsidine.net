@@ -39,7 +39,10 @@ export class CommentsComponent implements OnInit {
                                     this.comment,
                                     this.captchaToken)
       .subscribe(
-        () => {},
+        () => {
+          this.comment = "";
+          this.errMsg = "";
+        },
         () => {
           this.errMsg = "Error posting comment";
         })

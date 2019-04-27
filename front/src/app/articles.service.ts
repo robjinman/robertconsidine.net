@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Query, Mutation } from 'apollo-angular';
+import { Query, Mutation, Apollo } from 'apollo-angular';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import gql from 'graphql-tag';
@@ -110,7 +110,8 @@ class PostCommentGql extends Mutation<PostCommentResponse> {
   providedIn: 'root'
 })
 export class ArticleService {
-  constructor(private getArticleGql: GetArticleGql,
+  constructor(private apollo: Apollo,
+              private getArticleGql: GetArticleGql,
               private getArticlesGql: GetPublishedArticlesGql,
               private postCommentGql: PostCommentGql,
               private getCommentsGql: GetCommentsGql) {}
@@ -142,10 +143,19 @@ export class ArticleService {
   postComment(articleId: string,
               comment: string,
               captcha: string): Observable<Comment> {
-    return this.postCommentGql.mutate({
-      articleId: articleId,
-      content: comment,
-      captcha: captcha
+    return this.apollo.mutate({
+      mutation: this.postCommentGql.document,
+      variables: {
+        articleId: articleId,
+        content: comment,
+        captcha: captcha
+      },
+      refetchQueries: [{
+        query: this.getCommentsGql.document,
+        variables: {
+          id: articleId
+        }
+      }]
     })
     .pipe(
       map(result => result.data.postComment)
