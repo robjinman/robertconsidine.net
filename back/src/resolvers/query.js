@@ -44,6 +44,7 @@ async function comments(root, args, context, info) {
   return await context.prisma.comments({
     skip: args.skip,
     first: args.first,
+    orderBy: 'createdAt_DESC'
   });
 }
 
