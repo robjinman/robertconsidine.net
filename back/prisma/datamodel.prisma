@@ -1,19 +1,19 @@
 type Article {
-  id: ID! @unique
+  id: ID! @id
   draft: Boolean!
-  createdAt: DateTime!
-  modifiedAt: DateTime!
+  createdAt: DateTime! @createdAt
+  modifiedAt: DateTime! @modifiedAt
   publishedAt: DateTime
   title: String!
   summary: String!
   content: String!
   files: [File!]!
-  tags: [String!]!
+  tags: [String!]! @scalarList(strategy: RELATION)
   comments: [Comment!]!
 }
 
 type Page {
-  id: ID! @unique
+  id: ID! @id
   name: String! @unique
   content: String!
   files: [File]!
@@ -23,12 +23,12 @@ type Page {
 # by Page and Article, but Prisma doesn't support this yet.
 #
 # interface Document {
-#   id: ID! @unique
+#   id: ID! @id
 #   content: String!
 # }
 
 type File {
-  id: ID! @unique
+  id: ID! @id
 
   # Prisma doesn't support polymorphism through interfaces yet
   # document: Document!
@@ -42,13 +42,14 @@ type File {
 }
 
 type AuthPayload {
+  id: ID! @id
   token: String
   user: User
 }
 
 type User {
-  id: ID! @unique
-  createdAt: DateTime!
+  id: ID! @id
+  createdAt: DateTime! @createdAt
   name: String! @unique
   email: String! @unique
   # When null, the account has been activated
@@ -58,8 +59,8 @@ type User {
 }
 
 type Comment {
-  id: ID! @unique
-  createdAt: DateTime!
+  id: ID! @id
+  createdAt: DateTime! @createdAt
   content: String!
   user: User
   article: Article!
