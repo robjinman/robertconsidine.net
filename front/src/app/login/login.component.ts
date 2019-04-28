@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material';
 
 import { AuthService } from '../auth.service';
 import { SUCCESS_SNACKBAR_OPTIONS, ERROR_SNACKBAR_OPTIONS } from '../utils';
+import { AnalyticsService } from '../analytics.service';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,8 @@ export class LoginComponent implements OnInit {
     ])
   });
 
-  constructor(private authService: AuthService,
+  constructor(private analytics: AnalyticsService,
+              private authService: AuthService,
               private snackBar: MatSnackBar) { }
 
   ngOnInit() {
@@ -35,11 +37,13 @@ export class LoginComponent implements OnInit {
       .pipe(take(1))
       .subscribe(
         () => {
-          this.snackBar.open("You are logged in", "Dismiss",
+          this.analytics.fireEvent('login', 'accounts', 'success');
+          this.snackBar.open('You are logged in', 'Dismiss',
                              SUCCESS_SNACKBAR_OPTIONS);
         },
         () => {
-          this.snackBar.open("Invalid credentials", "Dismiss",
+          this.analytics.fireEvent('login', 'accounts', 'failure');
+          this.snackBar.open('Invalid credentials', 'Dismiss',
                              ERROR_SNACKBAR_OPTIONS);
         }
       );

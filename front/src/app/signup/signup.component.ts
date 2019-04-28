@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material';
 
 import { AuthService } from '../auth.service';
 import { SUCCESS_SNACKBAR_OPTIONS, ERROR_SNACKBAR_OPTIONS } from '../utils';
+import { AnalyticsService } from '../analytics.service';
 
 function nonMatchingPasswordsValidator(control: FormGroup) {
   const pw1 = control.get('password1');
@@ -44,6 +45,7 @@ export class SignupComponent implements OnInit {
   private captchaToken: string = "";
 
   constructor(private changeDetector: ChangeDetectorRef,
+              private analytics: AnalyticsService,
               private authService: AuthService,
               private snackBar: MatSnackBar) { }
 
@@ -64,10 +66,12 @@ export class SignupComponent implements OnInit {
       .pipe(take(1))
       .subscribe(
         () => {
+          this.analytics.fireEvent('signup', 'accounts', 'success');
           this.snackBar.open("Check your email to activate account", "Dismiss",
                              SUCCESS_SNACKBAR_OPTIONS);
         },
         err => {
+          this.analytics.fireEvent('signup', 'accounts', 'failure');
           this.snackBar.open(err.graphQLErrors[0].message, "Dismiss",
                              ERROR_SNACKBAR_OPTIONS);
         }
