@@ -17,7 +17,7 @@ export class CommentsComponent implements OnInit {
   errMsg: string = "";
   private captchaToken: string = "";
 
-  constructor(private authService: AuthService,
+  constructor(public authService: AuthService,
               private articleService: ArticleService,
               private changeDetector: ChangeDetectorRef) { }
 

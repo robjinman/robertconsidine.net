@@ -6,14 +6,14 @@ import gql from 'graphql-tag';
 
 import { Article, Comment } from './types'
 
-interface GetArticleResponse {
+export interface GetArticleResponse {
   article: Article;
 }
 
 @Injectable({
   providedIn: "root"
 })
-class GetArticleGql extends Query<GetArticleResponse> {
+export class GetArticleGql extends Query<GetArticleResponse> {
   document = gql`
     query article($id: ID!) {
       article(id: $id) {
@@ -31,14 +31,14 @@ class GetArticleGql extends Query<GetArticleResponse> {
   `;
 }
 
-interface GetArticlesResponse {
+export interface GetArticlesResponse {
   publishedArticles: Article[];
 }
 
 @Injectable({
   providedIn: "root"
 })
-class GetPublishedArticlesGql extends Query<GetArticlesResponse> {
+export class GetPublishedArticlesGql extends Query<GetArticlesResponse> {
   document = gql`
     query {
       publishedArticles {
@@ -58,7 +58,7 @@ class GetPublishedArticlesGql extends Query<GetArticlesResponse> {
 @Injectable({
   providedIn: "root"
 })
-class GetCommentsGql extends Query<GetArticleResponse> {
+export class GetCommentsGql extends Query<GetArticleResponse> {
   document = gql`
     query article($id: ID!) {
       article(id: $id) {
@@ -78,14 +78,14 @@ class GetCommentsGql extends Query<GetArticleResponse> {
   `;
 }
 
-interface PostCommentResponse {
+export interface PostCommentResponse {
   comment: Comment
 }
 
 @Injectable({
   providedIn: 'root'
 })
-class PostCommentGql extends Mutation<PostCommentResponse> {
+export class PostCommentGql extends Mutation<PostCommentResponse> {
   document = gql`
     mutation postComment($articleId: ID!,
                          $content: String!,

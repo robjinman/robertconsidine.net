@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit {
   private routerSub: Subscription;
 
   constructor(private router: Router,
-              private authService: AuthService,
+              public authService: AuthService,
               private snackBar: MatSnackBar) { }
 
   ngOnInit() {

@@ -4,7 +4,7 @@ import { Observable, Subject } from 'rxjs';
 const RECAPTCHA_SITE_KEY = '6LcnFqAUAAAAAFxvOBDeTSX08laQ9buoJ6KRd26O';
 declare var grecaptcha: any;
 
-interface PendingContruction {
+interface PendingConstruction {
   elementId: string;
   onSuccess: Function;
 }
@@ -14,7 +14,7 @@ interface PendingContruction {
 })
 export class CaptchaService {
   private _ready: boolean = false;
-  private _pending: PendingContruction = null;
+  private _pending: PendingConstruction = null;
   private _subject: Subject<number> = new Subject();
 
   constructor() {

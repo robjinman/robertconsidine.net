@@ -6,14 +6,14 @@ import gql from 'graphql-tag';
 
 import { Page } from './types'
 
-interface GetPageResponse {
+export interface GetPageResponse {
   page: Page;
 }
 
 @Injectable({
   providedIn: "root"
 })
-class GetPageGql extends Query<GetPageResponse> {
+export class GetPageGql extends Query<GetPageResponse> {
   document = gql`
     query page($name: String!) {
       page(name: $name) {

@@ -20,6 +20,7 @@ import { HeaderComponent } from './header/header.component';
 import { PageComponent } from './page/page.component';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material';
 import { CaptchaComponent } from './captcha/captcha.component';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,7 @@ import { CaptchaComponent } from './captcha/captcha.component';
       provide: APOLLO_OPTIONS,
       useFactory: (httpLink: HttpLink, authMiddleware: AuthMiddleware) => {
         const http = httpLink.create({
-          uri: "http://localhost:4000"
+          uri: environment.apiServerUri
         });
 
         return {
