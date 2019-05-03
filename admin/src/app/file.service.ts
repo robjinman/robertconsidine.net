@@ -16,7 +16,7 @@ export interface FileDesc {
   extension: string;
 }
 
-interface GetFilesResponse {
+export interface GetFilesResponse {
   files: File[]
 }
 
@@ -38,7 +38,7 @@ export class GetFilesGql extends Query<GetFilesResponse> {
 @Injectable({
   providedIn: 'root'
 })
-class UploadFileGql extends Mutation {
+export class UploadFileGql extends Mutation {
   document = gql`
     mutation uploadFile($documentId: ID!,
                         $data: String!,
@@ -61,7 +61,7 @@ class UploadFileGql extends Mutation {
 @Injectable({
   providedIn: 'root'
 })
-class DeleteFileGql extends Mutation {
+export class DeleteFileGql extends Mutation {
   document = gql`
     mutation deleteFile($id: ID!) {
       deleteFile(

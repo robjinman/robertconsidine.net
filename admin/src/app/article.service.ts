@@ -7,14 +7,14 @@ import gql from 'graphql-tag';
 import { Article, Comment } from './types'
 import { LoggingService } from './logging.service';
 
-interface GetArticleResponse {
+export interface GetArticleResponse {
   article: Article;
 }
 
 @Injectable({
   providedIn: 'root'
 })
-class GetArticleGql extends Query<GetArticleResponse> {
+export class GetArticleGql extends Query<GetArticleResponse> {
   document = gql`
     query article($id: ID!) {
       article(id: $id) {
@@ -40,14 +40,14 @@ class GetArticleGql extends Query<GetArticleResponse> {
   `;
 }
 
-interface GetArticlesResponse {
+export interface GetArticlesResponse {
   allArticles: Article[];
 }
 
 @Injectable({
   providedIn: 'root'
 })
-class GetAllArticlesGql extends Query<GetArticlesResponse> {
+export class GetAllArticlesGql extends Query<GetArticlesResponse> {
   document = gql`
     query {
       allArticles {
@@ -67,14 +67,14 @@ class GetAllArticlesGql extends Query<GetArticlesResponse> {
   `;
 }
 
-interface GetCommentsResponse {
+export interface GetCommentsResponse {
   comments: Comment[];
 }
 
 @Injectable({
   providedIn: 'root'
 })
-class GetCommentsGql extends Query<GetCommentsResponse> {
+export class GetCommentsGql extends Query<GetCommentsResponse> {
   document = gql`
     query {
       comments {
@@ -97,7 +97,7 @@ class GetCommentsGql extends Query<GetCommentsResponse> {
 @Injectable({
   providedIn: 'root'
 })
-class DeleteCommentGql extends Mutation {
+export class DeleteCommentGql extends Mutation {
   document = gql`
     mutation deleteComment($id: ID!) {
       deleteComment(
@@ -112,7 +112,7 @@ class DeleteCommentGql extends Mutation {
 @Injectable({
   providedIn: 'root'
 })
-class UpdateArticleGql extends Mutation {
+export class UpdateArticleGql extends Mutation {
   document = gql`
     mutation updateArticle($id: ID!,
                            $title: String!,
@@ -141,7 +141,7 @@ class UpdateArticleGql extends Mutation {
 @Injectable({
   providedIn: 'root'
 })
-class PostArticleGql extends Mutation {
+export class PostArticleGql extends Mutation {
   document = gql`
     mutation postArticle($title: String!,
                          $summary: String!,
@@ -168,7 +168,7 @@ class PostArticleGql extends Mutation {
 @Injectable({
   providedIn: 'root'
 })
-class PublishArticleGql extends Mutation {
+export class PublishArticleGql extends Mutation {
   document = gql`
     mutation publishArticle($id: ID!,
                             $publish: Boolean!) {
@@ -187,7 +187,7 @@ class PublishArticleGql extends Mutation {
 @Injectable({
   providedIn: 'root'
 })
-class DeleteArticleGql extends Mutation {
+export class DeleteArticleGql extends Mutation {
   document = gql`
     mutation deleteArticle($id: ID!) {
       deleteArticle(

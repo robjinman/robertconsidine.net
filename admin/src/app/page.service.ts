@@ -7,14 +7,14 @@ import gql from 'graphql-tag';
 import { Page } from './types'
 import { LoggingService } from './logging.service';
 
-interface GetPageResponse {
+export interface GetPageResponse {
   page: Page;
 }
 
 @Injectable({
   providedIn: 'root'
 })
-class GetPageGql extends Query<GetPageResponse> {
+export class GetPageGql extends Query<GetPageResponse> {
   document = gql`
     query page($name: String!) {
       page(name: $name) {
@@ -26,14 +26,14 @@ class GetPageGql extends Query<GetPageResponse> {
   `;
 }
 
-interface GetPagesResponse {
+export interface GetPagesResponse {
   pages: Page[];
 }
 
 @Injectable({
   providedIn: 'root'
 })
-class GetPagesGql extends Query<GetPagesResponse> {
+export class GetPagesGql extends Query<GetPagesResponse> {
   document = gql`
     query {
       pages {
@@ -48,7 +48,7 @@ class GetPagesGql extends Query<GetPagesResponse> {
 @Injectable({
   providedIn: 'root'
 })
-class UpdatePageGql extends Mutation {
+export class UpdatePageGql extends Mutation {
   document = gql`
     mutation updatePage($name: String!,
                         $content: String!) {
@@ -67,7 +67,7 @@ class UpdatePageGql extends Mutation {
 @Injectable({
   providedIn: 'root'
 })
-class PostPageGql extends Mutation {
+export class PostPageGql extends Mutation {
   document = gql`
     mutation postPage($name: String!,
                       $content: String!) {
@@ -86,7 +86,7 @@ class PostPageGql extends Mutation {
 @Injectable({
   providedIn: 'root'
 })
-class DeletePageGql extends Mutation {
+export class DeletePageGql extends Mutation {
   document = gql`
     mutation deletePage($name: String!) {
       deletePage(

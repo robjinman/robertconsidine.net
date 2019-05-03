@@ -7,14 +7,14 @@ import { map, tap } from 'rxjs/operators';
 import { User } from './types';
 import { LoggingService } from './logging.service';
 
-interface GetUsersResponse {
+export interface GetUsersResponse {
   users: User[];
 }
 
 @Injectable({
   providedIn: 'root'
 })
-class GetUsersGql extends Query<GetUsersResponse> {
+export class GetUsersGql extends Query<GetUsersResponse> {
   document = gql`
     query {
       users {
@@ -31,7 +31,7 @@ class GetUsersGql extends Query<GetUsersResponse> {
 @Injectable({
   providedIn: 'root'
 })
-class DeleteUserGql extends Mutation {
+export class DeleteUserGql extends Mutation {
   document = gql`
     mutation deleteUser($id: ID!) {
       deleteUser(id: $id) {

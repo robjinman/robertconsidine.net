@@ -26,6 +26,7 @@ import { PagesComponent } from './pages/pages.component';
 import { UsersComponent } from './users/users.component';
 import { ComposePageComponent } from './compose-page/compose-page.component';
 import { AttachmentsComponent } from './attachments/attachments.component';
+import { environment } from 'src/environments/environment';
 
 const quillToolbarOptions = [
   ['bold', 'italic', 'underline', 'strike'],
@@ -49,7 +50,7 @@ const quillToolbarOptions = [
   ['link', 'image', 'video']
 ];
 
-function imageHandler() {
+export function imageHandler() {
   const range = this.quill.getSelection();
   const value = prompt('What is the image URL');
   this.quill.insertEmbed(range.index, 'image', value, 'user');
@@ -103,7 +104,7 @@ function imageHandler() {
       provide: APOLLO_OPTIONS,
       useFactory: (httpLink: HttpLink, authMiddleware: AuthMiddleware) => {
         const http = httpLink.create({
-          uri: 'http://localhost:4000'
+          uri: environment.apiServerUri
         });
 
         return {
