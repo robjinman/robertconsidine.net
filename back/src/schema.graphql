@@ -31,6 +31,7 @@ type Mutation {
   deletePage(name: String!): Page
   uploadFile(documentId: ID!, data: String!, name: String!, extension: String!): File!
   deleteFile(id: ID!): File!
+  updateUser(currentPw: String!, id: ID!, name: String!, email: String!, newPw: String!): User!
   deleteUser(id: ID!): User!
 }
 

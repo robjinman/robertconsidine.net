@@ -28,6 +28,49 @@ export class GetUsersGql extends Query<GetUsersResponse> {
   `;
 }
 
+export interface GetUserResponse {
+  user: User;
+}
+
+@Injectable({
+  providedIn: "root"
+})
+export class GetUserGql extends Query<GetUserResponse> {
+  document = gql`
+    query user($name: String!) {
+      user(name: $name) {
+        id
+        name
+        activated
+        email
+      }
+    }
+  `;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UpdateUserGql extends Mutation {
+  document = gql`
+    mutation updateUser($currentPw: String!,
+                        $id: ID!,
+                        $name: String!,
+                        $email: String!,
+                        $newPw: String!) {
+      updateUser(currentPw: $currentPw,
+                 id: $id,
+                 name: $name,
+                 email: $email,
+                 newPw: $newPw) {
+        id
+        name
+        email
+      }
+    }
+  `;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -47,8 +90,23 @@ export class DeleteUserGql extends Mutation {
 export class UserService {
   constructor(private apollo: Apollo,
               private logger: LoggingService,
+              private getUserGql: GetUserGql,
               private getUsersGql: GetUsersGql,
+              private updateUserGql: UpdateUserGql,
               private deleteUserGql: DeleteUserGql) { }
+
+  getUser(name: string): Observable<User> {
+    return this.getUserGql.watch({ name })
+      .valueChanges
+      .pipe(
+        map(result => result.data.user),
+        tap(() => {
+          this.logger.add(`Fetched user, name=${name}`);
+        }, () => {
+          this.logger.add('Failed to fetch user');
+        })
+      );
+  }
 
   getUsers(): Observable<User[]> {
     return this.getUsersGql.watch()
@@ -77,6 +135,32 @@ export class UserService {
         this.logger.add(`Deleted user, id=${id}`);
       }, () => {
         this.logger.add(`Failed to delete user, id=${id}`);
+      })
+    );
+  }
+
+  updateUser(currentPw: string,
+             id: string,
+             name: string,
+             email: string,
+             newPw: string): Observable<User> {
+
+    return this.apollo.mutate({
+      mutation: this.updateUserGql.document,
+      variables: { currentPw, id, name, email, newPw },
+      refetchQueries: [{
+        query: this.getUserGql.document,
+        variables: {
+          name: name
+        }
+      }]
+    })
+    .pipe(
+      map(result => result.data.updateUser),
+      tap(() => {
+        this.logger.add(`Updated user, id=${id}`);
+      }, () => {
+        this.logger.add(`Failed to update user, id=${id}`);
       })
     );
   }

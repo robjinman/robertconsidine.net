@@ -220,6 +220,34 @@ async function deleteFile(parent, args, context, info) {
   });
 }
 
+async function updateUser(parent, args, context, info) {
+  const userId = getUserId(context);
+
+  if (userId !== args.id) {
+    throw new Error("Not authorized");
+  }
+
+  const user = await context.prisma.user({ id: userId });
+  const valid = await bcrypt.compare(args.currentPw, user.pwHash);
+
+  if (!valid) {
+    throw new Error("Invalid password");
+  }
+
+  const pwHash = await bcrypt.hash(args.newPw, 10);
+
+  return await context.prisma.updateUser({
+    data: {
+      name: args.name,
+      email: args.email,
+      pwHash: pwHash
+    },
+    where: {
+      id: userId
+    }
+  });
+}
+
 async function deleteUser(parent, args, context, info) {
   await assertAdminUser(context);
 
@@ -254,5 +282,6 @@ module.exports = {
   deleteComment,
   uploadFile,
   deleteFile,
+  updateUser,
   deleteUser
 };

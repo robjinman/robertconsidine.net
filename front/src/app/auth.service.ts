@@ -28,7 +28,7 @@ export class AuthMiddleware extends ApolloLink {
   }
 }
 
-interface GetUserResponse {
+export interface GetUserResponse {
   user: User;
 }
 
