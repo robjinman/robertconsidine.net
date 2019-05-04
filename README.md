@@ -118,3 +118,28 @@ Post some articles.
             id
           }
         }
+
+### Hosting
+
+#### S3
+
+1. Name the bucket the same as the domain, e.g. www.example.com
+2. Enable the 'static web hosting' option
+3. Enable public access policies
+4. Add a bucket policy to allow all GET requests
+
+        {
+            "Version": "2012-10-17",
+            "Id": "PolicyForPublicWebsite",
+            "Statement": [
+                {
+                    "Sid": "AddPerm",
+                    "Effect": "Allow",
+                    "Principal": "*",
+                    "Action": "s3:GetObject",
+                    "Resource": "arn:aws:s3:::robjinman.com/*"
+                }
+            ]
+        }
+
+5. Add a CNAME DNS entry to point to the bucket

@@ -1,5 +1,10 @@
 const jwt = require('jsonwebtoken');
+const bcrypt = require("bcryptjs");
+const { prisma } = require("./generated/prisma-client");
+
 const APP_SECRET = process.env.APP_SECRET;
+const INITIAL_ADMIN_PASSWORD = 'admin1234';
+const INITIAL_ADMIN_EMAIL = 'dummy@email.com';
 const ADMIN_USER = 'rob';
 
 function currentDateString() {
@@ -18,8 +23,28 @@ function getUserId(context) {
   return null;
 }
 
+async function createAdminUser() {
+  const exists = await prisma.$exists.user({
+    name: ADMIN_USER
+  });
+
+  if (!exists) {
+    const pwHash = await bcrypt.hash(INITIAL_ADMIN_PASSWORD, 10);
+    await prisma.createUser({
+      name: ADMIN_USER,
+      email: INITIAL_ADMIN_EMAIL,
+      pwHash: pwHash,
+      activationCode: null
+    });
+  }
+}
+
 async function assertAdminUser(context) {
   const userId = getUserId(context);
+  if (userId === null) {
+    throw new Error("Not authorized");
+  }
+
   const user = await context.prisma.user({ id: userId });
 
   if (user.name != ADMIN_USER) {
@@ -35,6 +60,7 @@ module.exports = {
   APP_SECRET,
   ADMIN_USER,
   getUserId,
+  createAdminUser,
   assertAdminUser,
   currentDateString,
   lowerCase

@@ -9,11 +9,12 @@ const article = require("./resolvers/article");
 const comment = require("./resolvers/comment");
 const file = require("./resolvers/file");
 const subscription = require("./resolvers/subscription");
-const accountActivation = require('./account_activation');
+const accountActivation = require("./account_activation");
+const utils = require("./utils");
 
 const resolvers = {
   Query: {
-    info: () => `This is the API of robjinman.com. Hello.`,
+    info: () => "This is the API of robjinman.com",
     ...query
   },
 
@@ -48,8 +49,10 @@ const server = new GraphQLServer({
   },
 });
 
-server.express.get('/activate', (req, res) => {
+server.express.get("/activate", (req, res) => {
   accountActivation.processActivation(req, res, prisma);
 });
 
-server.start(() => console.log(`Server is running on http://localhost:4000`));
+utils.createAdminUser();
+
+server.start(() => console.log("GraphQL server is running"));

@@ -54,11 +54,19 @@ Run the app
     APP_SECRET=XXXXXX \
     RECAPTCHA_SECRET_KEY=XXXXXX \
     EMAIL_PASSWORD=XXXXXX \
+    PRISMA_ENDPOINT=http://localhost:4466 \
     node src/index.js
 ```
+
+
+Deployment
+----------
+
+See the deployment/README.
 
 
 Useful links
 ------------
 
 * https://www.howtographql.com/graphql-js/0-introduction/
+* https://www.prisma.io/tutorials/deploy-prisma-to-aws-fargate-ct14

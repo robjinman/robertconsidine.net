@@ -21,6 +21,8 @@ async function publishedArticles(root, args, context, info) {
 }
 
 async function allArticles(root, args, context, info) {
+  await assertAdminUser(context);
+
   return await context.prisma.articles({
     skip: args.skip,
     first: args.first,
@@ -41,6 +43,8 @@ async function article(root, args, context, info) {
 }
 
 async function comments(root, args, context, info) {
+  await assertAdminUser(context);
+
   return await context.prisma.comments({
     skip: args.skip,
     first: args.first,
