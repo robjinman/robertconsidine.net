@@ -62,7 +62,12 @@ export class IdentityService {
 
   set userName(value: string) {
     this._userName = value;
-    localStorage.setItem('userName', this._userName);
+    if (this._userName) {
+      localStorage.setItem('userName', this._userName);
+    }
+    else {
+      localStorage.removeItem('userName');
+    }
   }
 
   get token(): string {
@@ -71,7 +76,12 @@ export class IdentityService {
 
   set token(value: string) {
     this._token = value;
-    localStorage.setItem('token', this._token);
+    if (this._token) {
+      localStorage.setItem('token', this._token);
+    }
+    else {
+      localStorage.removeItem('token');
+    }
   }
 }
 
