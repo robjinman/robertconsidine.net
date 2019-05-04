@@ -4,6 +4,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ArticlesComponent } from './articles/articles.component';
 import { CommentsComponent } from './comments/comments.component';
 import { UsersComponent } from './users/users.component';
+import { SecurityComponent } from './security/security.component';
 import { PagesComponent } from './pages/pages.component';
 import {
   ComposeArticleComponent
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'comments', component: CommentsComponent },
   { path: 'pages', component: PagesComponent },
   { path: 'users', component: UsersComponent },
+  { path: 'security', component: SecurityComponent },
   { path: 'compose-article', component: ComposeArticleComponent },
   { path: 'compose-page', component: ComposePageComponent },
 ];

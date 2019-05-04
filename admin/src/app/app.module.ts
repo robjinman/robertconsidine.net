@@ -27,6 +27,7 @@ import { UsersComponent } from './users/users.component';
 import { ComposePageComponent } from './compose-page/compose-page.component';
 import { AttachmentsComponent } from './attachments/attachments.component';
 import { environment } from 'src/environments/environment';
+import { SecurityComponent } from './security/security.component';
 
 const quillToolbarOptions = [
   ['bold', 'italic', 'underline', 'strike'],
@@ -68,7 +69,8 @@ export function imageHandler() {
     PagesComponent,
     UsersComponent,
     ComposePageComponent,
-    AttachmentsComponent
+    AttachmentsComponent,
+    SecurityComponent
   ],
   imports: [
     BrowserModule,
