@@ -1,4 +1,4 @@
-<div class="feed-component">
+<div class="feed-component page">
   <mat-card class="feed-item" *ngFor="let article of articles | async"
        [routerLink]="['/article', article.id]">
     <h3 class="item-title">{{ article.title }}</h3>
