@@ -31,10 +31,12 @@ export class AuthMiddleware extends ApolloLink {
 @Injectable({
   providedIn: 'root'
 })
-export class LoginGql extends Mutation {
+export class AdminLoginGql extends Mutation {
   document = gql`
-      mutation login($email: String!, $password: String!) {
-        login(email: $email, password: $password) {
+      mutation adminLogin($email: String!,
+                          $password: String!,
+                          $captcha: String!) {
+        adminLogin(email: $email, password: $password, captcha: $captcha) {
           token,
           user {
             name
@@ -99,12 +101,14 @@ export class AuthService {
 
   constructor(private logger: LoggingService,
               private identityService: IdentityService,
-              private loginGql: LoginGql) {}
+              private adminLoginGql: AdminLoginGql) {}
 
-  login(email: string, password: string): Observable<AuthPayload> {
-    return this.loginGql.mutate({ email, password })
+  adminLogin(email: string,
+        password: string,
+        captcha: string): Observable<AuthPayload> {
+    return this.adminLoginGql.mutate({ email, password, captcha })
       .pipe(
-        map(result => result.data.login),
+        map(result => result.data.adminLogin),
         tap(auth => {
           this.identityService.userName = auth.user.name;
           this.identityService.token = auth.token;

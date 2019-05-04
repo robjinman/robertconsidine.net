@@ -1,13 +1,17 @@
 <div class="login-component">
   <mat-card class="login-box">
-    <mat-form-field class="form-input">
-      <input [(ngModel)]="email" matInput placeholder="Email"/>
-    </mat-form-field>
-    <mat-form-field class="form-input">
-      <input type="password" [(ngModel)]="password" matInput
-             placeholder="Password" (keyup.enter)="login()" />
-    </mat-form-field>
-    <button class="btn-login" (click)="login()" mat-raised-button
-            color="primary">Login</button>
+    <form [formGroup]="loginForm">
+      <mat-form-field class="form-input">
+        <input formControlName="email" matInput placeholder="Email"/>
+      </mat-form-field>
+      <mat-form-field class="form-input">
+        <input type="password" formControlName="password" matInput
+              placeholder="Password" />
+      </mat-form-field>
+      <app-captcha uniqueId="login-captcha"
+                  (captchaComplete)="captchaComplete($event)"></app-captcha>
+      <button class="btn-login" (click)="login()" mat-raised-button
+              color="primary" mat-button [disabled]="!formReady()">Login</button>
+    </form>
   </mat-card>
 </div>

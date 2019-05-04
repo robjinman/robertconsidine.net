@@ -68,6 +68,32 @@ async function login(parent, args, context, info) {
   };
 }
 
+async function adminLogin(parent, args, context, info) {
+  await captcha.verifyCaptcha(args.captcha);
+
+  const email = lowerCase(args.email);
+  const user = await context.prisma.user({ email: email });
+  if (!user) {
+    throw new Error("No such user found");
+  }
+
+  if (user.name !== ADMIN_USER) {
+    throw new Error("Not authorised");
+  }
+
+  const valid = await bcrypt.compare(args.password, user.pwHash);
+  if (!valid) {
+    throw new Error("Invalid password");
+  }
+
+  const token = jwt.sign({ userId: user.id }, APP_SECRET);
+
+  return {
+    token,
+    user
+  };
+}
+
 async function postArticle(parent, args, context, info) {
   await assertAdminUser(context);
 
@@ -305,6 +331,7 @@ async function sendEmail(parent, args, context, info) {
 module.exports = {
   signup,
   login,
+  adminLogin,
   postPage,
   updatePage,
   deletePage,
