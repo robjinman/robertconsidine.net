@@ -1,0 +1,29 @@
+<div class="contact-component page">
+  <mat-card>
+    <h1>Contact</h1>
+    <p>
+      Please drop me a message and I'll try to get back to you as soon as
+      possible.
+    </p>
+    <form [formGroup]="contactForm">
+      <mat-form-field class="form-field">
+        <mat-error>Please enter a valid email address</mat-error>
+        <input matInput placeholder="Your email address"
+               formControlName="email"/>
+      </mat-form-field>
+      <mat-form-field class="form-field">
+        <mat-error>Please enter a subject</mat-error>
+        <input matInput placeholder="Subject" formControlName="subject" />
+      </mat-form-field>
+      <mat-form-field class="form-field">
+        <mat-error>Please enter a message</mat-error>
+        <textarea matInput formControlName="message" placeholder="Message">
+        </textarea>
+      </mat-form-field>
+      <app-captcha uniqueId="contact-form-captcha"
+                  (captchaComplete)="captchaComplete($event)"></app-captcha>
+      <button mat-button [disabled]="!formReady()" (click)="send()">
+        Send</button>
+    </form>
+  </mat-card>
+</div>

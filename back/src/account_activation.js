@@ -1,6 +1,5 @@
 const mailer = require("nodemailer");
-
-const EMAIL_ADDRESS = "robjinman.noreply@gmail.com";
+const { EMAIL_ADDRESS } = require('./utils');
 
 async function processActivation(req, res, prisma) {
   try {

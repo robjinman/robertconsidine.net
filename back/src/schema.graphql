@@ -33,6 +33,7 @@ type Mutation {
   deleteFile(id: ID!): File!
   updateUser(currentPw: String!, id: ID!, name: String!, email: String!, newPw: String!): User!
   deleteUser(id: ID!): User!
+  sendEmail(email: String!, subject: String!, message: String!, captcha: String!): Boolean
 }
 
 type File {

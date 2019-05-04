@@ -1,7 +1,9 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const mailer = require("nodemailer");
 const { APP_SECRET,
         ADMIN_USER,
+        EMAIL_ADDRESS,
         currentDateString,
         getUserId,
         assertAdminUser,
@@ -268,6 +270,38 @@ async function deleteUser(parent, args, context, info) {
   });
 }
 
+async function sendEmail(parent, args, context, info) {
+  await captcha.verifyCaptcha(args.captcha);
+
+  const admin = await context.prisma.user({
+    name: ADMIN_USER
+  });
+
+  const transporter = mailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: EMAIL_ADDRESS,
+      pass: process.env.EMAIL_PASSWORD
+    }
+  });
+
+  const options = {
+    from: args.email,
+    to: admin.email,
+    subject: `(via robjinman.com) ${args.subject}`,
+    text: `From ${args.email}\n\n${args.message}`
+  };
+
+  transporter.sendMail(options, error => {
+    if (error) {
+      console.error("Failed to send email", error);
+      throw new Error("Failed to send email");
+    }
+  });
+
+  return true;
+}
+
 module.exports = {
   signup,
   login,
@@ -283,5 +317,6 @@ module.exports = {
   uploadFile,
   deleteFile,
   updateUser,
-  deleteUser
+  deleteUser,
+  sendEmail
 };

@@ -6,6 +6,7 @@ const APP_SECRET = process.env.APP_SECRET;
 const INITIAL_ADMIN_PASSWORD = 'admin1234';
 const INITIAL_ADMIN_EMAIL = 'dummy@email.com';
 const ADMIN_USER = 'rob';
+const EMAIL_ADDRESS = "robjinman.noreply@gmail.com";
 
 function currentDateString() {
   return (new Date()).toISOString();
@@ -61,6 +62,7 @@ function lowerCase(s) {
 module.exports = {
   APP_SECRET,
   ADMIN_USER,
+  EMAIL_ADDRESS,
   getUserId,
   createAdminUser,
   assertAdminUser,

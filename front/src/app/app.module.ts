@@ -21,6 +21,7 @@ import { PageComponent } from './page/page.component';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material';
 import { CaptchaComponent } from './captcha/captcha.component';
 import { environment } from 'src/environments/environment';
+import { ContactComponent } from './contact/contact.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { environment } from 'src/environments/environment';
     SignupComponent,
     HeaderComponent,
     PageComponent,
-    CaptchaComponent
+    CaptchaComponent,
+    ContactComponent
   ],
   imports: [
     FormsModule,

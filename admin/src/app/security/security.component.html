@@ -1,35 +1,37 @@
 <div class="security-component page">
-  <div class="table">
-    <div class="row">
-      <div class="cell label">User name</div>
-      <div class="cell">{{ userName }}</div>
+  <mat-card>
+    <div class="table">
+      <div class="row">
+        <div class="cell label">User name</div>
+        <div class="cell">{{ userName }}</div>
+      </div>
+      <div class="row">
+        <div class="cell label">Current email</div>
+        <div class="cell">{{ oldEmail }}</div>
+      </div>
     </div>
-    <div class="row">
-      <div class="cell label">Current email</div>
-      <div class="cell">{{ oldEmail }}</div>
-    </div>
-  </div>
-  <form [formGroup]="detailsForm">
-    <mat-form-field class="form-field">
-      <input type="password" matInput placeholder="Current password"
-             formControlName="currentPassword" />
-    </mat-form-field>
-    <mat-form-field class="form-field">
-      <mat-error>Please enter a valid email address</mat-error>
-      <input matInput placeholder="New email" formControlName="email" />
-    </mat-form-field>
-    <mat-form-field class="form-field">
-      <mat-error>Please enter a password of at least 6 characters</mat-error>
-      <input type="password" matInput placeholder="New password"
-             formControlName="password1" />
-    </mat-form-field>
-    <mat-form-field class="form-field">
-      <input type="password" matInput placeholder="Reenter new password"
-             formControlName="password2" />
-    </mat-form-field>
-    <mat-error *ngIf="passwordsInvalid()">
-      Please ensure the passwords match</mat-error>
-    <button mat-button [disabled]="!formReady()" (click)="submit()">
-      Submit</button>
-  </form>
+    <form [formGroup]="detailsForm">
+      <mat-form-field class="form-field">
+        <input type="password" matInput placeholder="Current password"
+              formControlName="currentPassword" />
+      </mat-form-field>
+      <mat-form-field class="form-field">
+        <mat-error>Please enter a valid email address</mat-error>
+        <input matInput placeholder="New email" formControlName="email" />
+      </mat-form-field>
+      <mat-form-field class="form-field">
+        <mat-error>Please enter a password of at least 6 characters</mat-error>
+        <input type="password" matInput placeholder="New password"
+              formControlName="password1" />
+      </mat-form-field>
+      <mat-form-field class="form-field">
+        <input type="password" matInput placeholder="Reenter new password"
+              formControlName="password2" />
+      </mat-form-field>
+      <mat-error *ngIf="passwordsInvalid()">
+        Please ensure the passwords match</mat-error>
+      <button mat-button [disabled]="!formReady()" (click)="submit()">
+        Submit</button>
+    </form>
+  </mat-card>
 </div>

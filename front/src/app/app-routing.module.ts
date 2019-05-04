@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { FeedComponent } from './feed/feed.component';
 import { ArticleComponent } from './article/article.component';
 import { PageComponent } from './page/page.component';
+import { ContactComponent } from './contact/contact.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'feed', pathMatch: 'full' },
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'about',
     component: PageComponent,
     data: { pageName: "about" } },
+  { path: 'contact', component: ContactComponent }
 ];
 
 @NgModule({
