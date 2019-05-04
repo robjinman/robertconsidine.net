@@ -55,6 +55,11 @@ async function login(parent, args, context, info) {
     throw new Error("No such user found");
   }
 
+  // Don't allow admin login through this endpoint
+  if (user.name === ADMIN_USER) {
+    throw new Error("Not authorised");
+  }
+
   const valid = await bcrypt.compare(args.password, user.pwHash);
   if (!valid) {
     throw new Error("Invalid password");
