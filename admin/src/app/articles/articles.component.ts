@@ -7,7 +7,6 @@ import { ArticleService } from '../article.service';
 export interface ArticleTableRow {
   id: string;
   createdAt: string;
-  modifiedAt: string;
   publishedAt: string;
   title: string;
   draft: boolean;
@@ -24,7 +23,6 @@ export class ArticlesComponent implements OnInit {
   displayedColumns: string[] = [
     'title',
     'createdAt',
-    'modifiedAt',
     'publishedAt',
     'draft',
     'comments'
@@ -41,7 +39,6 @@ export class ArticlesComponent implements OnInit {
           return {
             id: article.id,
             createdAt: article.createdAt,
-            modifiedAt: article.modifiedAt,
             publishedAt: article.publishedAt,
             title: article.title,
             draft: article.draft,
