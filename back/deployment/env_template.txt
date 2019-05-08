@@ -1,0 +1,13 @@
+# Copy and rename to env_dev.txt and/or env_prod.txt. Set values accordingly.
+# The extract_vars function from utils.sh can be used to export the variables
+# into the current shell.
+
+# Used by prisma deploy
+PRISMA_ENDPOINT=http://localhost:4466
+PRISMA_MANAGEMENT_API_SECRET=XXXXXXXX
+
+# Used by back-end app
+APP_SECRET=XXXXXXXX
+RECAPTCHA_SECRET_KEY=XXXXXXXX
+EMAIL_PASSWORD=XXXXXXXX
+

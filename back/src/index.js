@@ -53,6 +53,10 @@ server.express.get("/activate", (req, res) => {
   accountActivation.processActivation(req, res, prisma);
 });
 
+server.express.get("/health", (req, res) => {
+  res.send('still alive');
+});
+
 utils.createAdminUser();
 
 server.start(() => console.log("GraphQL server is running"));
