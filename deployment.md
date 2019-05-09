@@ -169,6 +169,12 @@ Create a CloudFront distribution for each bucket, specifying the SSL certificate
 and index.html as the root object. Add the bucket's domain name to 'alternate
 domain names', e.g. blightednixhound.robjinman.com.
 
+Configure each CloudFront distribution as follows:
+
+* Edit the default behaviour to redirect HTTP requests to HTTPS.
+* Add a custom error response to respond with index.html, status 200 on 404
+errors (with TTL = 0).
+
 ### DNS configuration
 
 Add a CNAME DNS record for api.robjinman.com pointing to the prisma service's
@@ -187,7 +193,9 @@ From /back, source the env_prod.sh file and run prisma deploy.
 Building the API
 ----------------
 
-        docker build --tag rjinman/rj-com-graphql-api --file deployment/Dockerfile .
+        docker build \
+        --tag rjinman/rj-com-graphql-api \
+        --file deployment/Dockerfile .
 
 
 Links
