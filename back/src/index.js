@@ -59,4 +59,10 @@ server.express.get("/health", (req, res) => {
 
 utils.createAdminUser();
 
-server.start(() => console.log("GraphQL server is running"));
+const options = {
+  bodyParserOptions: {
+    limit: "10mb", type: "application/json"
+  }
+};
+
+server.start(options, () => console.log("GraphQL server is running"));

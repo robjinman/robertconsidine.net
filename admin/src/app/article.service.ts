@@ -268,8 +268,7 @@ export class ArticleService {
     })
     .pipe(
       map(result => result.data.postArticle),
-      tap(result => {
-        const article = result.data.postArticle;
+      tap(article => {
         this.logger.add(`Created article, id=${article.id}`);
       }, () => {
         this.logger.add('Failed to create article');

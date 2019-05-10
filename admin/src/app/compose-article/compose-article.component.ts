@@ -68,6 +68,9 @@ export class ComposeArticleComponent implements OnInit {
           this.article = article;
           this.snackbar.open('Article saved', 'Dismiss',
                              SUCCESS_SNACKBAR_OPTIONS);
+          this.router.navigate(['/compose-article'], {
+            queryParams: { id: article.id }
+          });
         }, () => {
           this.snackbar.open('Error saving article', 'Dismiss',
                              ERROR_SNACKBAR_OPTIONS);
