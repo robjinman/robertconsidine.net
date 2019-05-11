@@ -36,6 +36,10 @@ export interface Query {
   users: User[];
 
   user?: Maybe<User>;
+
+  tags: Tag[];
+
+  tag?: Maybe<Tag>;
 }
 
 export interface Article extends Document {
@@ -57,7 +61,7 @@ export interface Article extends Document {
 
   files: File[];
 
-  tags: string[];
+  tags: Tag[];
 
   comments: Comment[];
 }
@@ -72,6 +76,14 @@ export interface File {
   document: Document;
 }
 
+export interface Tag {
+  id: string;
+
+  name: string;
+
+  articles: Article[];
+}
+
 export interface Comment {
   id: string;
 
@@ -79,7 +91,7 @@ export interface Comment {
 
   content: string;
 
-  user: User;
+  user?: Maybe<User>;
 
   article: Article;
 }
@@ -115,6 +127,8 @@ export interface Mutation {
 
   login?: Maybe<AuthPayload>;
 
+  adminLogin?: Maybe<AuthPayload>;
+
   postArticle: Article;
 
   updateArticle: Article;
@@ -137,7 +151,13 @@ export interface Mutation {
 
   deleteFile: File;
 
+  updateUser: User;
+
   deleteUser: User;
+
+  sendEmail?: Maybe<boolean>;
+
+  postTag: Tag;
 }
 
 export interface AuthPayload {
@@ -192,6 +212,9 @@ export interface UsersQueryArgs {
 export interface UserQueryArgs {
   name: string;
 }
+export interface TagQueryArgs {
+  id: string;
+}
 export interface SignupMutationArgs {
   email: string;
 
@@ -205,6 +228,13 @@ export interface LoginMutationArgs {
   email: string;
 
   password: string;
+}
+export interface AdminLoginMutationArgs {
+  email: string;
+
+  password: string;
+
+  captcha: string;
 }
 export interface PostArticleMutationArgs {
   title: string;
@@ -269,6 +299,29 @@ export interface UploadFileMutationArgs {
 export interface DeleteFileMutationArgs {
   id: string;
 }
+export interface UpdateUserMutationArgs {
+  currentPw: string;
+
+  id: string;
+
+  name: string;
+
+  email: string;
+
+  newPw: string;
+}
 export interface DeleteUserMutationArgs {
   id: string;
+}
+export interface SendEmailMutationArgs {
+  email: string;
+
+  subject: string;
+
+  message: string;
+
+  captcha: string;
+}
+export interface PostTagMutationArgs {
+  name: string;
 }

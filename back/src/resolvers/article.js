@@ -31,7 +31,12 @@ function files(parent, args, context) {
   return context.prisma.article({ id: parent.id }).files();
 }
 
+function tags(parent, args, context) {
+  return context.prisma.article({ id: parent.id }).tags();
+}
+
 module.exports = {
   comments,
-  files
+  files,
+  tags
 };

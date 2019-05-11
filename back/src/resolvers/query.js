@@ -42,6 +42,16 @@ async function article(root, args, context, info) {
   return article;
 }
 
+async function tag(root, args, context, info) {
+  return await context.prisma.tag({
+    id: args.id
+  });
+}
+
+async function tags(root, args, context, info) {
+  return await context.prisma.tags();
+}
+
 async function comments(root, args, context, info) {
   await assertAdminUser(context);
 
@@ -107,6 +117,8 @@ module.exports = {
   publishedArticles,
   allArticles,
   article,
+  tag,
+  tags,
   comments,
   page,
   pages,

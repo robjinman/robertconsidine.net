@@ -6,6 +6,7 @@ const mutation = require("./resolvers/mutation");
 const user = require("./resolvers/user");
 const page = require("./resolvers/page");
 const article = require("./resolvers/article");
+const tag = require("./resolvers/tag");
 const comment = require("./resolvers/comment");
 const file = require("./resolvers/file");
 const subscription = require("./resolvers/subscription");
@@ -23,6 +24,7 @@ const resolvers = {
   User: user,
   Page: page,
   Article: article,
+  Tag: tag,
   Comment: comment,
   File: file,
 

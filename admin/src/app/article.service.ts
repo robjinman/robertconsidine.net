@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import gql from 'graphql-tag';
 
-import { Article, Comment } from './types'
+import { Article, Comment, Tag } from './types'
 import { LoggingService } from './logging.service';
 
 export interface GetArticleResponse {
@@ -26,7 +26,10 @@ export class GetArticleGql extends Query<GetArticleResponse> {
         title
         summary
         content
-        tags
+        tags {
+          id
+          name
+        }
         files {
           id
           name
@@ -58,10 +61,31 @@ export class GetAllArticlesGql extends Query<GetArticlesResponse> {
         publishedAt
         title
         summary
-        tags
+        tags {
+          id
+          name
+        }
         comments {
           id
         }
+      }
+    }
+  `;
+}
+
+export interface GetTagsResponse {
+  tags: Tag[];
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GetTagsGql extends Query<GetTagsResponse> {
+  document = gql`
+    query {
+      tags {
+        id
+        name
       }
     }
   `;
@@ -118,7 +142,7 @@ export class UpdateArticleGql extends Mutation {
                            $title: String!,
                            $summary: String!,
                            $content: String!,
-                           $tags: [String!]!) {
+                           $tags: [ID!]!) {
       updateArticle(
         id: $id
         title: $title
@@ -132,7 +156,10 @@ export class UpdateArticleGql extends Mutation {
         title
         summary
         content
-        tags
+        tags {
+          id
+          name
+        }
       }
     }
   `;
@@ -146,7 +173,7 @@ export class PostArticleGql extends Mutation {
     mutation postArticle($title: String!,
                          $summary: String!,
                          $content: String!,
-                         $tags: [String!]!) {
+                         $tags: [ID!]!) {
       postArticle(
         title: $title
         summary: $summary
@@ -159,10 +186,28 @@ export class PostArticleGql extends Mutation {
         title
         summary
         content
-        tags
+        tags {
+          id
+          name
+        }
       }
     }
   `;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class PostTagGql extends Mutation {
+  document = gql`
+  mutation postTag($name: String!) {
+    postTag(
+      name: $name
+    ) {
+      id
+      name
+    }
+  }`
 }
 
 @Injectable({
@@ -207,6 +252,8 @@ export class ArticleService {
               private logger: LoggingService,
               private getArticleGql: GetArticleGql,
               private getArticlesGql: GetAllArticlesGql,
+              private getTagsGql: GetTagsGql,
+              private postTagGql: PostTagGql,
               private getCommentsGql: GetCommentsGql,
               private postArticleGql: PostArticleGql,
               private updateArticleGql: UpdateArticleGql,
@@ -240,6 +287,19 @@ export class ArticleService {
       );
   }
 
+  getTags(): Observable<Tag[]> {
+    return this.getTagsGql.watch()
+      .valueChanges
+      .pipe(
+        map(result => result.data.tags),
+        tap(() => {
+          this.logger.add('Fetched tags');
+        }, () => {
+          this.logger.add('Failed to fetch tags');
+        })
+      );
+  }
+
   getComments(): Observable<Comment[]> {
     return this.getCommentsGql.watch()
       .valueChanges
@@ -260,7 +320,7 @@ export class ArticleService {
         title: article.title,
         summary: article.summary,
         content: article.content,
-        tags: article.tags
+        tags: article.tags.map(tag => tag.id)
       },
       refetchQueries: [{
         query: this.getArticlesGql.document
@@ -282,7 +342,7 @@ export class ArticleService {
       title: article.title,
       summary: article.summary,
       content: article.content,
-      tags: article.tags
+      tags: article.tags.map(tag => tag.id)
     })
     .pipe(
       map(result => result.data.updateArticle),
@@ -325,6 +385,24 @@ export class ArticleService {
         this.logger.add(`Deleted article, id=${id}`);
       }, () => {
         this.logger.add(`Failed to delete article, id=${id}`);
+      })
+    );
+  }
+
+  postTag(name: string): Observable<Tag> {
+    return this.apollo.mutate({
+      mutation: this.postTagGql.document,
+      variables: { name },
+      refetchQueries: [{
+        query: this.getTagsGql.document
+      }]
+    })
+    .pipe(
+      map(result => result.data.postTag),
+      tap(tag => {
+        this.logger.add(`Created tag, id=${tag.id}`);
+      }, () => {
+        this.logger.add('Failed to create tag');
       })
     );
   }

@@ -1,0 +1,14 @@
+<div class="tags-selector-component">
+  <div class="new-tag">
+    <mat-form-field class="form-input">
+      <input #newTag matInput placeholder="New tag name" value="" />
+    </mat-form-field>
+    <button mat-button (click)="addTag(newTag.value)">Add</button>
+  </div>
+  <div class="tag-list">
+    <mat-checkbox class="tag" *ngFor="let tag of value"
+                  [(ngModel)]="tag.selected">
+      {{ tag.name }}
+    </mat-checkbox>
+  </div>
+</div>

@@ -30,6 +30,7 @@ import { AttachmentsComponent } from './attachments/attachments.component';
 import { environment } from 'src/environments/environment';
 import { SecurityComponent } from './security/security.component';
 import { CaptchaComponent } from './captcha/captcha.component';
+import { TagsSelectorComponent } from './tags-selector/tags-selector.component';
 
 const quillToolbarOptions = [
   ['bold', 'italic', 'underline', 'strike'],
@@ -77,7 +78,8 @@ export function imageHandler() {
     ComposePageComponent,
     AttachmentsComponent,
     SecurityComponent,
-    CaptchaComponent
+    CaptchaComponent,
+    TagsSelectorComponent
   ],
   imports: [
     BrowserModule,

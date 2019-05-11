@@ -2,10 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material';
+import { Subscription } from 'rxjs';
 
 import { Article } from '../types';
 import { ArticleService } from '../article.service';
 import { ERROR_SNACKBAR_OPTIONS, SUCCESS_SNACKBAR_OPTIONS } from '../utils';
+import { TagFieldData } from '../tags-selector/tag-field-data';
+import { articleHasTag } from '../utils';
 
 @Component({
   selector: 'app-compose',
@@ -26,6 +29,8 @@ export class ComposeArticleComponent implements OnInit {
     files: [],
     comments: []
   };
+  tagsSub: Subscription;
+  tags: TagFieldData[] = [];
 
   constructor(private articleService: ArticleService,
               private route: ActivatedRoute,
@@ -40,15 +45,67 @@ export class ComposeArticleComponent implements OnInit {
         .pipe(take(1))
         .subscribe(article => {
           this.article = article;
+          this._toggleTags(article);
         }, () => {
           this.snackbar.open('Error loading article', 'Dismiss',
                              ERROR_SNACKBAR_OPTIONS);
           this.article = null;
         });
     }
+
+    this.tagsSub = this.articleService.getTags()
+      .subscribe(tags => {
+        this.tags = tags.map(tag => {
+          return {
+            id: tag.id,
+            name: tag.name,
+            selected: false
+          };
+        });
+
+        this._toggleTags(this.article);
+      });
+  }
+
+  ngOnDestroy() {
+    this.tagsSub.unsubscribe();
+  }
+
+  _toggleTags(article: Article) {
+    for (let tag of this.tags) {
+      tag.selected = articleHasTag(article, tag.id);
+    }
+  }
+
+  _setTagsOnArticle() {
+    let toDelete = new Set();
+    let toAdd = [];
+
+    for (let tag of this.tags) {
+      const hasTag = articleHasTag(this.article, tag.id);
+
+      if (!tag.selected && hasTag) {
+        toDelete.add(tag.id);
+      }
+      else if (tag.selected && !hasTag) {
+        toAdd.push(tag.id);
+      }
+    }
+
+    this.article.tags = this.article.tags.filter(tag => !toDelete.has(tag.id));
+
+    for (let tag of toAdd) {
+      this.article.tags.push({
+        id: tag,
+        name: '',
+        articles: []
+      });
+    }
   }
 
   save() {
+    this._setTagsOnArticle();
+
     if (this.article.id) {
       this.articleService.updateArticle(this.article)
         .pipe(take(1))

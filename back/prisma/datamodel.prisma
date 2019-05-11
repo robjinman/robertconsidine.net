@@ -8,8 +8,14 @@ type Article {
   summary: String!
   content: String!
   files: [File!]!
-  tags: [String!]! @scalarList(strategy: RELATION)
+  tags: [Tag!]!
   comments: [Comment!]!
+}
+
+type Tag {
+  id: ID! @id
+  name: String! @unique
+  articles: [Article!]!
 }
 
 type Page {

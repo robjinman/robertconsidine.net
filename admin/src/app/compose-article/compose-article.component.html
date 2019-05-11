@@ -12,6 +12,7 @@
     <div class="content-input">
       <quill-editor [(ngModel)]="article.content"></quill-editor>
     </div>
+    <app-tags-selector [(ngModel)]="tags"></app-tags-selector>
     <div class="buttons">
       <button (click)="cancel()" mat-button>Cancel</button>
       <button (click)="save()" color="primary" mat-button>Save</button>

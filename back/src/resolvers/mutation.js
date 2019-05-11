@@ -109,7 +109,7 @@ async function postArticle(parent, args, context, info) {
     title: args.title,
     summary: args.summary,
     content: args.content,
-    tags: { set: args.tags },
+    tags: { connect: args.tags.map(id => { return { id }; }) },
     modifiedAt: timestamp
   });
 }
@@ -117,12 +117,22 @@ async function postArticle(parent, args, context, info) {
 async function updateArticle(parent, args, context, info) {
   await assertAdminUser(context);
 
+  const currentTags = (await context.prisma.article({
+    id: args.id
+  }).tags()).map(t => t.id);
+
+  const tagSet = new Set(args.tags);
+  const toRemove = currentTags.filter(t => !tagSet.has(t));
+
   return await context.prisma.updateArticle({
     data: {
       title: args.title,
       summary: args.summary,
       content: args.content,
-      tags: { set: args.tags },
+      tags: {
+        disconnect: toRemove.map(id => { return { id }; }),
+        connect: args.tags.map(id => { return { id }; })
+      },
     },
     where: {
       id: args.id
@@ -166,6 +176,14 @@ async function postPage(parent, args, context, info) {
   return await context.prisma.createPage({
     name: args.name,
     content: args.content,
+  });
+}
+
+async function postTag(parent, args, context, info) {
+  await assertAdminUser(context);
+
+  return await context.prisma.createTag({
+    name: args.name
   });
 }
 
@@ -344,6 +362,7 @@ module.exports = {
   updateArticle,
   publishArticle,
   deleteArticle,
+  postTag,
   postComment,
   deleteComment,
   uploadFile,

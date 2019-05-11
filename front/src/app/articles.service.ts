@@ -22,7 +22,10 @@ export class GetArticleGql extends Query<GetArticleResponse> {
         title
         summary
         content
-        tags
+        tags {
+          id
+          name
+        }
         comments {
           id
         }
@@ -46,7 +49,10 @@ export class GetPublishedArticlesGql extends Query<GetArticlesResponse> {
         publishedAt
         title
         summary
-        tags
+        tags {
+          id
+          name
+        }
         comments {
           id
         }

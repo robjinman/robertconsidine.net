@@ -6,7 +6,7 @@ interface Document {
 
 type Query {
   info: String!
-  publishedArticles(tags: [String!], skip: Int, first: Int, filter: String): [Article!]!
+  publishedArticles(tags: [ID!], skip: Int, first: Int, filter: String): [Article!]!
   allArticles(skip: Int, first: Int): [Article!]!
   article(id: ID!): Article
   page(name: String!): Page
@@ -15,14 +15,16 @@ type Query {
   comments(skip: Int, first: Int): [Comment!]!
   users(skip: Int, first: Int): [User!]!
   user(name: String!): User
+  tags: [Tag!]!
+  tag(id: ID!): Tag
 }
 
 type Mutation {
   signup(email: String!, password: String!, name: String!, captcha: String!): AuthPayload
   login(email: String!, password: String!): AuthPayload
   adminLogin(email: String!, password: String!, captcha: String!): AuthPayload
-  postArticle(title: String!, summary: String!, content: String!, tags: [String!]!): Article!
-  updateArticle(id: ID!, title: String!, summary: String!, content: String!, tags: [String!]!): Article!
+  postArticle(title: String!, summary: String!, content: String!, tags: [ID!]!): Article!
+  updateArticle(id: ID!, title: String!, summary: String!, content: String!, tags: [ID!]!): Article!
   publishArticle(id: ID!, publish: Boolean!): Article!
   deleteArticle(id: ID!): Article!
   postComment(articleId: ID!, content: String!, captcha: String!): Comment!
@@ -35,6 +37,7 @@ type Mutation {
   updateUser(currentPw: String!, id: ID!, name: String!, email: String!, newPw: String!): User!
   deleteUser(id: ID!): User!
   sendEmail(email: String!, subject: String!, message: String!, captcha: String!): Boolean
+  postTag(name: String!): Tag!
 }
 
 type File {
@@ -66,8 +69,14 @@ type Article implements Document {
   summary: String!
   content: String!
   files: [File!]!
-  tags: [String!]!
+  tags: [Tag!]!
   comments: [Comment!]!
+}
+
+type Tag {
+  id: ID!
+  name: String!
+  articles: [Article!]!
 }
 
 type AuthPayload {
