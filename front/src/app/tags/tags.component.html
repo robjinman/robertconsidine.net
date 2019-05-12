@@ -1,0 +1,10 @@
+<mat-card class="tags-component">
+  <mat-chip-list multiple>
+    <mat-chip *ngFor="let tag of tags"
+              class="tag-link"
+              [selected]="tagSelected(tag.id)"
+              (click)="toggleTag(tag.id)">
+      {{ tag.name }}
+    </mat-chip>
+  </mat-chip-list>
+</mat-card>

@@ -12,6 +12,12 @@ async function publishedArticles(root, args, context, info) {
     ];
   };
 
+  if (args.tags) {
+    where.tags_some = {
+      id_in: args.tags
+    }
+  }
+
   return await context.prisma.articles({
     where,
     skip: args.skip,

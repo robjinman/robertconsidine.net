@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import gql from 'graphql-tag';
 
-import { Article, Comment } from './types'
+import { Article, Comment, Tag } from './types'
 
 export interface GetArticleResponse {
   article: Article;
@@ -43,8 +43,8 @@ export interface GetArticlesResponse {
 })
 export class GetPublishedArticlesGql extends Query<GetArticlesResponse> {
   document = gql`
-    query {
-      publishedArticles {
+    query publishedArticles($tags: [ID!]) {
+      publishedArticles(tags: $tags) {
         id
         publishedAt
         title
@@ -113,6 +113,24 @@ export class PostCommentGql extends Mutation<PostCommentResponse> {
   `;
 }
 
+export interface GetTagsResponse {
+  tags: Tag[];
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GetTagsGql extends Query<GetTagsResponse> {
+  document = gql`
+    query {
+      tags {
+        id
+        name
+      }
+    }
+  `;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -121,7 +139,8 @@ export class ArticleService {
               private getArticleGql: GetArticleGql,
               private getArticlesGql: GetPublishedArticlesGql,
               private postCommentGql: PostCommentGql,
-              private getCommentsGql: GetCommentsGql) {}
+              private getCommentsGql: GetCommentsGql,
+              private getTagsGql: GetTagsGql) {}
 
   getArticle(id: string): Observable<Article> {
     return this.getArticleGql.watch({id: id})
@@ -132,7 +151,18 @@ export class ArticleService {
   }
 
   getArticles(): Observable<Article[]> {
-    return this.getArticlesGql.watch()
+    return this.getArticlesGql.watch({ tags: null })
+      .valueChanges
+      .pipe(
+        map(result => result.data.publishedArticles)
+      );
+  }
+
+  getArticlesByTags(tags: string[]): Observable<Article[]> {
+    if (tags.length == 0) {
+      tags = null;
+    }
+    return this.getArticlesGql.watch({ tags })
       .valueChanges
       .pipe(
         map(result => result.data.publishedArticles)
@@ -144,6 +174,14 @@ export class ArticleService {
       .valueChanges
       .pipe(
         map(result => result.data.article.comments)
+      );
+  }
+
+  getTags(): Observable<Tag[]> {
+    return this.getTagsGql.watch()
+      .valueChanges
+      .pipe(
+        map(result => result.data.tags),
       );
   }
 

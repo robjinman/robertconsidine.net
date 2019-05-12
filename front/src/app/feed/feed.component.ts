@@ -18,4 +18,7 @@ export class FeedComponent implements OnInit {
     this.articles = this.articleService.getArticles();
   }
 
+  searchByTags(tags: string[]) {
+    this.articles = this.articleService.getArticlesByTags(tags);
+  }
 }
