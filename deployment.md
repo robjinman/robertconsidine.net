@@ -181,21 +181,39 @@ Add a CNAME DNS record for api.robjinman.com pointing to the prisma service's
 load balancer.
 
 
-Deploying the schema
---------------------
+Subsequent Deployments
+----------------------
 
-From /back, source the env_prod.sh file and run prisma deploy.
+### Back-end
 
-        . ../deployment/env_prod.sh
-        prisma deploy
+To redeploy the back-end after code changes, run back/deployment/api/deploy.sh.
+Run a new task in the robjinman-com-api service by updating the service and
+selecting 'Force new deployment'. Then stop the old task. The task should
+deploy the latest prisma schema on start up.
 
+If for some reason the 'prisma deploy' fails, it can be run manually by spinning
+up an EC2 instance on the public subnet, copying the prisma directory into it
+and running the command from there.
 
-Building the API
-----------------
+From /back, copy the prisma directory to the instance and log in
 
-        docker build \
-        --tag rjinman/rj-com-graphql-api \
-        --file deployment/Dockerfile .
+        scp -r ./prisma ubuntu@35.176.188.95:/home/ubuntu/
+        ssh ubuntu@35.176.188.95
+
+Deploy the prisma schema
+
+        PRISMA_ENDPOINT=XXXXXX PRISMA_MANAGEMENT_API_SECRET=XXXXXX prisma deploy
+
+The api service still needs to be redeployed so that it has the generated
+javascript files. It will usually succeed this time as the schema will be
+up-to-date.
+
+### Front-end and admin site
+
+To build and deploy, from /front or /admin, run
+
+        ng build --prod
+        ./deploy.sh
 
 
 Links

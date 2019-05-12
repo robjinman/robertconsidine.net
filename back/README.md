@@ -59,12 +59,6 @@ Run the app
 ```
 
 
-Deployment
-----------
-
-See the deployment/README.
-
-
 Useful links
 ------------
 

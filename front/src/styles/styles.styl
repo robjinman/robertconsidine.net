@@ -1,30 +1,39 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css"
 @require 'palette'
 
-body
-  position: absolute
-  width: 100%
+html
   height: 100%
-  padding: 0
-  margin: 0
-  background-image: url('../assets/bg.jpg')
-  background-size: cover
-  background-attachment: fixed
 
-.page
-  width: 90%
-  margin: 0 auto 0 auto
-  padding: 20px
-  max-width: 800px
+  body
+    position: absolute
+    width: 100%
+    height: 100%
+    padding: 0
+    margin: 0
+    background-color: var_bg_col_0
+    background-image: url('../assets/bg.jpg')
+    background-size: cover
+    background-attachment: fixed
+    background-repeat: no-repeat
 
-.snackbar
-  color: white
+  .page
+    width: 90%
+    margin: 0 auto 0 auto
+    padding: 20px
+    max-width: 800px
 
-  .mat-simple-snackbar-action
+    img {
+      max-width: 100%
+    }
+
+  .snackbar
     color: white
 
-.error-snackbar
-  background-color: var_material_red
+    .mat-simple-snackbar-action
+      color: white
 
-.success-snackbar
-  background-color: var_material_blue
+  .error-snackbar
+    background-color: var_material_red
+
+  .success-snackbar
+    background-color: var_material_blue

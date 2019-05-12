@@ -2,10 +2,10 @@
   <app-tags (onChange)="searchByTags($event)"></app-tags>
   <mat-card class="feed-item" *ngFor="let article of articles | async"
        [routerLink]="['/article', article.id]">
-    <h3 class="item-title">{{ article.title }}</h3>
     <div class="tags-list">
       <div class="tag" *ngFor="let tag of article.tags">{{ tag.name }}</div>
     </div>
+    <h3 class="item-title">{{ article.title }}</h3>
     <div class="item-date">{{ article.publishedAt | date }}</div>
     <div class="item-summary" [innerHTML]="article.summary"></div>
   </mat-card>
