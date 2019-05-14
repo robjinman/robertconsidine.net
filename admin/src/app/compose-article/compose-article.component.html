@@ -1,26 +1,28 @@
 <div class="compose-article-component page">
-  <div *ngIf="article">
-    <div class="form">
-      <mat-form-field class="form-input">
-        <input matInput placeholder="Title" [(ngModel)]="article.title" />
-      </mat-form-field>
-      <mat-form-field class="form-input">
-        <textarea matInput placeholder="Summary" [(ngModel)]="article.summary">
-        </textarea>
-      </mat-form-field>
+  <mat-card>
+    <div *ngIf="article">
+      <div class="form">
+        <mat-form-field class="form-input">
+          <input matInput placeholder="Title" [(ngModel)]="article.title" />
+        </mat-form-field>
+        <mat-form-field class="form-input">
+          <textarea matInput placeholder="Summary" [(ngModel)]="article.summary">
+          </textarea>
+        </mat-form-field>
+      </div>
+      <div class="content-input">
+        <quill-editor [(ngModel)]="article.content"></quill-editor>
+      </div>
+      <app-tags-selector [(ngModel)]="tags"></app-tags-selector>
+      <div class="buttons">
+        <button (click)="cancel()" mat-button>Cancel</button>
+        <button (click)="save()" color="primary" mat-button>Save</button>
+        <button *ngIf="article.id" (click)="togglePublished()" mat-button>
+          {{ article.draft ? "Publish" : "Unpublish" }}</button>
+        <button (click)="delete()" color="error" mat-button>Delete</button>
+      </div>
+      <app-attachments [documentId]="article.id"></app-attachments>
     </div>
-    <div class="content-input">
-      <quill-editor [(ngModel)]="article.content"></quill-editor>
-    </div>
-    <app-tags-selector [(ngModel)]="tags"></app-tags-selector>
-    <div class="buttons">
-      <button (click)="cancel()" mat-button>Cancel</button>
-      <button (click)="save()" color="primary" mat-button>Save</button>
-      <button *ngIf="article.id" (click)="togglePublished()" mat-button>
-        {{ article.draft ? "Publish" : "Unpublish" }}</button>
-      <button (click)="delete()" color="error" mat-button>Delete</button>
-    </div>
-    <app-attachments [documentId]="article.id"></app-attachments>
-  </div>
-  <div *ngIf="!article"><span class="error-404">404</span></div>
+    <div *ngIf="!article"><span class="error-404">404</span></div>
+  </mat-card>
 </div>
