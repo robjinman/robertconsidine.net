@@ -55,7 +55,7 @@ robjinman-com-prisma-sg on TCP port 5432.
 Add a rule to robjinman-com-api-sg to allow inbound traffic from anywhere
 on TCP port 4000.
 
-## SSL certificates
+### SSL certificates
 
 Obtain an SSL certificate for robjinman.com from AWS ACM using the region
 US-East (N. Virginia). Set the domain to robjinman.com and set *.robjinman.com
@@ -177,8 +177,13 @@ errors (with TTL = 0).
 
 ### DNS configuration
 
-Add a CNAME DNS record for api.robjinman.com pointing to the prisma service's
-load balancer.
+In Route 53, add the following records:
+
+* robjinman.com (A - alias) -> CloudFront distro for robjinman.com S3 bucket
+* www.robjinman.com (CNAME) -> Same as above
+* api.robjinman.com (A - alias) -> api-robjinman-com-lb load balancer
+* blightednixhound.robjinman.com (A - alias) -> CloudFront distro for
+  blightednixhound.robjinman.com S3 bucket
 
 
 Subsequent Deployments
