@@ -13,7 +13,7 @@ export interface ConfirmationPromptData {
 export class ConfirmationPromptComponent implements OnInit {
 
   constructor(private dialogRef: MatDialogRef<ConfirmationPromptComponent>,
-              @Inject(MAT_DIALOG_DATA) private data: ConfirmationPromptData) { }
+              @Inject(MAT_DIALOG_DATA) public data: ConfirmationPromptData) { }
 
   ngOnInit() {
   }
