@@ -31,6 +31,9 @@ import { environment } from 'src/environments/environment';
 import { SecurityComponent } from './security/security.component';
 import { CaptchaComponent } from './captcha/captcha.component';
 import { TagsSelectorComponent } from './tags-selector/tags-selector.component';
+import {
+  ConfirmationPromptComponent
+} from './confirmation-prompt/confirmation-prompt.component';
 
 const quillToolbarOptions = [
   ['bold', 'italic', 'underline', 'strike'],
@@ -79,7 +82,8 @@ export function imageHandler() {
     AttachmentsComponent,
     SecurityComponent,
     CaptchaComponent,
-    TagsSelectorComponent
+    TagsSelectorComponent,
+    ConfirmationPromptComponent
   ],
   imports: [
     BrowserModule,
@@ -103,6 +107,9 @@ export function imageHandler() {
       theme: 'snow'
     }),
     MaterialUiModule
+  ],
+  entryComponents: [
+    ConfirmationPromptComponent
   ],
   providers: [
     {

@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription, Subject } from 'rxjs';
 import { map, take } from 'rxjs/operators';
+import { MatDialog } from '@angular/material';
 
 import { ArticleService } from '../article.service';
+import {
+  ConfirmationPromptComponent
+} from '../confirmation-prompt/confirmation-prompt.component';
 
 const MAX_PREVIEW_LEN = 50;
 
@@ -36,7 +40,8 @@ export class CommentsComponent implements OnInit {
   showDetails = (idx: number, row: CommentTableRow) => row.showMore;
   hideDetails = (idx: number, row: CommentTableRow) => !row.showMore;
 
-  constructor(private articleService: ArticleService) {}
+  constructor(private articleService: ArticleService,
+              private dialog: MatDialog) {}
 
   ngOnInit() {
     this.sub = this.articleService.getComments()
@@ -69,7 +74,16 @@ export class CommentsComponent implements OnInit {
   }
 
   deleteComment(id: string) {
-    this.articleService.deleteComment(id).pipe(take(1)).subscribe();
+    const dialog = this.dialog.open(ConfirmationPromptComponent, {
+      data: {
+        message: "Are you sure you want to delete the comment?"
+      }
+    });
+    dialog.afterClosed().subscribe(result => {
+      if (result) {
+        this.articleService.deleteComment(id).pipe(take(1)).subscribe();
+      }
+    });
   }
 
   ngOnDestroy() {

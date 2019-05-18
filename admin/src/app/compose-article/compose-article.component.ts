@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
 
 import { Article } from '../types';
@@ -9,6 +9,9 @@ import { ArticleService } from '../article.service';
 import { ERROR_SNACKBAR_OPTIONS, SUCCESS_SNACKBAR_OPTIONS } from '../utils';
 import { TagFieldData } from '../tags-selector/tag-field-data';
 import { articleHasTag } from '../utils';
+import {
+  ConfirmationPromptComponent
+} from '../confirmation-prompt/confirmation-prompt.component';
 
 @Component({
   selector: 'app-compose',
@@ -35,7 +38,8 @@ export class ComposeArticleComponent implements OnInit {
   constructor(private articleService: ArticleService,
               private route: ActivatedRoute,
               private router: Router,
-              private snackbar: MatSnackBar) { }
+              private snackbar: MatSnackBar,
+              private dialog: MatDialog) { }
 
   ngOnInit() {
     this.article.id = this.route.snapshot.queryParams['id'];
@@ -136,21 +140,41 @@ export class ComposeArticleComponent implements OnInit {
   }
 
   cancel() {
-    this.router.navigate(['/articles']);
+    const dialog = this.dialog.open(ConfirmationPromptComponent, {
+      data: {
+        message: 'Are you sure you want to proceed? Any pending changes will' +
+                 ' be lost.'
+      }
+    });
+    dialog.afterClosed().subscribe(result => {
+      if (result) {
+        this.router.navigate(['/articles']);
+      }
+    });
   }
 
   delete() {
-    this.articleService.deleteArticle(this.article.id)
-      .pipe(take(1))
-      .subscribe(
-        () => {
-          this.snackbar.open('Article deleted', 'Dismiss',
-                             SUCCESS_SNACKBAR_OPTIONS);
-        }, () => {
-          this.snackbar.open('Error deleting article', 'Dismiss',
-                             ERROR_SNACKBAR_OPTIONS);
-        }
-      );
+    const dialog = this.dialog.open(ConfirmationPromptComponent, {
+      data: {
+        message: 'Are you sure you want to delete this article?'
+      }
+    });
+    dialog.afterClosed().subscribe(result => {
+      if (result) {
+        this.articleService.deleteArticle(this.article.id)
+        .pipe(take(1))
+        .subscribe(
+          () => {
+            this.snackbar.open('Article deleted', 'Dismiss',
+                               SUCCESS_SNACKBAR_OPTIONS);
+            this.router.navigate(['/articles']);
+          }, () => {
+            this.snackbar.open('Error deleting article', 'Dismiss',
+                               ERROR_SNACKBAR_OPTIONS);
+          }
+        );
+      }
+    });
   }
 
   togglePublished() {

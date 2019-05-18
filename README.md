@@ -28,6 +28,9 @@ Start the database server and prisma server. From project_root/back, run
 
 Start the back-end app. From project_root/back, run
 
+        source ./deployment/utils.sh
+        extract_vars ./deployment/env_dev.txt
+
         node ./src/index.js
 
 Build and run the admin app. From project_root/admin, run

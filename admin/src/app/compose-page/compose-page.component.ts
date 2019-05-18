@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog } from '@angular/material';
 
 import { Page } from '../types';
 import { PageService } from '../page.service';
 import { SUCCESS_SNACKBAR_OPTIONS, ERROR_SNACKBAR_OPTIONS } from '../utils';
+import {
+  ConfirmationPromptComponent
+} from '../confirmation-prompt/confirmation-prompt.component';
 
 @Component({
   selector: 'app-compose-page',
@@ -23,7 +26,8 @@ export class ComposePageComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private pageService: PageService,
-              private snackbar: MatSnackBar) { }
+              private snackbar: MatSnackBar,
+              private dialog: MatDialog) { }
 
   ngOnInit() {
     this.page.name = this.route.snapshot.queryParams['name'];
@@ -67,17 +71,38 @@ export class ComposePageComponent implements OnInit {
   }
 
   cancel() {
-    this.router.navigate(['/pages']);
+    const dialog = this.dialog.open(ConfirmationPromptComponent, {
+      data: {
+        message: 'Are you sure you want to proceed? Any pending changes will' +
+                 ' be lost.'
+      }
+    });
+    dialog.afterClosed().subscribe(result => {
+      if (result) {
+        this.router.navigate(['/pages']);
+      }
+    });
   }
 
   delete() {
-    this.pageService.deletePage(this.page.id)
-      .pipe(take(1))
-      .subscribe(() => {
-        this.snackbar.open('Page deleted', 'Dismiss', SUCCESS_SNACKBAR_OPTIONS);
-      }, () => {
-        this.snackbar.open('Error deleting page', 'Dismiss',
-                           ERROR_SNACKBAR_OPTIONS);
-      });
+    const dialog = this.dialog.open(ConfirmationPromptComponent, {
+      data: {
+        message: 'Are you sure you want to delete this page?'
+      }
+    });
+    dialog.afterClosed().subscribe(result => {
+      if (result) {
+        this.pageService.deletePage(this.page.name)
+        .pipe(take(1))
+        .subscribe(() => {
+          this.snackbar.open('Page deleted', 'Dismiss',
+                             SUCCESS_SNACKBAR_OPTIONS);
+          this.router.navigate(['/pages']);
+        }, () => {
+          this.snackbar.open('Error deleting page','Dismiss',
+                             ERROR_SNACKBAR_OPTIONS);
+        });
+      }
+    });
   }
 }

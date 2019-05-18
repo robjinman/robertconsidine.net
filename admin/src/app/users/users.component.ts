@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { MatDialog } from '@angular/material';
 
 import { UserService } from '../user.service';
 import { User } from '../types';
+import {
+  ConfirmationPromptComponent
+} from '../confirmation-prompt/confirmation-prompt.component';
 
 @Component({
   selector: 'app-users',
@@ -20,13 +24,23 @@ export class UsersComponent implements OnInit {
     'action'
   ];
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService,
+              private dialog: MatDialog) { }
 
   ngOnInit() {
     this.users$ = this.userService.getUsers();
   }
 
   deleteUser(id: string) {
-    this.userService.deleteUser(id).pipe(take(1)).subscribe();
+    const dialog = this.dialog.open(ConfirmationPromptComponent, {
+      data: {
+        message: "Are you sure you want to delete user?"
+      }
+    });
+    dialog.afterClosed().subscribe(result => {
+      if (result) {
+        this.userService.deleteUser(id).pipe(take(1)).subscribe();
+      }
+    });
   }
 }
