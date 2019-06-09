@@ -48,16 +48,26 @@ Run the app
     docker-compose up
 ```
 
+Or, run the data layer separately from the app (so that the app can be restarted independently when
+the code changes).
+
+```
+    source ./deployment/utils.sh
+    extract_vars ./deployment/env_dev.txt
+
+    docker-compose -f prisma/docker-compose.yml up
+```
+
 Deploy latest prisma configuration and apply DB migrations
 
 ```
     prisma deploy
 ```
 
-Run the app
+To start the app. Kill and restart after changing the code.
 
 ```
-    node src/index.js
+    node ./src/index.js
 ```
 
 

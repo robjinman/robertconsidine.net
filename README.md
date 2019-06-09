@@ -22,16 +22,12 @@ Commands
 
 ### Running the app
 
-Start the database server and prisma server. From project_root/back, run
-
-        docker-compose -f prisma/docker-compose.yml up
-
 Start the back-end app. From project_root/back, run
 
         source ./deployment/utils.sh
         extract_vars ./deployment/env_dev.txt
 
-        node ./src/index.js
+        docker-compose up
 
 Build and run the admin app. From project_root/admin, run
 
