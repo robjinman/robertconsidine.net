@@ -1,0 +1,18 @@
+version: 1
+task_definition:
+  ecs_network_mode: awsvpc
+  services:
+    robjinman-com-prisma:
+      cpu_shares: 100
+      mem_limit: 524288000
+    robjinman-com-api:
+      cpu_shares: 100
+      mem_limit: 524288000
+run_params:
+  network_configuration:
+    awsvpc_configuration:
+      subnets:
+        - subnet-802022fb
+        - subnet-0fe6b542
+      security_groups:
+        - sg-0006446861381284d

@@ -35,26 +35,28 @@ Ensure there is no local installation of postgres running
     sudo service postgresql stop
 ```
 
-Create/run the docker containers, which contain the prisma server and the db
-server.
+Set the environment variables
 
 ```
-    sudo docker-compose -f prisma/docker-compose.yml up
-```
-
-Deploy latest prisma configuration and apply DB migrations
-
-```
-    PRISMA_MANAGEMENT_API_SECRET=XXXXXX prisma deploy
+    source ./deployment/utils.sh
+    extract_vars ./deployment/env_dev.txt
 ```
 
 Run the app
 
 ```
-    APP_SECRET=XXXXXX \
-    RECAPTCHA_SECRET_KEY=XXXXXX \
-    EMAIL_PASSWORD=XXXXXX \
-    PRISMA_ENDPOINT=http://localhost:4466 \
+    docker-compose up
+```
+
+Deploy latest prisma configuration and apply DB migrations
+
+```
+    prisma deploy
+```
+
+Run the app
+
+```
     node src/index.js
 ```
 

@@ -1,0 +1,97 @@
+{
+  "containerDefinitions": [
+    {
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "robjinman-com-api",
+          "awslogs-region": "eu-west-2",
+          "awslogs-stream-prefix": "robjinman-com-api"
+        }
+      },
+      "healthCheck": {
+        "command": [ "CMD-SHELL", "curl -f http://localhost:4000/health" ],
+        "interval": 10,
+        "timeout": 5,
+        "retries": 3
+      },
+      "portMappings": [
+        {
+          "hostPort": 4000,
+          "containerPort": 4000
+        }
+      ],
+      "cpu": 100,
+      "environment": [
+        {
+          "name": "APP_SECRET",
+          "value": "XXXXXXXX"
+        },
+        {
+          "name": "EMAIL_PASSWORD",
+          "value": "XXXXXXXX"
+        },
+        {
+          "name": "PRISMA_ENDPOINT",
+          "value": "http://robjinman-com-prisma:4466"
+        },
+        {
+          "name": "PRISMA_MANAGEMENT_API_SECRET",
+          "value": "XXXXXXXX"
+        },
+        {
+          "name": "PRISMA_SECRET",
+          "value": "XXXXXXXX"
+        },
+        {
+          "name": "RECAPTCHA_SECRET_KEY",
+          "value": "XXXXXXXX"
+        }
+      ],
+      "memory": 500,
+      "image": "596072319882.dkr.ecr.eu-west-2.amazonaws.com/robjinman-com/api:latest",
+      "links": ["robjinman-com-prisma:robjinman-com-prisma"],
+      "dependsOn": [
+        {
+          "containerName": "robjinman-com-prisma",
+          "condition": "HEALTHY"
+        }
+      ],
+      "name": "robjinman-com-api"
+    },
+    {
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "robjinman-com-prisma",
+          "awslogs-region": "eu-west-2",
+          "awslogs-stream-prefix": "robjinman-com-prisma"
+        }
+      },
+      "healthCheck": {
+        "command": [ "CMD-SHELL", "test $(curl -s http://localhost:4466/status) == '\"OK\"'" ],
+        "interval": 10,
+        "timeout": 5,
+        "retries": 3
+      },
+      "portMappings": [
+        {
+          "hostPort": 4466,
+          "containerPort": 4466
+        }
+      ],
+      "cpu": 100,
+      "environment": [
+        {
+          "name": "PRISMA_CONFIG",
+          "value": "managementApiSecret: XXXXXXXX\nport: 4466\ndatabases:\n  default:\n    migrations: true\n    connector: postgres\n    host: robjinman-com-db.cdhanocomsuz.eu-west-2.rds.amazonaws.com\n    port: 5432\n    user: prisma\n    password: XXXXXXXX\n"
+        }
+      ],
+      "memory": 500,
+      "image": "596072319882.dkr.ecr.eu-west-2.amazonaws.com/robjinman-com/prisma:latest",
+      "name": "robjinman-com-prisma"
+    }
+  ],
+  "family": "robjinman-com",
+  "networkMode": "bridge"
+}

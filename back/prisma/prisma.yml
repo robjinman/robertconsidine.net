@@ -9,3 +9,5 @@ generate:
 hooks:
   post-deploy:
     - prisma generate
+
+secret: ${env:PRISMA_SECRET}
