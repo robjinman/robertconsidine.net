@@ -93,5 +93,6 @@
     }
   ],
   "family": "robjinman-com",
+  "taskRoleArn": "arn:aws:iam::596072319882:role/ecs_task_s3_full_access",
   "networkMode": "bridge"
 }

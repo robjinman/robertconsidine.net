@@ -101,6 +101,7 @@ Subsequent deployments
 
 Redeploying after updating the task definition
 
+        aws ecs register-task-definition --cli-input-json file://task.json
         aws ecs update-service --cluster robjinman-com --service robjinman-com --task-definition robjinman-com
 
 Redeploying after updating docker images
