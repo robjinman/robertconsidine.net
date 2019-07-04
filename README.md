@@ -40,15 +40,19 @@ Build and run the front-end app. From project_root/front, run
 
 ### Development
 
-After changing GraphQL schema, apply DB migrations and regenerate prisma
-client, then restart the back-end app. From project_root/back
+To run just the data layer, from project_root/back
+
+        docker-compose -f prisma/docker-compose.yml up
+
+Every time the GraphQL schema changes, apply DB migrations and regenerate prisma
+client, then restart the back-end app
 
         PRISMA_MANAGEMENT_API_SECRET=XXXXXX prisma deploy
-        node src/index.js
+        node ./src/index.js
 
 Regenerate types.ts (configured in codegen.yml)
 
-        rm src/app/types.ts
+        rm ./src/app/types.ts
         gql-gen
 
 Create a new Angular component

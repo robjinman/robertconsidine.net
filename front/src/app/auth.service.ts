@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
-import { Mutation, Query } from 'apollo-angular';
+import { Mutation, Query, Apollo } from 'apollo-angular';
 import { Observable } from 'rxjs';
 import { map, tap, take } from 'rxjs/operators';
 import gql from 'graphql-tag';
@@ -88,6 +88,17 @@ export class SignupGql extends Mutation {
 @Injectable({
   providedIn: 'root'
 })
+export class ActivateAccountGql extends Mutation {
+  document = gql`
+    mutation activateAccount($id: ID!, $code: String!) {
+      activateAccount(id: $id, code: $code)
+    }
+  `;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
 export class IdentityService {
   private _token: string = null;
   private _userName: string = null;
@@ -132,9 +143,11 @@ export class IdentityService {
 export class AuthService {
   private _userActivated: boolean = false;
 
-  constructor(private identityService: IdentityService,
+  constructor(private apollo: Apollo,
+              private identityService: IdentityService,
               private loginGql: LoginGql,
               private signupGql: SignupGql,
+              private activateAccountGql: ActivateAccountGql,
               private getUserGql: GetUserGql) {
 
     if (this.authorised) {
@@ -193,6 +206,24 @@ export class AuthService {
           this.identityService.token = auth.token;
         })
       );
+  }
+
+  activateAccount(id: string, code: string) {
+    return this.apollo.mutate({
+      mutation: this.activateAccountGql.document,
+      variables: {
+        id,
+        code
+      },
+      refetchQueries: [{
+        query: this.getUserGql.document,
+        variables: {
+          id
+        }
+      }]
+    }).pipe(tap(() => {
+      this._userActivated = true;
+    }));
   }
 
   logout() {

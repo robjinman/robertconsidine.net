@@ -40,7 +40,7 @@ async function signup(parent, args, context, info) {
   });
   const token = jwt.sign({ userId: user.id }, APP_SECRET);
 
-  activation.dispatchActivationEmail(args.name, email, code);
+  activation.dispatchActivationEmail(user.id, args.name, email, code);
 
   return {
     token,
@@ -97,6 +97,44 @@ async function adminLogin(parent, args, context, info) {
     token,
     user
   };
+}
+
+async function sendActivationEmail(parent, args, context, info) {
+  const userId = getUserId(context);
+
+  const user = await context.prisma.user({
+    id: userId
+  });
+
+  if (user.activationCode === null) {
+    throw new Error("User already activated");
+  }
+
+  activation.dispatchActivationEmail(user.id,
+                                     user.name,
+                                     user.email,
+                                     user.activationCode);
+}
+
+async function activateAccount(parent, args, context, info) {
+  const users = await context.prisma.updateManyUsers({
+    data: {
+      activationCode: null
+    },
+    where: {
+      AND: [{
+        id: args.id,
+      }, {
+        activationCode: args.code,
+      }]
+    }
+  });
+
+  if (users.count == 0) {
+    throw new Error("No user with matching id and activation code");
+  }
+
+  return true;
 }
 
 async function postArticle(parent, args, context, info) {
@@ -354,6 +392,8 @@ async function sendEmail(parent, args, context, info) {
 module.exports = {
   signup,
   login,
+  activateAccount,
+  sendActivationEmail,
   adminLogin,
   postPage,
   updatePage,

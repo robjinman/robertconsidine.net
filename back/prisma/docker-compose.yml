@@ -13,7 +13,7 @@ services:
   robjinman-com-prisma:
     build:
       context: .
-      dockerfile: ./deployment/prisma/Dockerfile
+      dockerfile: ../deployment/prisma/Dockerfile
       args:
         PRISMA_CONFIG: |
           managementApiSecret: ${PRISMA_MANAGEMENT_API_SECRET}

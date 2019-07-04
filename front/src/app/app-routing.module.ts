@@ -5,6 +5,7 @@ import { FeedComponent } from './feed/feed.component';
 import { ArticleComponent } from './article/article.component';
 import { PageComponent } from './page/page.component';
 import { ContactComponent } from './contact/contact.component';
+import { AccountActivationComponent } from './account-activation/account-activation.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'feed', pathMatch: 'full' },
@@ -16,7 +17,8 @@ const routes: Routes = [
   { path: 'about',
     component: PageComponent,
     data: { pageName: "about" } },
-  { path: 'contact', component: ContactComponent }
+  { path: 'contact', component: ContactComponent },
+  { path: 'activate', component: AccountActivationComponent }
 ];
 
 @NgModule({

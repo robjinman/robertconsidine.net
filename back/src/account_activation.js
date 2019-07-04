@@ -1,31 +1,7 @@
 const mailer = require("nodemailer");
 const { EMAIL_ADDRESS } = require('./utils');
 
-async function processActivation(req, res, prisma) {
-  try {
-    if (!req.query.code) {
-      throw Error("Null activation code");
-    }
-
-    await prisma.updateUser({
-      data: {
-        activationCode: null
-      },
-      where: {
-        activationCode: req.query.code,
-      }
-    });
-
-    console.log("Activated user");
-    res.redirect('https://robjinman.com/activation-success');
-  }
-  catch(err) {
-    console.error(err);
-    res.redirect('https://robjinman.com/activation-failure');
-  }
-}
-
-function dispatchActivationEmail(userName, email, code) {
+function dispatchActivationEmail(userId, userName, email, code) {
   const transporter = mailer.createTransport({
     service: "gmail",
     auth: {
@@ -34,7 +10,7 @@ function dispatchActivationEmail(userName, email, code) {
     }
   });
 
-  const link = `https://api.robjinman.com/activate?code=${code}`;
+  const link = `https://robjinman.com/activate?user=${userId}&code=${code}`;
 
   const options = {
     from: EMAIL_ADDRESS,
@@ -55,6 +31,5 @@ function dispatchActivationEmail(userName, email, code) {
 }
 
 module.exports = {
-  processActivation,
   dispatchActivationEmail
 };

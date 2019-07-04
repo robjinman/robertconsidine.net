@@ -23,6 +23,7 @@ import { CaptchaComponent } from './captcha/captcha.component';
 import { environment } from 'src/environments/environment';
 import { ContactComponent } from './contact/contact.component';
 import { TagsComponent } from './tags/tags.component';
+import { AccountActivationComponent } from './account-activation/account-activation.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { TagsComponent } from './tags/tags.component';
     PageComponent,
     CaptchaComponent,
     ContactComponent,
-    TagsComponent
+    TagsComponent,
+    AccountActivationComponent
   ],
   imports: [
     FormsModule,

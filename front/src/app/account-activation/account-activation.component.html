@@ -1,0 +1,18 @@
+<div class="account-activation-component page">
+  <mat-card>
+    <div class="activation-pending"
+          *ngIf="activationStatus == Status.PENDING">
+      Activating your account...
+    </div>
+    <div class="activation-success"
+          *ngIf="activationStatus == Status.SUCCESS">
+      Account activation successful.
+    </div>
+    <div class="activate-failure"
+          *ngIf="activationStatus == Status.FAILURE">
+      Sorry, that combination of user ID and activation code is not
+      recognised.
+    </div>
+    <div class="redirect-prompt">Please wait to be redirected</div>
+  </mat-card>
+</div>

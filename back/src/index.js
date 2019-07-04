@@ -10,7 +10,6 @@ const tag = require("./resolvers/tag");
 const comment = require("./resolvers/comment");
 const file = require("./resolvers/file");
 const subscription = require("./resolvers/subscription");
-const accountActivation = require("./account_activation");
 const utils = require("./utils");
 
 const resolvers = {
@@ -49,10 +48,6 @@ const server = new GraphQLServer({
       s3Service: new s3.S3Service()
     }
   },
-});
-
-server.express.get("/activate", (req, res) => {
-  accountActivation.processActivation(req, res, prisma);
 });
 
 server.express.get("/health", (req, res) => {
