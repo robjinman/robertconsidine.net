@@ -34,7 +34,7 @@ function dispatchActivationEmail(userName, email, code) {
     }
   });
 
-  const link = `https://robjinman.com/activate?code=${code}`;
+  const link = `https://api.robjinman.com/activate?code=${code}`;
 
   const options = {
     from: EMAIL_ADDRESS,
