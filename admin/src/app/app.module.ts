@@ -102,6 +102,9 @@ export function imageHandler() {
           handlers: {
             image: imageHandler
           }
+        },
+        clipboard: {
+          matchVisual: false
         }
       },
       theme: 'snow'
