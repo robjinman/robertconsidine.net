@@ -58,7 +58,7 @@ async function usedTags(root, args, context, info) {
   return await context.prisma.tags({
     where: {
       articles_some: {
-        id_not: null
+        draft: false
       }
     }
   });
