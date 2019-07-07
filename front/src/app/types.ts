@@ -37,7 +37,9 @@ export interface Query {
 
   user?: Maybe<User>;
 
-  tags: Tag[];
+  allTags: Tag[];
+
+  usedTags: Tag[];
 
   tag?: Maybe<Tag>;
 }
@@ -124,6 +126,10 @@ export interface Page extends Document {
 
 export interface Mutation {
   signup?: Maybe<AuthPayload>;
+
+  activateAccount?: Maybe<boolean>;
+
+  sendActivationEmail?: Maybe<boolean>;
 
   login?: Maybe<AuthPayload>;
 
@@ -223,6 +229,11 @@ export interface SignupMutationArgs {
   name: string;
 
   captcha: string;
+}
+export interface ActivateAccountMutationArgs {
+  id: string;
+
+  code: string;
 }
 export interface LoginMutationArgs {
   email: string;

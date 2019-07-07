@@ -74,7 +74,7 @@ export class GetAllArticlesGql extends Query<GetArticlesResponse> {
 }
 
 export interface GetTagsResponse {
-  tags: Tag[];
+  allTags: Tag[];
 }
 
 @Injectable({
@@ -83,7 +83,7 @@ export interface GetTagsResponse {
 export class GetTagsGql extends Query<GetTagsResponse> {
   document = gql`
     query {
-      tags {
+      allTags {
         id
         name
       }
@@ -291,7 +291,7 @@ export class ArticleService {
     return this.getTagsGql.watch()
       .valueChanges
       .pipe(
-        map(result => result.data.tags),
+        map(result => result.data.allTags),
         tap(() => {
           this.logger.add('Fetched tags');
         }, () => {

@@ -54,7 +54,17 @@ async function tag(root, args, context, info) {
   });
 }
 
-async function tags(root, args, context, info) {
+async function usedTags(root, args, context, info) {
+  return await context.prisma.tags({
+    where: {
+      articles_some: {
+        id_not: null
+      }
+    }
+  });
+}
+
+async function allTags(root, args, context, info) {
   return await context.prisma.tags();
 }
 
@@ -124,7 +134,8 @@ module.exports = {
   allArticles,
   article,
   tag,
-  tags,
+  allTags,
+  usedTags,
   comments,
   page,
   pages,

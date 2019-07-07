@@ -114,7 +114,7 @@ export class PostCommentGql extends Mutation<PostCommentResponse> {
 }
 
 export interface GetTagsResponse {
-  tags: Tag[];
+  usedTags: Tag[];
 }
 
 @Injectable({
@@ -123,7 +123,7 @@ export interface GetTagsResponse {
 export class GetTagsGql extends Query<GetTagsResponse> {
   document = gql`
     query {
-      tags {
+      usedTags {
         id
         name
       }
@@ -181,7 +181,7 @@ export class ArticleService {
     return this.getTagsGql.watch()
       .valueChanges
       .pipe(
-        map(result => result.data.tags),
+        map(result => result.data.usedTags),
       );
   }
 

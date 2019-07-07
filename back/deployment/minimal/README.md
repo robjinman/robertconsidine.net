@@ -99,6 +99,10 @@ Create a load balancer
 Subsequent deployments
 ----------------------
 
+After code changes to the back-end, build and redeploy the docker image
+
+        ./deployment/api/deploy.sh
+
 Redeploying after updating the task definition
 
         aws ecs register-task-definition --cli-input-json file://task.json

@@ -217,8 +217,14 @@ up-to-date.
 
 To build and deploy, from /front or /admin, run
 
+        rm -r ./dist
         ng build --prod
         ./deploy.sh
+
+It may then be necessary to invalidate the CloudFront cache for the changes to
+take effect.
+
+        aws cloudfront create-invalidation --distribution-id E13PJ1NK2DLG0D --paths "/*"
 
 
 Links

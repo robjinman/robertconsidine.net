@@ -15,7 +15,8 @@ type Query {
   comments(skip: Int, first: Int): [Comment!]!
   users(skip: Int, first: Int): [User!]!
   user(name: String!): User
-  tags: [Tag!]!
+  allTags: [Tag!]!
+  usedTags: [Tag!]!
   tag(id: ID!): Tag
 }
 
