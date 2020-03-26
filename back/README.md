@@ -38,8 +38,7 @@ Ensure there is no local installation of postgres running
 Set the environment variables
 
 ```
-    source ./deployment/utils.sh
-    extract_vars ./deployment/env_dev.txt
+    source ./deployment/env_dev.sh
 ```
 
 Run the app
@@ -52,8 +51,7 @@ Or, run the data layer separately from the app (so that the app can be restarted
 the code changes).
 
 ```
-    source ./deployment/utils.sh
-    extract_vars ./deployment/env_dev.txt
+    source ./deployment/env_dev.sh
 
     docker-compose -f prisma/docker-compose.yml up
 ```

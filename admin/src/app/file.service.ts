@@ -7,7 +7,7 @@ import gql from 'graphql-tag';
 import { File } from './types'
 import { LoggingService } from './logging.service';
 
-const BUCKET_URL = "https://s3.eu-west-2.amazonaws.com/assets.robjinman.com";
+const BUCKET_URL = "https://s3.eu-west-2.amazonaws.com/assets.robertconsidine.net";
 
 export interface FileDesc {
   documentId: string;

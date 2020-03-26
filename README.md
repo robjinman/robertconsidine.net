@@ -1,5 +1,5 @@
-RobJinman.com
-=============
+RobertConsidine.net
+===================
 
 My personal website.
 
@@ -140,7 +140,7 @@ Post some articles.
                     "Effect": "Allow",
                     "Principal": "*",
                     "Action": "s3:GetObject",
-                    "Resource": "arn:aws:s3:::robjinman.com/*"
+                    "Resource": "arn:aws:s3:::robertconsidine.net/*"
                 }
             ]
         }

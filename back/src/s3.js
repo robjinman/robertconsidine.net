@@ -2,7 +2,7 @@ const aws = require("aws-sdk");
 
 class S3Service {
   constructor() {
-    this.bucket = "assets.robjinman.com";
+    this.bucket = "assets.robertconsidine.net";
     this.s3 = new aws.S3();
 
     aws.config.update({

@@ -10,12 +10,12 @@ function dispatchActivationEmail(userId, userName, email, code) {
     }
   });
 
-  const link = `https://robjinman.com/activate?user=${userId}&code=${code}`;
+  const link = `https://robertconsidine.net/activate?user=${userId}&code=${code}`;
 
   const options = {
     from: EMAIL_ADDRESS,
     to: email,
-    subject: "RobJinman.com account activation",
+    subject: "RobertConsidine.net account activation",
     html: `Hi <b>${userName}</b>. Click <a href="${link}">here</a> ` +
           `to activate your account.`
   };

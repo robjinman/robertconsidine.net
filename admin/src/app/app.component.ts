@@ -10,7 +10,8 @@ import { AuthService } from './auth.service';
   styleUrls: ['./app.component.styl']
 })
 export class AppComponent {
-  title = 'RobJinman.com Admin Console';
+  title = 'RobertConsidine.net Admin Console';
+  currentYear = (new Date()).getFullYear();
 
   constructor(private authService: AuthService,
               private matIconRegistry: MatIconRegistry,

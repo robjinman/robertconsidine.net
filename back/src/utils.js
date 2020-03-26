@@ -6,7 +6,7 @@ const APP_SECRET = process.env.APP_SECRET;
 const INITIAL_ADMIN_PASSWORD = 'admin1234';
 const INITIAL_ADMIN_EMAIL = 'dummy@email.com';
 const ADMIN_USER = 'rob';
-const EMAIL_ADDRESS = "robjinman.noreply@gmail.com";
+const EMAIL_ADDRESS = "robertconsidine.noreply@gmail.com";
 
 function currentDateString() {
   return (new Date()).toISOString();

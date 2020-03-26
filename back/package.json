@@ -2,6 +2,9 @@
   "name": "rjblog-server",
   "version": "1.0.0",
   "main": "index.js",
+  "scripts": {
+    "run": "node ./src/index.js"
+  },
   "license": "MIT",
   "dependencies": {
     "aws-sdk": "^2.437.0",

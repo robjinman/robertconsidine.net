@@ -14,7 +14,7 @@ const utils = require("./utils");
 
 const resolvers = {
   Query: {
-    info: () => "This is the API of robjinman.com",
+    info: () => "This is the API of robertconsidine.net",
     ...query
   },
 

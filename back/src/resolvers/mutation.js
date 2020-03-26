@@ -375,7 +375,7 @@ async function sendEmail(parent, args, context, info) {
   const options = {
     from: args.email,
     to: admin.email,
-    subject: `(via robjinman.com) ${args.subject}`,
+    subject: `(via robertconsidine.net) ${args.subject}`,
     text: `From ${args.email}\n\n${args.message}`
   };
 

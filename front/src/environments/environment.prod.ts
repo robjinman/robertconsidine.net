@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiServerUri: 'https://api.robjinman.com:4000'
+  apiServerUri: 'https://api.robertconsidine.net:4000'
 };
