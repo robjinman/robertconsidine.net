@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
+import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 
 import { MailService } from '../mail.service';
@@ -29,7 +30,8 @@ export class ContactComponent implements OnInit {
 
   constructor(private changeDetector: ChangeDetectorRef,
               private mailService: MailService,
-              private snackBar: MatSnackBar) { }
+              private snackBar: MatSnackBar,
+              private router: Router) { }
 
   ngOnInit() {
   }
@@ -52,6 +54,7 @@ export class ContactComponent implements OnInit {
       .pipe(take(1))
       .subscribe(() => {
         this.snackBar.open("Email sent", "Dismiss", SUCCESS_SNACKBAR_OPTIONS);
+        this.router.navigate(['/']);
       }, err => {
         this.snackBar.open("Error sending email", "Dismiss",
                            ERROR_SNACKBAR_OPTIONS);

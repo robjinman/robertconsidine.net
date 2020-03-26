@@ -1,6 +1,5 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const mailer = require("nodemailer");
 const { APP_SECRET,
         ADMIN_USER,
         EMAIL_ADDRESS,
@@ -10,6 +9,7 @@ const { APP_SECRET,
         lowerCase } = require("../utils");
 const captcha = require("../captcha");
 const activation = require("../account_activation");
+const { dispatchEmail } = require("../mail");
 
 async function signup(parent, args, context, info) {
   await captcha.verifyCaptcha(args.captcha);
@@ -40,7 +40,7 @@ async function signup(parent, args, context, info) {
   });
   const token = jwt.sign({ userId: user.id }, APP_SECRET);
 
-  activation.dispatchActivationEmail(user.id, args.name, email, code);
+  await activation.dispatchActivationEmail(user.id, args.name, email, code);
 
   return {
     token,
@@ -110,10 +110,10 @@ async function sendActivationEmail(parent, args, context, info) {
     throw new Error("User already activated");
   }
 
-  activation.dispatchActivationEmail(user.id,
-                                     user.name,
-                                     user.email,
-                                     user.activationCode);
+  await activation.dispatchActivationEmail(user.id,
+                                           user.name,
+                                           user.email,
+                                           user.activationCode);
 }
 
 async function activateAccount(parent, args, context, info) {
@@ -360,31 +360,14 @@ async function deleteUser(parent, args, context, info) {
 async function sendEmail(parent, args, context, info) {
   await captcha.verifyCaptcha(args.captcha);
 
+  const password = process.env.EMAIL_PASSWORD;
+  const subject = `(via robertconsidine.net) ${args.subject}`;
+  const body = `From ${args.email}\n\n${args.message}`;
   const admin = await context.prisma.user({
     name: ADMIN_USER
   });
 
-  const transporter = mailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: EMAIL_ADDRESS,
-      pass: process.env.EMAIL_PASSWORD
-    }
-  });
-
-  const options = {
-    from: args.email,
-    to: admin.email,
-    subject: `(via robertconsidine.net) ${args.subject}`,
-    text: `From ${args.email}\n\n${args.message}`
-  };
-
-  transporter.sendMail(options, error => {
-    if (error) {
-      console.error("Failed to send email", error);
-      throw new Error("Failed to send email");
-    }
-  });
+  await dispatchEmail(EMAIL_ADDRESS, password, admin.email, subject, body);
 
   return true;
 }
